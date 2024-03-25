@@ -3,7 +3,6 @@ import java.util.Scanner;
 
 public class Staff {
 	Scanner sc = new Scanner(System.in);
-	private static Order currentOrder = new Order(); // Holds the order currently making ? 
 	
 	private String name;
 	private String loginID;
