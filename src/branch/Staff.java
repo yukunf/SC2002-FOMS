@@ -22,7 +22,7 @@ public class Staff {
 	}
 	
 	public void displayOrders() {
-		
+		// are orders saved in a list?
 	}
 	public void viewDetails(Order order) {
 		System.out.println("select order to view (input orderID): ");
