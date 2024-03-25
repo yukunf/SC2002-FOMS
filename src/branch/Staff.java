@@ -11,7 +11,7 @@ public class Staff {
 	private int age;
 	private String branch;
 	
-	public staff(String name, String loginID, char role, char gender, int age, String branch) {
+	public Staff(String name, String loginID, char role, char gender, int age, String branch) {
 		this.name=name;
 		this.loginID=loginID;
 		this.role=role;
