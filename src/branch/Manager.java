@@ -1,3 +1,6 @@
 package src.branch
 
-public class Manager
+public class Manager extends Staff {
+  
+
+}  
