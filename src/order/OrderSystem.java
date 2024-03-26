@@ -5,6 +5,7 @@ import src.branch.Branch;
 import src.menu.Food;
 
 import java.util.NoSuchElementException;
+import java.util.Scanner;
 
 /**
  * @author fengyukun
@@ -32,10 +33,12 @@ public class OrderSystem {
     }
 
     private static OrderStatus getOrderStatus(int orderID){
+
         return getOrderByID(orderID).getStatus();
     }
 
     public static void addToCart(Food food){
+
         currentOrder.addOrderItem(food);
     }
 
@@ -52,6 +55,23 @@ public class OrderSystem {
     public static void checkOrderStatus(){
         // TODO: Do everything here if users need to check the order status
         // including I/O with command line
+        Scanner s = new Scanner(System.in);
+        System.out.println("Please input the Order ID:");
+        boolean found = false;
+        Order o = null;
+        int id = s.nextInt();
+        while(!found) {
+            try {
+                o = getOrderByID(id);
+            } catch (Exception e) {
+                System.out.println("Order Not Found! Please check your input and try again");
+            }
+            if(o != null){
+                System.out.println("Status of Order "+id+" : "+o.getStatus());
+                found = true;
+            }
+        }
+
     }
 
     public static void createNewOrder(){
