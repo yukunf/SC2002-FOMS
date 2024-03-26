@@ -57,5 +57,9 @@ public class OrderSystem {
     public static void createNewOrder(){
         // TODO: Do everything here if users need to create an order
         // including I/O with command line
+    	System.out.println("Select Branch:");
+    	System.out.println("1. NTU");
+    	System.out.println("2. JP");
+    	System.out.println("3. JE");
     }
 }

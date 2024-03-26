@@ -13,7 +13,7 @@ import java.util.List;
  * @version 1.00.00
  **/
 public class Order {
-    private int orderID;
+    private static int orderID = 0; 
     private int branchID;
 
     private int time; // Time when order is placed ( #TODO or when order is ready???)
@@ -22,7 +22,7 @@ public class Order {
     private List<Food> foodList;
 
     public Order() {
-        orderID = 0;
+        orderID++; //everytime a new order is instantiated can increment no need to manually set it.
         branchID = 0;
         time = 0;
         status = OrderStatus.PREPARING;
