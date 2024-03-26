@@ -1,4 +1,4 @@
-package sc2002assign;
+package src.branch;
 import java.util.Scanner;
 
 public class Admin {

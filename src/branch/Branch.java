@@ -4,7 +4,7 @@ import src.menu.Menu;
 
 public class Branch {
   private int BranchID;
-  private String location;
+  private String branchName;
   private int staffQuota;
   private Staff[] staffList;
 
@@ -18,12 +18,12 @@ public class Branch {
     BranchID = branchID;
   }
 
-  public String getLocation() {
-    return location;
+  public String getBranchName() {
+    return branchName;
   }
 
-  public void setLocation(String location) {
-    this.location = location;
+  public void setBranchName(String branchName) {
+    this.branchName = branchName;
   }
 
   public int getStaffQuota() {

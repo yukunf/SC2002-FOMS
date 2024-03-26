@@ -2,7 +2,7 @@ package src.branch;
 
 public class Manager extends Staff {
   public Manager() {
-      super("NA","NA",'M',-1,"NA");
+      super("NA","NA",'M',-1,-1);
 
   }
   
