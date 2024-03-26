@@ -27,8 +27,11 @@ public class Menu {
 
 
     public List<Food> getFoodListByCategory(FoodCategory category){
-        //#TODO Filter by category
-        return foodList;
+        List<Food> cate = new ArrayList<>();
+        for(Food f: foodList){
+            if(f.getCategory() == category)cate.add(f);
+        }
+        return cate;
     }
     //#TODO more methods
 
