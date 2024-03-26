@@ -12,14 +12,14 @@ public class Staff {
 	private String loginID;
 	private char gender;
 	private int age;
-	private String branch;
+	private int branch;
 	
-	public Staff(String name, String loginID, char gender, int age, String branch) {
+	public Staff(String name, String loginID, char gender, int age, int branch) {
 		this.name=name;
 		this.loginID=loginID;
 		this.gender=gender;
 		this.age=age;
-		this.branch=branch;		
+		this.branch=branch;
 	}
 	
 	public void displayOrders() {

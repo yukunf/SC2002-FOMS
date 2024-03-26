@@ -13,7 +13,8 @@ import java.util.List;
  * @version 1.00.00
  **/
 public class Order {
-    private static int orderID = 0; 
+    private static int orderCount = 0;
+    private int orderID;
     private int branchID;
 
     private int time; // Time when order is placed ( #TODO or when order is ready???)
@@ -22,15 +23,18 @@ public class Order {
     private List<Food> foodList;
 
     public Order() {
-        orderID++; //everytime a new order is instantiated can increment no need to manually set it.
+        orderID = orderCount;
+        orderCount++; //everytime a new order is instantiated can increment no need to manually set it.
         branchID = 0;
         time = 0;
         status = OrderStatus.PREPARING;
         foodList = new ArrayList<>();
     }
 
-    public Order(int orderID, int branchID, int time, OrderStatus status, List<Food> orderItem) {
-        this.orderID = orderID;
+    public Order(int branchID, int time, OrderStatus status, List<Food> orderItem) {
+        orderID = orderCount;
+        orderCount++; //everytime a new order is instantiated can increment no need to manually set it.
+
         this.branchID = branchID;
         this.time = time;
         this.status = status;
@@ -41,9 +45,6 @@ public class Order {
         return orderID;
     }
 
-    public void setOrderID(int orderID) {
-        this.orderID = orderID;
-    }
 
     public int getBranchID() {
         return branchID;
@@ -69,6 +70,10 @@ public class Order {
         this.status = status;
     }
 
+    public static void setOrderIDCounter(int c){
+        Order.orderCount = c;
+    }
+
     public List<Food> getFoodList() {
         return foodList;
     }
@@ -79,4 +84,5 @@ public class Order {
 
     public void clearOrderItem(){
         foodList = new ArrayList<>();}
+
 }
