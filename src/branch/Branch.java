@@ -1,14 +1,20 @@
 package src.branch;
 
 import src.menu.Menu;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Branch {
   private int BranchID;
   private String branchName;
   private int staffQuota;
-  private Staff[] staffList;
-
+  private List<Staff> staffList;
   private Menu branchMenu;
+  
+  public Branch(String branchName, int staffQuota){
+	  this.branchName = branchName;
+	  this.staffQuota = staffQuota;
+  }
 
   public int getBranchID() {
     return BranchID;
@@ -34,11 +40,11 @@ public class Branch {
     this.staffQuota = staffQuota;
   }
 
-  public Staff[] getStaffList() {
+  public List<Staff> getStaffList() {
     return staffList;
   }
 
-  public void setStaffList(Staff[] staffList) {
+  public void setStaffList(List<Staff> staffList) {
     this.staffList = staffList;
   }
 }

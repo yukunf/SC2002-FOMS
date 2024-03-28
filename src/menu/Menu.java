@@ -29,7 +29,7 @@ public class Menu {
     public List<Food> getFoodListByCategory(FoodCategory category){
         List<Food> cate = new ArrayList<>();
         for(Food f: foodList){
-            if(f.getCategory() == category)cate.add(f);
+            if(f.getCategory() == category) cate.add(f);
         }
         return cate;
     }

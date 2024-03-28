@@ -9,17 +9,18 @@ package src.menu;
  **/
 public class Food {
 
-    private int ID;
+    private int ID; //Need ID?
     private String name;
     private FoodCategory category;
-
-
+    private String branch;
+    private double price;
 
     private boolean availability;
 
-    public Food(int ID, String name, FoodCategory category, boolean availability) {
-        this.ID = ID;
+    public Food(String name, double price, String branch, FoodCategory category, boolean availability) {
         this.name = name;
+        this.price = price;
+        this.branch = branch;
         this.category = category;
         this.availability = availability;
     }

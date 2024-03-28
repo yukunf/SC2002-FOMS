@@ -12,9 +12,9 @@ public class Staff {
 	private String loginID;
 	private char gender;
 	private int age;
-	private int branch;
+	private String branch;
 	
-	public Staff(String name, String loginID, char gender, int age, int branch) {
+	public Staff(String name, String loginID, char gender, int age, String branch) {
 		this.name=name;
 		this.loginID=loginID;
 		this.gender=gender;
@@ -44,4 +44,7 @@ public class Staff {
 //			case 3:	currentOrder.status = OrderStatus.CANCELLED;
 //				break;
 		}
+	public String getStaffName() {
+		return name;
+	}
 	}

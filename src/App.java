@@ -8,8 +8,10 @@ import src.branch.Staff;
 import src.order.Order;
 import src.order.OrderStatus;
 import src.order.OrderSystem;
+import src.menu.Food;
 
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author fengyukun
@@ -41,7 +43,7 @@ public class App {
 
 
 
-		Order.setOrderIDCounter(orderList.get(orderList.size() - 1).getOrderID() + 1);
+		//Order.setOrderIDCounter(orderList.get(orderList.size() - 1).getOrderID() + 1);
 		// Set the counter 1 more than the biggest existing orderID
 	}
 
@@ -79,7 +81,7 @@ public class App {
     public static void main(String[] args) {
 
 
-		initialize();
+		//initialize();
 
 
     	int opt;
@@ -94,6 +96,10 @@ public class App {
 				customerDriver();
         		break;
         	case 2:
+        		List<Staff> staffList = Filereader.readStaffList();
+        		for(Staff staff : staffList) {
+        			System.out.println(staff.getStaffName());
+        		}
         		break;
         	case 3:
         		break;
