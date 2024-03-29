@@ -80,7 +80,7 @@ public class OrderSystem {
     public static void createNewOrder(){
         // TODO: Do everything here if users need to create an order
         // including I/O with command line
-    	//Receipt, input handling
+    	//Receipt, input handling and formatting
     	//Edit cart (adding/removing from cart)
     	//Payment page
     	List<Food> catMenu = null;
