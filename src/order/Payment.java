@@ -8,5 +8,7 @@ package src.order;
  * @version 1.00.00
  **/
 public class Payment {
+    // A dummy class to simulate the process of payment
     //TODO
+
 }

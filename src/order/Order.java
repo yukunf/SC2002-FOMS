@@ -2,6 +2,7 @@ package src.order;
 
 import src.menu.Food;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * Package : src.order
  * @version 1.00.00
  **/
-public class Order {
+public class Order implements Serializable {
     private static int orderCount = 0;
     private int orderID;
     private int branchID;
@@ -21,13 +22,14 @@ public class Order {
                     // in unix timestamp
     private OrderStatus status;
     private List<Food> foodList;
+    //TODO Maybe need a subclass to store customize options and quantity;
 
     public Order() {
         orderID = orderCount;
         orderCount++; //everytime a new order is instantiated can increment no need to manually set it.
         branchID = 0;
         time = 0;
-        status = OrderStatus.PREPARING;
+        status = OrderStatus.UNPAID;
         foodList = new ArrayList<>();
     }
 

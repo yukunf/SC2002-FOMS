@@ -2,16 +2,15 @@ package src;
 
 import src.branch.Admin;
 import src.branch.Branch;
+
 import java.util.Scanner;
 
 import src.branch.Staff;
 import src.order.Order;
-import src.order.OrderStatus;
 import src.order.OrderSystem;
 import src.menu.Food;
 
 import java.util.List;
-import java.util.ArrayList;
 
 /**
  * @author fengyukun
@@ -25,6 +24,7 @@ public class App {
     public static List<Branch> branchList;  // Stores every branch
     public static List<Order> orderList;  // Stores every order; Keeps orderID ascending
 
+	public static List<Food> menuList;
 	public static List<Staff> staffList;
 
 	public static List<Admin> adminList;
@@ -36,9 +36,13 @@ public class App {
 	* Use this function to initialize everything when program starts
 	* That is, all I/O functions, including reading Branch, Menu, Staff from .xls or .csv files.
 	* */
-	public static void initialize(){ // TODO
+	public static void initialize(){
 		// reading orderList;
-
+		branchList = FileIO.readBranchList();
+		menuList = FileIO.readFoodList();
+		staffList = FileIO.readStaffList();
+		adminList = FileIO.readAdminList();
+		// TODO orderList
 
 
 
@@ -96,7 +100,7 @@ public class App {
 				customerDriver();
         		break;
         	case 2:
-        		List<Staff> staffList = Filereader.readStaffList();
+        		List<Staff> staffList = FileIO.readStaffList();
         		for(Staff staff : staffList) {
         			System.out.println(staff.getStaffName());
         		}
