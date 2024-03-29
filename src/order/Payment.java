@@ -10,7 +10,7 @@ package src.order;
 public class Payment {
 
     private double amount;
-    private String paymentMethod; //eg. credit card, PayPal
+    private String paymentMethod; //eg. credit card, payPal
 
 
     public Payment(double amount, String paymentMethod) {
