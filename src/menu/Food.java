@@ -40,7 +40,19 @@ public class Food {
     public void setName(String name) {
         this.name = name;
     }
-
+    
+    public String getBranch() {
+    	return branch;
+    }
+    
+    public double getPrice() {
+    	return price;
+    }
+    
+    public void setPrice(double price) {
+    	this.price = price;
+    }
+    
     public FoodCategory getCategory() {
         return category;
     }

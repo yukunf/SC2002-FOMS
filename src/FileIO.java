@@ -17,7 +17,7 @@ import src.order.Order;
 public class FileIO {
 
 	
-	//This reads the file and returns the list of food
+	//This reads the file and returns the list of all food
 	public static List<Food> readFoodList(){
 		List<Food> FoodList = new ArrayList<Food>();
 		try {
@@ -40,7 +40,7 @@ public class FileIO {
 		return FoodList;
 	}
 	
-	//This reads the file and returns the list of staff
+	//This reads the file and returns the list of all staff
 	public static List<Staff> readStaffList(){
 		List<Staff> staffList = new ArrayList<Staff>();
 		try {
@@ -83,11 +83,27 @@ public class FileIO {
 		}
 		return branchList;
 	}
-
+	
+	//reads the file and return the list of admins
 	public static List<Admin> readAdminList(){
 	List<Admin> adminList = new ArrayList<>();
-
-	// TODO
+	try {
+		File staffCsv = new File("staff_list.csv");
+		Scanner sc = new Scanner(staffCsv);
+		sc.nextLine(); //skip the header row
+		while(sc.hasNextLine()) {
+			String line = sc.nextLine();
+			String data[] = line.split(",");
+			if(data.length == 0) break;
+			if(data[2].equals("A")) {
+			Admin admin = new Admin(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]));
+			adminList.add(admin);
+			}
+		}
+	}
+	catch(FileNotFoundException f) {
+		System.out.println("Invalid file");
+	}
 	return adminList;
 
 	}

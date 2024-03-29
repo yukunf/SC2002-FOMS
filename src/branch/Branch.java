@@ -1,6 +1,6 @@
 package src.branch;
 
-import src.menu.Menu;
+import src.menu.Food;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -9,11 +9,12 @@ public class Branch {
   private String branchName;
   private int staffQuota;
   private List<Staff> staffList;
-  private Menu branchMenu;
+  private List<Food> branchMenu;
   
   public Branch(String branchName, int staffQuota){
 	  this.branchName = branchName;
 	  this.staffQuota = staffQuota;
+	  this.branchMenu = branchMenu;
   }
 
   public int getBranchID() {
@@ -46,5 +47,13 @@ public class Branch {
 
   public void setStaffList(List<Staff> staffList) {
     this.staffList = staffList;
+  }
+  
+  public void setBranchMenu(List<Food> branchMenu) {
+	  this.branchMenu = branchMenu;
+  }
+  
+  public List<Food> getBranchMenu() {
+	  return branchMenu;
   }
 }

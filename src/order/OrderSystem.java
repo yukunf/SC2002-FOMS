@@ -3,9 +3,12 @@ package src.order;
 import src.App;
 import src.branch.Branch;
 import src.menu.Food;
+import src.menu.Menu;
+import src.menu.FoodCategory;
 
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.List;
 
 /**
  * @author fengyukun
@@ -77,11 +80,103 @@ public class OrderSystem {
     public static void createNewOrder(){
         // TODO: Do everything here if users need to create an order
         // including I/O with command line
-        int l = App.branchList.size();
+    	//Receipt, input handling
+    	//Edit cart (adding/removing from cart)
+    	//Payment page
+    	List<Food> catMenu = null;
+    	int l = 0;
+    	Scanner sc = new Scanner(System.in);
     	System.out.println("Select Branch:");
-        for (int i = 0; i < l; i++) {
-            System.out.println(l+" : "+ App.branchList.get(l).getBranchName());
+        for (Branch branch : App.branchList) {
+            System.out.println(l+1+" : "+ App.branchList.get(l).getBranchName());
+            l++;
         }
-
+        int opt = sc.nextInt();
+        Menu menu = new Menu(App.foodList);
+        Branch branch = App.branchList.get(opt-1);
+        branch.setBranchMenu(menu.getFoodListByBranch(branch.getBranchName()));
+       while(true) {
+    	   int i = 1;
+    	   System.out.println("Select category:");
+    	   for(FoodCategory fc : FoodCategory.values()) {
+    		   System.out.println(i + ". " + fc);
+    		   i++;
+        	}
+    	   System.out.println(i + ". " + "Review cart");
+    	   i = 1;
+    	   opt = sc.nextInt();
+    	   if(opt == 5) {
+    		   break;
+    	   }
+    	   switch(opt) {
+    	   case 1:
+    		   catMenu = menu.getFoodListByCategory(branch.getBranchMenu(), FoodCategory.BURGER);
+    		   if(catMenu.isEmpty()) {
+    			   System.out.println("This branch has no burgers.");
+    			   System.out.println();
+    			   continue;
+    		   }
+    		   for(Food cateFood : catMenu) {
+    			   System.out.println(i + ". " + cateFood.getName() + " $" + String.format("%.2f", cateFood.getPrice()));
+    			   i++;
+    		   }
+    		   System.out.println();
+    		   break;
+    	   case 2:
+    		   catMenu = menu.getFoodListByCategory(branch.getBranchMenu(), FoodCategory.SIDE);
+    		   if(catMenu.isEmpty()) {
+    			   System.out.println("This branch has no sides.");
+    			   System.out.println();
+    			   continue;
+    		   }
+    		   for(Food cateFood : catMenu) {
+    			   System.out.println(i + ". " + cateFood.getName() + " $" + String.format("%.2f", cateFood.getPrice()));
+    			   i++;
+    		   }
+    		   System.out.println();
+    		   break;
+    	   case 3:
+    		   catMenu = menu.getFoodListByCategory(branch.getBranchMenu(), FoodCategory.DRINK);
+    		   if(catMenu.isEmpty()) {
+    			   System.out.println("This branch has no drinks.");
+    			   System.out.println();
+    			   continue;
+    		   }
+    		   for(Food cateFood : catMenu) {
+    			   System.out.println(i + ". " + cateFood.getName() + " $" + String.format("%.2f", cateFood.getPrice()));
+    			   i++;
+    		   }
+    		   System.out.println();
+    		   break;
+    	   case 4:
+    		   catMenu = menu.getFoodListByCategory(branch.getBranchMenu(), FoodCategory.SET_MEAL);
+    		   if(catMenu.isEmpty()) {
+    			   System.out.println("This branch has no set meals.");
+    			   System.out.println();
+    			   continue;
+    		   }
+    		   for(Food cateFood : catMenu) {
+    			   System.out.println(i + ". " + cateFood.getName() + " $" + String.format("%.2f", cateFood.getPrice()));
+    			   i++;
+    			 
+    		   }
+    		   System.out.println();
+    		   break;
+    	   default:
+    		   System.out.println("Invalid option");
+    		   break;
+    	   }
+    	   opt = sc.nextInt();
+    	   currentOrder.addOrderItem(catMenu.get(opt-1));
+    	   }
+       //Review cart
+       int i = 1;
+       for(Food custFood : currentOrder.getFoodList()) {
+    	   System.out.println(i + ". " + custFood.getName() + " $" + String.format("%.2f", custFood.getPrice()));
+    	   i++;
+       }
+       System.out.println("Total: " + "$" + String.format("%.2f", currentOrder.getTotalCost()));
+        }
+    
     }
-}
+

@@ -24,11 +24,25 @@ public class Menu {
     public List<Food> getFoodList(){
         return foodList;
     }
+    
+    public List<Food> getFoodListByBranch(String branch){
+    	List<Food> branchMenu = new ArrayList<Food>();
+    	for(Food f : foodList) {
+    		if(f.getBranch().equals(branch)) {
+    			branchMenu.add(f);
+    		}
+    	}
+    	return branchMenu;
+    }
+    
+    public void setFoodListByBranch(List<Food> foodList){
+    	this.foodList = foodList;
+    }
 
-
-    public List<Food> getFoodListByCategory(FoodCategory category){
+    
+    public List<Food> getFoodListByCategory(List<Food> branchMenu, FoodCategory category){
         List<Food> cate = new ArrayList<>();
-        for(Food f: foodList){
+        for(Food f: branchMenu){
             if(f.getCategory() == category) cate.add(f);
         }
         return cate;

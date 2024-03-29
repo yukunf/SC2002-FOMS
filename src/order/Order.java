@@ -47,7 +47,13 @@ public class Order implements Serializable {
         return orderID;
     }
 
-
+    public double getTotalCost() {
+    	double cost = 0;
+    	for(Food items : foodList) {
+    		cost += items.getPrice();
+    	}
+    	return cost;
+    }
     public int getBranchID() {
         return branchID;
     }

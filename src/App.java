@@ -24,7 +24,7 @@ public class App {
     public static List<Branch> branchList;  // Stores every branch
     public static List<Order> orderList;  // Stores every order; Keeps orderID ascending
 
-	public static List<Food> menuList;
+	public static List<Food> foodList;
 	public static List<Staff> staffList;
 
 	public static List<Admin> adminList;
@@ -39,7 +39,7 @@ public class App {
 	public static void initialize(){
 		// reading orderList;
 		branchList = FileIO.readBranchList();
-		menuList = FileIO.readFoodList();
+		foodList = FileIO.readFoodList();
 		staffList = FileIO.readStaffList();
 		adminList = FileIO.readAdminList();
 		// TODO orderList
@@ -85,8 +85,7 @@ public class App {
     public static void main(String[] args) {
 
 
-		//initialize();
-
+		initialize();
 
     	int opt;
         System.out.println("Select a domain:");
@@ -100,9 +99,9 @@ public class App {
 				customerDriver();
         		break;
         	case 2:
-        		List<Staff> staffList = FileIO.readStaffList();
-        		for(Staff staff : staffList) {
-        			System.out.println(staff.getStaffName());
+        		List<Admin> AdminList = FileIO.readAdminList();
+        		for(Admin admin : AdminList) {
+        			System.out.println(admin.getAdminName());
         		}
         		break;
         	case 3:
