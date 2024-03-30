@@ -113,13 +113,21 @@ public void RemoveStaff(Staff a,Branch branch) {
 	return;
 	
 }
-public void DisplayStaff() {
+public void DisplayStaff(Branch branch) {
+	for(Staff st:branch.getStaffList())
+		System.out.println(st.getStaffName());
+	}
 	
 }
-public void AssignManager() {
-	
+public void AssignManager(Branch branch,Manager manager) {
+	List<Manager> mnglist;
+	mnglist=branch.getmanagerlist();
+	mnglist.add(manager);
+	branch.setmanagerlist(mnglist);
 }
-public void TransferStaffManager() {
+
+public void TransferStaffManager(Branch newBranch, Manager manager) {
+	newBranch.setmanagerlist(null);
 	
 }
 public void addpaymentmethod() {
