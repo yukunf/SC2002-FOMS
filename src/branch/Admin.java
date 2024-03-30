@@ -1,10 +1,8 @@
 package src.branch;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Admin {
-	private List<Branch> branschlist;
 
 	Scanner sc = new Scanner(System.in);
 
@@ -29,22 +27,27 @@ public void AddStaff(Branch branch) {
 		char gender=sc.nextLine().charAt(0);
 		System.out.println("Enter the age of the new staff");
 		int age=sc.nextInt();
+
 		String branchname=branch.getBranchName();
-		
 		Staff newsStaff=new Staff(name,ID,gender,age,branchname);
 		staffList.add(newsStaff);
+		branch.setStaffList(staffList);
 	}
 
 		
 }
 
-public void EditStaff(Staff a) {
-	for (String str1:branschlist){
-		for (String str2:staffList){
-			int index=staffList.indexOf(a);
+public void EditStaff(Staff a,Branch branch) {
+
+	List<Staff> stlist;
+
+	for (Staff stf: branch.getStaffList()){
+		if (stf.getStaffName().equals(a.getStaffName())){
+			int ind =branch.getStaffList().indexOf(a);
+			break;
 		}
 	}
-	
+
 	System.out.println("What do you want to edit");
 	System.out.println("1.name");
 	System.out.println("2.ID");
@@ -52,13 +55,18 @@ public void EditStaff(Staff a) {
 	System.out.println("4.age");
 	System.out.println("5.branch");
 	int choice=sc.nextInt();
+
 	switch (choice) {
 		case 1:
 		System.out.println("key in the new name");
 		String name=sc.nextLine();
 		a.changeStaffName(a,name);
+		stlist=branch.getStaffList().remove(ind);
+		branch.setStaffList(stlist.set(ind, a));
 		return;			
-			break;
+		break;
+
+		
 		case 2:
 		System.out.println("key in the new ID");
 		String id=sc.nextLine();
@@ -72,7 +80,8 @@ public void EditStaff(Staff a) {
 
 	}
 }
-public void RemoveStaff() {
+
+public void RemoveStaff(Staff a) {
 	
 }
 public void DisplayStaff() {
