@@ -47,4 +47,20 @@ public class Staff {
 	public String getStaffName() {
 		return name;
 	}
+	public void changeStaffName(Staff a, String newname) {
+		a.name=newname;
+	}
+	public void changeStaffID(Staff a, String newID) {
+		a.loginID=newID;
+		
+	}
+	public void changeStaffgender(Staff a, char newgender) {
+		a.gender=newgender;
+	}
+	public void changeStaffage(Staff a, int newage) {
+		a.age=newage;
+	}
+	public void changeStaffbranch(Staff a, String newbranch) {
+		a.branch=newbranch;
+	}
 	}
