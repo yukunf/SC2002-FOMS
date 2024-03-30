@@ -23,7 +23,7 @@ public class OrderSystem {
 
 
     /*-------------------- Tool Methods -----------------------------*/
-    private static Order currentOrder = new Order(); // Holds the order currently making
+    private Order currentOrder = new Order(); // Holds the order currently making
 
 
     public static Order getOrderByID(int orderID){
@@ -35,18 +35,18 @@ public class OrderSystem {
         throw new NoSuchElementException("No such order.");
     }
 
-    private static OrderStatus getOrderStatus(int orderID){
+    private OrderStatus getOrderStatus(int orderID){
 
         return getOrderByID(orderID).getStatus();
     }
 
-    public static void addToCart(Food food){
+    public void addToCart(Food food){
 
         currentOrder.addOrderItem(food);
     }
 
 
-    public static  Order generateOrder(){ // #TODO Send Order to payment or what
+    public  Order generateOrder(){ // #TODO Send Order to payment or what
         Order temp = currentOrder;
         currentOrder = new Order(); // Reset the order don't care about nulls
         return temp;
@@ -76,15 +76,55 @@ public class OrderSystem {
         }
 
     }
+    
+    private int reviewCart() {
+    	Scanner sc = new Scanner(System.in);
+    	int opt = 0;
+	       while(true) {
+	    	   int i = 1;
+	    	   System.out.println("======== Review cart ========");
+	    	   for(Food custFood : currentOrder.getFoodList()) {
+		    	   System.out.println(i + ". " + custFood.getName() + " $" + String.format("%.2f", custFood.getPrice()));
+		    	   i++;
+		       }
+	    	   System.out.println();
+	    	   System.out.println("Total: " + "$" + String.format("%.2f", currentOrder.getTotalCost()));
+	    	   System.out.println("=============================");
+	    	   System.out.println("1. Add more items");
+	    	   System.out.println("2. Remove items");
+	    	   System.out.println("3. Payment");
+	    	   opt = sc.nextInt();
+	    	   if(opt == 1) {
+	    		   return 0;
+	      }
+	    	   else if(opt == 2) {
+	    		   i = 1;
+				  System.out.println("Select items to remove:");
+				  for(Food custFood : currentOrder.getFoodList()) {
+					  System.out.println(i + ". " + custFood.getName() + " $" + String.format("%.2f", custFood.getPrice()));
+					  i++;
+			   }
+				   int opt2 = sc.nextInt();
+				   currentOrder.removeOrderItem(opt2-1);
+	      }
+		      else if(opt == 3) {
+		    	  System.out.println("Proceeding to payment");
+		    	  return 1;
+		      }
+		      else {
+		    	  System.out.println("Invalid option!");
+		      }
+		       }
+	      
+    }
 
-    public static void createNewOrder(){
+    public void createNewOrder(){
         // TODO: Do everything here if users need to create an order
         // including I/O with command line
-    	//Receipt, input handling and formatting
-    	//Edit cart (adding/removing from cart)
-    	//Payment page
+    	//input handling
     	List<Food> catMenu = null;
     	int l = 0;
+    	int rc = -1;
     	Scanner sc = new Scanner(System.in);
     	System.out.println("Select Branch:");
         for (Branch branch : App.branchList) {
@@ -94,6 +134,7 @@ public class OrderSystem {
         int opt = sc.nextInt();
         Menu menu = new Menu(App.foodList);
         Branch branch = App.branchList.get(opt-1);
+        //Setting the menu according to the branch selected
         branch.setBranchMenu(menu.getFoodListByBranch(branch.getBranchName()));
        while(true) {
     	   int i = 1;
@@ -105,9 +146,6 @@ public class OrderSystem {
     	   System.out.println(i + ". " + "Review cart");
     	   i = 1;
     	   opt = sc.nextInt();
-    	   if(opt == 5) {
-    		   break;
-    	   }
     	   switch(opt) {
     	   case 1:
     		   catMenu = menu.getFoodListByCategory(branch.getBranchMenu(), FoodCategory.BURGER);
@@ -162,21 +200,33 @@ public class OrderSystem {
     		   }
     		   System.out.println();
     		   break;
+    	
+    	   case 5: // Review Cart
+    		   rc = reviewCart();
+    		   break;
     	   default:
     		   System.out.println("Invalid option");
     		   break;
     	   }
-    	   opt = sc.nextInt();
-    	   currentOrder.addOrderItem(catMenu.get(opt-1));
+    	   if(opt <= 4) {
+    		   int opt2 = sc.nextInt();
+    		   currentOrder.addOrderItem(catMenu.get(opt2-1));
+    	   	}
+    	   else if(opt == 5) {
+    		   if(rc == 1) {
+    			   Payment payment = new Payment(currentOrder.getTotalCost(), "Credit Card");
+    			   payment.processPayment();
+    			   System.out.println();
+    			   Receipt.printReceipt(branch.getBranchName(), currentOrder.getOrderID(), currentOrder.getFoodList(), currentOrder.getTotalCost());
+    			   currentOrder.setStatus(OrderStatus.PREPARING);
+    			   App.orderList.add(currentOrder);
+    			   break;
+    		   }
     	   }
-       //Review cart
-       int i = 1;
-       for(Food custFood : currentOrder.getFoodList()) {
-    	   System.out.println(i + ". " + custFood.getName() + " $" + String.format("%.2f", custFood.getPrice()));
-    	   i++;
-       }
-       System.out.println("Total: " + "$" + String.format("%.2f", currentOrder.getTotalCost()));
-        }
-    
+    		   
+    	}
     }
+}
+    
+
 

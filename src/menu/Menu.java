@@ -28,7 +28,7 @@ public class Menu {
     public List<Food> getFoodListByBranch(String branch){
     	List<Food> branchMenu = new ArrayList<Food>();
     	for(Food f : foodList) {
-    		if(f.getBranch().equals(branch)) {
+    		if(f.getBranch().equals(branch) && f.isAvailability()) {  //make sure is available
     			branchMenu.add(f);
     		}
     	}

@@ -25,8 +25,8 @@ public class Order implements Serializable {
     //TODO Maybe need a subclass to store customize options and quantity;
 
     public Order() {
+    	orderCount++; //everytime a new order is instantiated can increment no need to manually set it.
         orderID = orderCount;
-        orderCount++; //everytime a new order is instantiated can increment no need to manually set it.
         branchID = 0;
         time = 0;
         status = OrderStatus.UNPAID;
@@ -34,9 +34,8 @@ public class Order implements Serializable {
     }
 
     public Order(int branchID, int time, OrderStatus status, List<Food> orderItem) {
-        orderID = orderCount;
-        orderCount++; //everytime a new order is instantiated can increment no need to manually set it.
-
+    	orderCount++; //everytime a new order is instantiated can increment no need to manually set it.
+    	orderID = orderCount;
         this.branchID = branchID;
         this.time = time;
         this.status = status;
@@ -88,6 +87,9 @@ public class Order implements Serializable {
 
     public void addOrderItem(Food orderItem) {
         this.foodList.add(orderItem);
+    }
+    public void removeOrderItem(int index) {
+    	this.foodList.remove(index);
     }
 
     public void clearOrderItem(){
