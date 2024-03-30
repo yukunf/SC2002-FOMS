@@ -21,7 +21,7 @@ public class Payment {
     
     //assuming all payments are successful
     public void processPayment() {
-        System.out.println("Payment of " + amount + " via " + paymentMethod + " has been processed successfully.");
+        System.out.println("Payment of " + "$" + String.format("%.2f", amount) + " via " + paymentMethod + " has been processed successfully.");
     }
 
     //getters and setters

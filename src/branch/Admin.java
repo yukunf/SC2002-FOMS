@@ -3,15 +3,27 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Admin {
-	List<Branch> branchlist;
+
+	private List<Branch> branschlist;
+	private String name;
+	private String loginID;
+	private char gender;
+	private int age;
 	Scanner sc = new Scanner(System.in);
 
 
-//constructor
+// default constructor
 	public Admin(){
 
 	}
-	
+
+//Constructor
+public Admin(String name, String loginID, char gender, int age) {
+	this.name = name;
+	this.loginID = loginID;
+	this.gender = gender;
+	this.age = age;
+	}
 	
 	
 public void AddStaff(Branch branch) {

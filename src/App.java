@@ -11,6 +11,7 @@ import src.order.OrderSystem;
 import src.menu.Food;
 
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * @author fengyukun
@@ -22,7 +23,7 @@ import java.util.List;
 public class App {
 	private static final Scanner sc = new Scanner(System.in);
     public static List<Branch> branchList;  // Stores every branch
-    public static List<Order> orderList;  // Stores every order; Keeps orderID ascending
+    public static List<Order> orderList = new ArrayList<>();  // Stores every order; Keeps orderID ascending
 
 	public static List<Food> foodList;
 	public static List<Staff> staffList;
@@ -73,7 +74,9 @@ public class App {
 		int secondOpt = sc.nextInt();
 		while(secondOpt != 3){
 			if(secondOpt == 1) {
-				OrderSystem.createNewOrder();
+				//OrderSystem cannot be static because everytime you create a new order, it will just add on the previous order.
+				OrderSystem os = new OrderSystem();
+				os.createNewOrder();
 				break;
 			} else if(secondOpt == 2) {
 				OrderSystem.checkOrderStatus();
@@ -99,10 +102,6 @@ public class App {
 				customerDriver();
         		break;
         	case 2:
-        		List<Admin> AdminList = FileIO.readAdminList();
-        		for(Admin admin : AdminList) {
-        			System.out.println(admin.getAdminName());
-        		}
         		break;
         	case 3:
         		break;
