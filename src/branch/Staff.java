@@ -25,7 +25,7 @@ public class Staff {
 	}
 	
 	public void displayOrders() {
-		int orderCount;
+	    int orderCount;
 	    for (int i=0; i<orderCount; i++) {		// need to make orderCount public?
 	      System.out.println(orderList[i]);		
 	    }
