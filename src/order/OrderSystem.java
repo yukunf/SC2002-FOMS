@@ -121,7 +121,7 @@ public class OrderSystem {
     public void createNewOrder(){
         // TODO: Do everything here if users need to create an order
         // including I/O with command line
-    	//input handling
+    	//left input handling
     	List<Food> catMenu = null;
     	int l = 0;
     	int rc = -1;
@@ -134,8 +134,19 @@ public class OrderSystem {
         int opt = sc.nextInt();
         Menu menu = new Menu(App.foodList);
         Branch branch = App.branchList.get(opt-1);
+        currentOrder.setBranch(branch.getBranchName());
         //Setting the menu according to the branch selected
         branch.setBranchMenu(menu.getFoodListByBranch(branch.getBranchName()));
+        System.out.println("Select Dining status:");
+        System.out.println("1. Takeaway");
+        System.out.println("2. Dine-in");
+        opt = sc.nextInt();
+        if(opt == 1) {
+        	currentOrder.setDiningStatus(false);
+        }
+        else if(opt == 2) {
+        	currentOrder.setDiningStatus(true);
+        }
        while(true) {
     	   int i = 1;
     	   System.out.println("Select category:");
@@ -217,7 +228,7 @@ public class OrderSystem {
     			   Payment payment = new Payment(currentOrder.getTotalCost(), "Credit Card");
     			   payment.processPayment();
     			   System.out.println();
-    			   Receipt.printReceipt(branch.getBranchName(), currentOrder.getOrderID(), currentOrder.getFoodList(), currentOrder.getTotalCost());
+    			   Receipt.printReceipt(currentOrder);
     			   currentOrder.setStatus(OrderStatus.PREPARING);
     			   App.orderList.add(currentOrder);
     			   break;

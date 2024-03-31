@@ -16,8 +16,8 @@ import java.util.List;
 public class Order implements Serializable {
     private static int orderCount = 0;
     private int orderID;
-    private int branchID;
-
+    private String branch;
+    private boolean diningStatus; //True == dining in and false == take away
     private int time; // Time when order is placed ( #TODO or when order is ready???)
                     // in unix timestamp
     private OrderStatus status;
@@ -27,18 +27,19 @@ public class Order implements Serializable {
     public Order() {
     	orderCount++; //everytime a new order is instantiated can increment no need to manually set it.
         orderID = orderCount;
-        branchID = 0;
         time = 0;
         status = OrderStatus.UNPAID;
+        diningStatus = false;
         foodList = new ArrayList<>();
     }
 
-    public Order(int branchID, int time, OrderStatus status, List<Food> orderItem) {
+    public Order(String branch, int time, OrderStatus status, boolean diningStatus, List<Food> orderItem) {
     	orderCount++; //everytime a new order is instantiated can increment no need to manually set it.
     	orderID = orderCount;
-        this.branchID = branchID;
+        this.branch = branch;
         this.time = time;
         this.status = status;
+        this.diningStatus = diningStatus;
         this.foodList = orderItem;
     }
 
@@ -53,12 +54,20 @@ public class Order implements Serializable {
     	}
     	return cost;
     }
-    public int getBranchID() {
-        return branchID;
+    public String getBranch() {
+        return branch;
     }
 
-    public void setBranchID(int branchID) {
-        this.branchID = branchID;
+    public void setBranch(String branch) {
+        this.branch = branch;
+    }
+    
+    public boolean getDiningStatus() {
+    	return diningStatus;
+    }
+    
+    public void setDiningStatus(boolean diningStatus) {
+    	this.diningStatus = diningStatus;
     }
 
     public int getTime() {

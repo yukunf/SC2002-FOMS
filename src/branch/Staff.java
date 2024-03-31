@@ -13,6 +13,7 @@ public class Staff {
 	private char gender;
 	private int age;
 	private String branch;
+	private String password; 
 	
 	public Staff(String name, String loginID, char gender, int age, String branch) {
 		this.name=name;
@@ -20,6 +21,7 @@ public class Staff {
 		this.gender=gender;
 		this.age=age;
 		this.branch=branch;
+		this.password = "password"; //default password
 	}
 	
 	public void displayOrders() {
@@ -62,5 +64,14 @@ public class Staff {
 	}
 	public void changeStaffbranch(Staff a, String newbranch) {
 		a.branch=newbranch;
+	}
+	public String getLoginID() {
+		return loginID;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {  //For staff to change password
+		this.password = password;
 	}
 	}
