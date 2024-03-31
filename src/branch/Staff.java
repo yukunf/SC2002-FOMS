@@ -25,27 +25,37 @@ public class Staff {
 	}
 	
 	public void displayOrders() {
-		// are orders saved in a list?
+		int orderCount;
+	    for (int i=0; i<orderCount; i++) {		// need to make orderCount public?
+	      System.out.println(orderList[i]);		
+	    }
 	}
 	public void viewDetails(Order order) {
-		System.out.println("select order to view (input orderID): ");
-		String currentOrder = sc.nextLine();
-//		currentOrder =
+		System.out.println("Enter order to view (input orderID): ");
+		int currentOrder = sc.nextInt();
+		System.out.println("Order details: ");
+		System.out.println("Branch: "+orderList[currentOrder].branch+ ", Time: "+orderList[currentOrder].time+", Dine-in: "+orderList[currentOrder].diningStatus+ ", Current status: "+orderList[currentOrder].status);
+//		int i=0;
+//		while (orderList[currentOrder].foodList[i] != null) {
+//			how to access quantity and food item bought?
+//		}
+		
+		
 	}
 	public void processOrder() {
-		System.out.println("select order to process (input orderID): ");
-		String currentOrder = sc.nextLine();
-//		currentOrder = 	// not sure how to access the order?
+		System.out.println("Enter orderID: ");
+		int currentOrder = sc.nextInt();
 		System.out.println("change status to 1: PREPARING, 2: READY, 3: CANCELLED");
 		int choice = sc.nextInt();
-//		switch (choice) {
-//			case 1: currentOrder.status = OrderStatus.PREPARING;
-//				break;
-//			case 2: currentOrder.status = OrderStatus.READY;
-//				break;
-//			case 3:	currentOrder.status = OrderStatus.CANCELLED;
-//				break;
-		}
+		switch (choice) {
+			case 1: orderList[currentOrder].status = OrderStatus.PREPARING;
+				break;
+			case 2: orderList[currentOrder].status = OrderStatus.READY;
+				break;
+			case 3:	orderList[currentOrder].status = OrderStatus.CANCELLED;
+				break;
+	}
+		
 	public String getStaffName() {
 		return name;
 	}
