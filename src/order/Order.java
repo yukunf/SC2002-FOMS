@@ -2,6 +2,7 @@ package src.order;
 
 import src.menu.Food;
 
+import java.beans.JavaBean;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,7 @@ public class Order implements Serializable {
     private int time; // Time when order is placed ( #TODO or when order is ready???)
                     // in unix timestamp
     private OrderStatus status;
-    private List<Food> foodList;
+    private List<OrderEntry> foodList;
     //TODO Maybe need a subclass to store customize options and quantity;
 
     public Order() {
@@ -33,7 +34,7 @@ public class Order implements Serializable {
         foodList = new ArrayList<>();
     }
 
-    public Order(String branch, int time, OrderStatus status, boolean diningStatus, List<Food> orderItem) {
+    public Order(String branch, int time, OrderStatus status, boolean diningStatus, List<OrderEntry> orderItem) {
     	orderCount++; //everytime a new order is instantiated can increment no need to manually set it.
     	orderID = orderCount;
         this.branch = branch;
@@ -49,8 +50,8 @@ public class Order implements Serializable {
 
     public double getTotalCost() {
     	double cost = 0;
-    	for(Food items : foodList) {
-    		cost += items.getPrice();
+    	for(OrderEntry oe : foodList) {
+    		cost += oe.getQuantity() * oe.getFood().getPrice();
     	}
     	return cost;
     }
@@ -90,11 +91,11 @@ public class Order implements Serializable {
         Order.orderCount = c;
     }
 
-    public List<Food> getFoodList() {
+    public List<OrderEntry> getFoodList() {
         return foodList;
     }
 
-    public void addOrderItem(Food orderItem) {
+    public void addOrderItem(OrderEntry orderItem) {
         this.foodList.add(orderItem);
     }
     public void removeOrderItem(int index) {
@@ -104,4 +105,59 @@ public class Order implements Serializable {
     public void clearOrderItem(){
         foodList = new ArrayList<>();}
 
+}
+
+@JavaBean
+class OrderEntry{ // Class used to represent a line of order
+    private Food food;
+    private int quantity;
+
+    private boolean hasCustomization;
+    private String customization;
+
+    public OrderEntry(Food food, int quantity,boolean hasCustomization, String customization) {
+        this.food = food;
+        this.quantity = quantity;
+        this.customization = customization;
+        this.hasCustomization = hasCustomization;
+    }
+    public OrderEntry(Food food) {
+        this.food = food;
+        this.quantity = 1;
+        this.customization = "";
+        this.hasCustomization = false;
+    }
+
+    public Food getFood() {
+        return food;
+    }
+
+    public void setFood(Food food) {
+        this.food = food;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getCustomization() {
+        return customization;
+    }
+
+    public void setCustomization(String customization) {
+        this.customization = customization;
+        this.hasCustomization = true;
+    }
+
+    public boolean isHasCustomization() {
+        return hasCustomization;
+    }
+
+    public void setHasCustomization(boolean hasCustomization) {
+        this.hasCustomization = hasCustomization;
+    }
 }

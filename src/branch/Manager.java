@@ -1,5 +1,12 @@
 package src.branch;
 
+import src.menu.Food;
+import src.menu.FoodCategory;
+
+import static src.App.foodList;
+import static src.App.staffList;
+import static src.menu.FoodCategory.*;
+
 public class Manager extends Staff {
   public Manager() {
       super("NA","NA",'M',-1,"NA");

@@ -42,7 +42,7 @@ public class OrderSystem {
 
     public void addToCart(Food food){
 
-        currentOrder.addOrderItem(food);
+        currentOrder.addOrderItem(new OrderEntry(food));
     }
 
 
@@ -83,8 +83,8 @@ public class OrderSystem {
 	       while(true) {
 	    	   int i = 1;
 	    	   System.out.println("======== Review cart ========");
-	    	   for(Food custFood : currentOrder.getFoodList()) {
-		    	   System.out.println(i + ". " + custFood.getName() + " $" + String.format("%.2f", custFood.getPrice()));
+	    	   for(OrderEntry oe : currentOrder.getFoodList()) {
+		    	   System.out.println(i + ". " + oe.getFood().getName() + " $" + String.format("%.2f", oe.getFood().getPrice()));
 		    	   i++;
 		       }
 	    	   System.out.println();
@@ -100,8 +100,8 @@ public class OrderSystem {
 	    	   else if(opt == 2) {
 	    		   i = 1;
 				  System.out.println("Select items to remove:");
-				  for(Food custFood : currentOrder.getFoodList()) {
-					  System.out.println(i + ". " + custFood.getName() + " $" + String.format("%.2f", custFood.getPrice()));
+				  for(OrderEntry oe : currentOrder.getFoodList()) {
+					  System.out.println(i + ". " + oe.getFood().getName() + " $" + String.format("%.2f", oe.getFood().getPrice()));
 					  i++;
 			   }
 				   int opt2 = sc.nextInt();
@@ -221,12 +221,12 @@ public class OrderSystem {
     	   }
     	   if(opt <= 4) {
     		   int opt2 = sc.nextInt();
-    		   currentOrder.addOrderItem(catMenu.get(opt2-1));
+    		   currentOrder.addOrderItem(new OrderEntry(catMenu.get(opt2-1)));
     	   	}
     	   else if(opt == 5) {
     		   if(rc == 1) {
-    			   Payment payment = new Payment(currentOrder.getTotalCost(), "Credit Card");
-    			   payment.processPayment();
+//    			   Payment payment = new Payment(currentOrder.getTotalCost(), "Credit Card");
+//    			   payment.processPayment();
     			   System.out.println();
     			   Receipt.printReceipt(currentOrder);
     			   currentOrder.setStatus(OrderStatus.PREPARING);

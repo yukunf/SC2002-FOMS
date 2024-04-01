@@ -23,7 +23,7 @@ import java.util.ArrayList;
 public class App {
 	private static final Scanner sc = new Scanner(System.in);
     public static List<Branch> branchList;  // Stores every branch
-    public static List<Order> orderList = new ArrayList<>();  // Stores every order; Keeps orderID ascending
+    public static List<Order> orderList;  // Stores every order; Keeps orderID ascending
 	public static List<Food> foodList;
 	public static List<Staff> staffList;
 	public static List<Admin> adminList;

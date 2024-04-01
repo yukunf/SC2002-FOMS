@@ -8,42 +8,35 @@ package src.order;
  * @version 1.00.00
  */
 public class Payment {
+    public enum PaymentMethod {CREDIT_CARD,CASH,PAYPAL,PAYNOW}
+    private static double amount;
+    private Order currentOrder;
 
-    private double amount;
-    private String paymentMethod; //eg. credit card, payPal
-
-
-    public Payment(double amount, String paymentMethod) {
-        this.amount = amount;
-        this.paymentMethod = paymentMethod;
-    }
+//    public Payment(double amount, String paymentMethod) {
+//        this.amount = amount;
+//        this.paymentMethod = paymentMethod;
+//    }
 
     
     //assuming all payments are successful
-    public void processPayment() {
-        System.out.println("Payment of " + "$" + String.format("%.2f", amount) + " via " + paymentMethod + " has been processed successfully.");
+    public static void processPayment() {
+        //System.out.println("Payment of " + "$" + String.format("%.2f", amount) + " via " + paymentMethod + " has been processed successfully.");
     }
 
     //getters and setters
-    public double getAmount() {
+    public static double getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
-        this.amount = amount;
+    public static void calculate(){
+        // TODO calculate amount by order
     }
 
-    public String getPaymentMethod() {
-        return paymentMethod;
-    }
 
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
-    }
+//    public void setPaymentMethod(String paymentMethod) {
+//        this.paymentMethod = paymentMethod;
+//    }
 
     //for testing
-    public static void main(String[] args) {
-        Payment payment = new Payment(100, "Credit Card");
-        payment.processPayment(); 
-    }
+
 }
