@@ -25,8 +25,8 @@ public class Receipt {
 			System.out.println("Dining Status: Takeaway");
 		}
 		System.out.println();
-		for(Food food: currentOrder.getFoodList()) {
-			System.out.println(food.getName() + " $" + String.format("%.2f", food.getPrice()));
+		for(OrderEntry food: currentOrder.getFoodList()) {
+			System.out.println(food.getFood().getName() + " $" + String.format("%.2f", food.getFood().getPrice()));
 		}
 		System.out.println();
 		System.out.println("Total: " + "$" + String.format("%.2f", currentOrder.getTotalCost()));

@@ -230,7 +230,7 @@ public class OrderSystem {
     			   System.out.println();
     			   Receipt.printReceipt(currentOrder);
     			   currentOrder.setStatus(OrderStatus.PREPARING);
-    			   App.orderList.add(currentOrder);
+    			   //App.orderList.add(currentOrder);
     			   break;
     		   }
     	   }

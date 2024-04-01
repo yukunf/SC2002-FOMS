@@ -11,6 +11,9 @@ public class Manager extends Staff {
   public Manager() {
       super("NA","NA",'M',-1,"NA");
   }
+  public Manager(String name, String loginID, char gender, int age, String branch) {
+	  super(name, loginID, gender, age, branch);
+  }
   
   public void displayStaff() {
 	int StaffQuota=getStaffQuota();
