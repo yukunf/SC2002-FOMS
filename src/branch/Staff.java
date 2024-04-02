@@ -29,16 +29,17 @@ public class Staff {
 	}
 	
 	public void displayOrders() {
-	    int orderCount;
-	    for (int i=0; i<orderCount; i++) {		// need to make orderCount public?
-	      System.out.println(orderList.get(i));
-	    }
+//	    int orderCount;
+//	    for (int i=0; i<orderCount; i++) {		// need to make orderCount public? <- FIXME Why?? just read lists
+//	      System.out.println(orderList.get(i));
+//	    }
 	}
 	public void viewDetails(Order order) {
 		System.out.println("Enter order to view (input orderID): ");
 		int currentOrder = sc.nextInt();
 		System.out.println("Order details: ");
-		System.out.println("Branch: "+ orderList[currentOrder].branch+ ", Time: "+ orderList[currentOrder].time+", Dine-in: "+orderList[currentOrder].diningStatus+ ", Current status: "+orderList[currentOrder].status);
+		// FIXME BRO WHY U ASKED ORDERID THEN RETRIEVE ORDER BY THE PARAMETER ???
+//		System.out.println("Branch: "+ orderList[currentOrder].branch+ ", Time: "+ orderList[currentOrder].time+", Dine-in: "+orderList[currentOrder].diningStatus+ ", Current status: "+orderList[currentOrder].status);
 //		int i=0;
 //		while (orderList[currentOrder].foodList[i] != null) {
 //			how to access quantity and food item bought?
@@ -51,17 +52,17 @@ public class Staff {
 		int currentOrder = sc.nextInt();
 		System.out.println("change status to 1: PREPARING, 2: READY, 3: CANCELLED");
 		int choice = sc.nextInt();
-		switch (choice) {
-			case 1:
-				orderList[currentOrder].status = OrderStatus.PREPARING;
-				break;
-			case 2:
-				orderList[currentOrder].status = OrderStatus.READY;
-				break;
-			case 3:
-				orderList[currentOrder].status = OrderStatus.CANCELLED;
-				break;
-		}
+//		switch (choice) { FIXME
+//			case 1:
+//				orderList[currentOrder].status = OrderStatus.PREPARING;
+//				break;
+//			case 2:
+//				orderList[currentOrder].status = OrderStatus.READY;
+//				break;
+//			case 3:
+//				orderList[currentOrder].status = OrderStatus.CANCELLED;
+//				break;
+//		}
 	}
 
 		public String getStaffName () {
