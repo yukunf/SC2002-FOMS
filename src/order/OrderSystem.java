@@ -225,12 +225,12 @@ public class OrderSystem {
     	   	}
     	   else if(opt == 5) {
     		   if(rc == 1) {
-//    			   Payment payment = new Payment(currentOrder.getTotalCost(), "Credit Card");
-//    			   payment.processPayment();
+				   Payment.assignOrder(currentOrder);
+				   Payment.processPayment();
     			   System.out.println();
     			   Receipt.printReceipt(currentOrder);
     			   currentOrder.setStatus(OrderStatus.PREPARING);
-    			   //App.orderList.add(currentOrder);
+    			   App.orderList.add(currentOrder);
     			   break;
     		   }
     	   }
