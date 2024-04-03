@@ -105,6 +105,18 @@ public class Order implements Serializable {
     public void clearOrderItem(){
         foodList = new ArrayList<>();}
 
+    public String getCustomization (int i) {
+		return foodList.get(i).getCustomization();
+	}
+    public Food getFood (int i) {
+		return foodList.get(i).getFood();
+	}
+    public boolean getHasCustomization (int i) {
+		return foodList.get(i).isHasCustomization();
+	}
+    public int getQuantity (int i) {
+		return foodList.get(i).getQuantity();
+	}
 }
 
 @JavaBean
