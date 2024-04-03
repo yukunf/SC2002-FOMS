@@ -11,23 +11,21 @@ import java.util.Scanner;
  */
 public class Payment {
     public enum PaymentMethod {CREDIT_CARD,CASH,PAYPAL,PAYNOW}
-    private static double amount;
-    private static Order currentOrder = null;
 
-    public static void assignOrder(Order o){
-        currentOrder = o;
-    }
 
-    
-    //assuming all payments are successful
-    /* returns 1 if payment successful*/
-    public static int processPayment() {
+
+    /*
+    * Returns 1 if payment successful.
+    *
+    *
+    * */
+    public static boolean processPayment(Order currentOrder) {
         Scanner sc = new Scanner(System.in);
         if(currentOrder == null){
             System.out.println("Error: Order Not Assigned. Exiting...");
         }
 
-        calculate();
+        double amount = calculate(currentOrder);
         System.out.println("Due Amount: S$ "+amount);
         System.out.println("All possible payment method are:");
         for (int i = 0; i < PaymentMethod.values().length; i++) {
@@ -36,7 +34,7 @@ public class Payment {
         System.out.println("-----------------------------------\nPlease enter your choice:\n Enter -1 to cancel payment.");
         switch (sc.nextInt()){
             default:
-                return 0;
+                return false;
             case 1:
                 System.out.println("Payment Through Credit Card...Authorizing...Completed");
                 break;
@@ -50,24 +48,19 @@ public class Payment {
                 System.out.println("Payment Through Paynow...Please scan the QR Code...Completed");
                 break;
         }
-        currentOrder = null;
-        return 1;
+        currentOrder.setStatus(OrderStatus.PREPARING);
+        return true;
     }
 
-    //getters and setters
-    public static double getAmount() {
-        return amount;
-    }
 
-    private static void calculate(){
-        amount = 0;
+    private static double calculate(Order currentOrder){
+        double amount = 0;
         for(OrderEntry oe : currentOrder.getFoodList()){
             amount += oe.getQuantity() * oe.getFood().getPrice();
         }
+        return amount;
     }
 
 
-
-    //for testing
 
 }

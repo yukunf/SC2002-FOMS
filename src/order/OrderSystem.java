@@ -46,12 +46,6 @@ public class OrderSystem {
     }
 
 
-    public  Order generateOrder(){ // #TODO Send Order to payment or what
-        Order temp = currentOrder;
-        currentOrder = new Order(); // Reset the order don't care about nulls
-        return temp;
-    }
-
 
     /*-------------------- User Methods -----------------------------*/
 
@@ -122,6 +116,8 @@ public class OrderSystem {
         // TODO: Do everything here if users need to create an order
         // including I/O with command line
     	//left input handling
+
+		currentOrder = new Order(); //refresh the order object
     	List<Food> catMenu = null;
     	int l = 0;
     	int rc = -1;
@@ -225,12 +221,15 @@ public class OrderSystem {
     	   	}
     	   else if(opt == 5) {
     		   if(rc == 1) {
-				   Payment.assignOrder(currentOrder);
-				   Payment.processPayment();
-    			   System.out.println();
-    			   Receipt.printReceipt(currentOrder);
-    			   currentOrder.setStatus(OrderStatus.PREPARING);
-    			   App.orderList.add(currentOrder);
+				   boolean paymentSuccess = Payment.processPayment(currentOrder);
+				   if(paymentSuccess) {
+					   Receipt.printReceipt(currentOrder);
+					   // currentOrder.setStatus(OrderStatus.PREPARING); Done by payment
+					   App.orderList.add(currentOrder);
+				   }
+				   else{
+					   System.out.println("Payment Failed. Order will be dropped");
+				   }
     			   break;
     		   }
     	   }
