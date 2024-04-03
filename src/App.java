@@ -51,6 +51,14 @@ public class App {
 	}
 
 
+	//TODO Actually I don know where to put this in...
+	public static Order searchOrderByID(int id){
+		for(Order o:
+		orderList){
+			if(o.getOrderID() == id)return o;
+		}
+		return null;
+	}
 
 
 
