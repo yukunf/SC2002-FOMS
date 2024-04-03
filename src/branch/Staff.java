@@ -29,40 +29,42 @@ public class Staff {
 	}
 	
 	public void displayOrders() {
-//	    int orderCount;
-//	    for (int i=0; i<orderCount; i++) {		// need to make orderCount public? <- FIXME Why?? just read lists
-//	      System.out.println(orderList.get(i));
-//	    }
+		for (Order order : orderList) {		
+	      System.out.println(order.getOrderID());
+	    }
 	}
 	public void viewDetails(Order order) {
 		System.out.println("Enter order to view (input orderID): ");
 		int currentOrder = sc.nextInt();
 		System.out.println("Order details: ");
-		// FIXME BRO WHY U ASKED ORDERID THEN RETRIEVE ORDER BY THE PARAMETER ???
-//		System.out.println("Branch: "+ orderList[currentOrder].branch+ ", Time: "+ orderList[currentOrder].time+", Dine-in: "+orderList[currentOrder].diningStatus+ ", Current status: "+orderList[currentOrder].status);
-//		int i=0;
-//		while (orderList[currentOrder].foodList[i] != null) {
-//			how to access quantity and food item bought?
-//		}
-		
-		
+		System.out.println("Branch: "+ orderObject.getBranch()+ ", Time: "+ orderObject.getTime()+", Dine-in: "+orderObject.getBranch()+ ", Current status: "+orderObject.getStatus());
+		for (int i=0; i < orderObject.getFoodList().size(); i++) {
+			String customization;
+			if (orderList.get(currentOrder).getHasCustomization(i)) {
+				customization = orderObject.getCustomization(i);
+			}
+			else {
+				customization= "None";
+			}
+			System.out.println((i+1)+". Food item: " +orderObject.getFood(i)+ ", Food item: " +orderObject.getQuantity(i)+ ", Customization: "+customization);
+		}
 	}
 	public void processOrder() {
 		System.out.println("Enter orderID: ");
 		int currentOrder = sc.nextInt();
 		System.out.println("change status to 1: PREPARING, 2: READY, 3: CANCELLED");
 		int choice = sc.nextInt();
-//		switch (choice) { FIXME
-//			case 1:
-//				orderList[currentOrder].status = OrderStatus.PREPARING;
-//				break;
-//			case 2:
-//				orderList[currentOrder].status = OrderStatus.READY;
-//				break;
-//			case 3:
-//				orderList[currentOrder].status = OrderStatus.CANCELLED;
-//				break;
-//		}
+		switch (choice) { 
+			case 1:
+				orderList.get(currentOrder).setStatus(OrderStatus.PREPARING);
+				break;
+			case 2:
+				orderList.get(currentOrder).setStatus(OrderStatus.READY);
+				break;
+			case 3:
+				orderList.get(currentOrder).setStatus(OrderStatus.CANCELLED);
+				break;
+		}
 	}
 
 		public String getStaffName () {
