@@ -7,6 +7,7 @@ import src.order.OrderStatus;
 import java.util.Scanner;
 
 import static src.App.orderList;
+import static src.App.searchOrderByID;
 
 
 public class Staff {
@@ -33,22 +34,31 @@ public class Staff {
 	      System.out.println(order.getOrderID());
 	    }
 	}
-	public void viewDetails(Order order) {
+	public void viewDetails() {
 		System.out.println("Enter order to view (input orderID): ");
-		int currentOrder = sc.nextInt();
+		int orderID = sc.nextInt();
+		Order orderObject = searchOrderByID(orderID);
+		if(orderObject == null){
+			System.out.println("Order doesn't exist.");
+			return;
+		}
+
 		System.out.println("Order details: ");
 		System.out.println("Branch: "+ orderObject.getBranch()+ ", Time: "+ orderObject.getTime()+", Dine-in: "+orderObject.getBranch()+ ", Current status: "+orderObject.getStatus());
 		for (int i=0; i < orderObject.getFoodList().size(); i++) {
 			String customization;
-			if (orderList.get(currentOrder).getHasCustomization(i)) {
+			if (orderObject.getFoodList().get(i).isHasCustomization()) {
 				customization = orderObject.getCustomization(i);
 			}
 			else {
 				customization= "None";
 			}
-			System.out.println((i+1)+". Food item: " +orderObject.getFood(i)+ ", Food item: " +orderObject.getQuantity(i)+ ", Customization: "+customization);
+			System.out.println((i+1)+". Food item: " +orderObject.getFoodList().get(i).getFood()+ ", Food item: "
+					+orderObject.getFoodList().indexOf(i).getQuantity(i)+ ", Customization: "+customization);
 		}
 	}
+
+
 	public void processOrder() {
 		System.out.println("Enter orderID: ");
 		int currentOrder = sc.nextInt();
