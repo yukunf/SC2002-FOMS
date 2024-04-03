@@ -48,13 +48,13 @@ public class Staff {
 		for (int i=0; i < orderObject.getFoodList().size(); i++) {
 			String customization;
 			if (orderObject.getFoodList().get(i).isHasCustomization()) {
-				customization = orderObject.getCustomization(i);
+				customization = orderObject.getFoodList().get(i).getCustomization();
 			}
 			else {
 				customization= "None";
 			}
 			System.out.println((i+1)+". Food item: " +orderObject.getFoodList().get(i).getFood()+ ", Food item: "
-					+orderObject.getFoodList().indexOf(i).getQuantity(i)+ ", Customization: "+customization);
+					+orderObject.getFoodList().get(i).getQuantity()+ ", Customization: "+customization);
 		}
 	}
 
