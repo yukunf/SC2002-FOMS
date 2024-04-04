@@ -42,7 +42,7 @@ public class App {
 		staffList = FileIO.readStaffList();
 		adminList = FileIO.readAdminList();
 		// TODO orderList
-
+		orderList = new ArrayList<Order>();
 
 
 
@@ -93,9 +93,15 @@ public class App {
 	}
 	
 	public static void staffDriver() {  //May want to use a HashMap for constant look up time
+		String input;
 		Staff loggedInStaff = null;
+		do { 	
 		System.out.println("LoginID:");
-		String input = sc.next();
+		System.out.println("Enter 'q' to exit");
+		input = sc.next();
+		if(input.equals("q")) {
+			break;
+		}
 		for(Staff staff : staffList) {
 			if(input.equals(staff.getLoginID())){
 				loggedInStaff = staff;
@@ -107,16 +113,21 @@ public class App {
 			input = sc.next();
 			if(input.equals(loggedInStaff.getPassword())) {
 				System.out.println("Login successful, " + loggedInStaff.getStaffName());
+				break;
 				//Proceed to staff page
 			}
 			else {
 				System.out.println("Wrong password!");
+				System.out.println();
 			}
 		}
 		else {
+			if(!input.equals("q")) {
 			System.out.println("Invalid LoginID!");
+			System.out.println();
+			}
 		}
-		
+	}while(!input.equals("q"));
 		
 	}
     public static void main(String[] args) {
@@ -125,11 +136,11 @@ public class App {
 		initialize();
 
     	int opt;
-        System.out.println("Select a domain:");
-        System.out.println("1. Customer");
-        System.out.println("2. Staff");
-        System.out.println("3. Terminate");
         do {
+        	System.out.println("Select a domain:");
+            System.out.println("1. Customer");
+            System.out.println("2. Staff");
+            System.out.println("3. Terminate");
         	opt = sc.nextInt();
         	switch(opt) {
         	case 1: // Customer
@@ -144,7 +155,7 @@ public class App {
         		System.out.println("Invalid option");
         		break;
         	}
-        	
+        	System.out.println();
         }while(opt != 3);
 
 		deinitialize();
