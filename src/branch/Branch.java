@@ -2,7 +2,6 @@ package src.branch;
 
 import src.menu.Food;
 import java.util.List;
-import java.util.ArrayList;
 
 public class Branch {
   private int BranchID;
@@ -10,11 +9,14 @@ public class Branch {
   private int staffQuota;
   private List<Staff> staffList;
   private List<Food> branchMenu;
-  
+  private List<Manager> managerList;
+  private Boolean state;
+
   public Branch(String branchName, int staffQuota){
-	  this.branchName = branchName;
-	  this.staffQuota = staffQuota;
-	  this.branchMenu = branchMenu;
+    this.branchName = branchName;
+    this.staffQuota = staffQuota;
+    this.branchMenu = branchMenu;
+    this.state=true;
   }
 
   public int getBranchID() {
@@ -48,12 +50,29 @@ public class Branch {
   public void setStaffList(List<Staff> staffList) {
     this.staffList = staffList;
   }
-  
+
   public void setBranchMenu(List<Food> branchMenu) {
-	  this.branchMenu = branchMenu;
+    this.branchMenu = branchMenu;
   }
-  
+
   public List<Food> getBranchMenu() {
-	  return branchMenu;
+    return branchMenu;
+  }
+
+  public List<Manager> getmanagerlist(){
+    return this.managerList;
+
+  }
+
+  public void setmanagerlist(List<Manager> managerList){
+
+  }
+
+  public Boolean getState(){
+    return this.state;
+  }
+
+  public void setstate(Boolean open){
+    this.state=open;
   }
 }
