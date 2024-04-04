@@ -1,10 +1,12 @@
 package src.branch;
 import java.util.List;
 import java.util.Scanner;
+import src.order.Payment;
 
 public class Admin {
-
-	private List<Branch> branschlist;
+	
+	private List<Branch> branchlist;
+	private List<String> paymentMethodsList;	 
 	private String name;
 	private String loginID;
 	private char gender;
@@ -94,8 +96,8 @@ public void EditStaff(Staff a,Branch branch) {
 
 			int branchindex = -1;
 
-			for (int i=0;i<branchlist.size();++i){
-				if (branchlist.get(0).getBranchName().equals(branchnm)){
+			for (int i=0;i<this.branchlist.size();++i){
+				if (this.branchlist.get(0).getBranchName().equals(branchnm)){
 					branchindex=i;
 					break;
 				}
@@ -105,7 +107,7 @@ public void EditStaff(Staff a,Branch branch) {
 				System.out.println("Branch does not exist.");
 				return;
 			}
-			Branch bh=branchlist.get(branchindex);
+			Branch bh=this.branchlist.get(branchindex);
 			List<Staff> stflist=bh.getStaffList();
 			stflist.add(a);
 			bh.setStaffList(stflist);
@@ -137,21 +139,36 @@ public void AssignManager(Branch branch,Manager manager) {
 	branch.setmanagerlist(mnglist);
 }
 
-public void TransferStaffManager(Branch newBranch, Manager manager) {
-	newBranch.setmanagerlist(null);
+public void TransferStaffManager(Branch newBranch, Branch originalBranch, Manager manager) {
+	List<Manager> managerlist;
+	managerlist=originalBranch.getmanagerlist();
+	managerlist.remove(manager);
+	originalBranch.setmanagerlist(managerlist);
+	managerlist=newBranch.getmanagerlist();
+	AssignManager(newBranch, manager);	
+}
+
+public List<String> getPaymentMethod(){
+	return paymentMethodsList;
+}
+
+private List<String> addpaymentmethod(String newpaymentmethod) {
+	paymentMethodsList.add(newpaymentmethod);
+	return paymentMethodsList;
+}
+private List<String> removepaymentmethod(String removingpaymentmethod) {
+	paymentMethodsList.remove(removingpaymentmethod);
+	return paymentMethodsList;
 	
 }
-public void addpaymentmethod() {
+private void open(Branch branch) {
+	branch.setstate(true);
+	
 	
 }
-public void removepaymentmethod() {
-	
+private void close(Branch branch) {
+	branch.setstate(false);	
 }
-public void open() {
-	
-}
-public void close() {
-	
 }
 
 

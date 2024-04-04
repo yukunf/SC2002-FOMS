@@ -10,6 +10,7 @@ public class Branch {
   private int staffQuota;
   private List<Staff> staffList;
   private List<Food> branchMenu;
+  private List<Manager> managerList;
   
   public Branch(String branchName, int staffQuota){
 	  this.branchName = branchName;
@@ -55,5 +56,14 @@ public class Branch {
   
   public List<Food> getBranchMenu() {
 	  return branchMenu;
+  }
+  
+  public List<Manager> getmanagerlist(){
+    return this.managerList;
+    
+  }
+
+  public void setmanagerlist(List<Manager> managerList){
+    
   }
 }
