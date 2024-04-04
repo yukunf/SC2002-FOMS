@@ -62,6 +62,7 @@ public class OrderSystem {
                 o = getOrderByID(id);
             } catch (Exception e) {
                 System.out.println("Order Not Found! Please check your input and try again");
+                break;
             }
             if(o != null){
                 System.out.println("Status of Order "+id+" : "+o.getStatus());
@@ -119,30 +120,57 @@ public class OrderSystem {
 
 		currentOrder = new Order(); //refresh the order object
     	List<Food> catMenu = null;
-    	int l = 0;
+    	int l;
     	int rc = -1;
     	Scanner sc = new Scanner(System.in);
-    	System.out.println("Select Branch:");
-        for (Branch branch : App.branchList) {
-            System.out.println(l+1+" : "+ App.branchList.get(l).getBranchName());
-            l++;
-        }
-        int opt = sc.nextInt();
-        Menu menu = new Menu(App.foodList);
-        Branch branch = App.branchList.get(opt-1);
-        currentOrder.setBranch(branch.getBranchName());
-        //Setting the menu according to the branch selected
-        branch.setBranchMenu(menu.getFoodListByBranch(branch.getBranchName()));
-        System.out.println("Select Dining status:");
-        System.out.println("1. Takeaway");
-        System.out.println("2. Dine-in");
-        opt = sc.nextInt();
-        if(opt == 1) {
-        	currentOrder.setDiningStatus(false);
-        }
-        else if(opt == 2) {
-        	currentOrder.setDiningStatus(true);
-        }
+    	int opt = 0;
+    	boolean validInput = false;
+    	while (!validInput) {
+    		System.out.println("Select Branch:");
+    		l = 0;
+        	for (Branch branch : App.branchList) {
+        	    System.out.println((l+1) + " : " + branch.getBranchName());
+        	    l++;
+        	}
+    	    try {
+    	        opt = sc.nextInt();
+    	        if (opt < 1 || opt > App.branchList.size()) {
+    	            throw new Exception();
+    	        }
+    	        validInput = true;
+    	    } catch (Exception e) {
+    	        System.out.println("Invalid input!");
+    	        sc.nextLine(); // Clear the input buffer
+    	    } 
+    	}
+    	Menu menu = new Menu(App.foodList);
+    	Branch branch = App.branchList.get(opt-1);
+    	currentOrder.setBranch(branch.getBranchName());
+    	// Setting the menu according to the branch selected
+    	branch.setBranchMenu(menu.getFoodListByBranch(branch.getBranchName()));
+
+    	validInput = false;
+    	while (!validInput) {
+        	System.out.println("Select Dining status:");
+        	System.out.println("1. Takeaway");
+        	System.out.println("2. Dine-in");
+    	    try {
+    	        opt = sc.nextInt();
+    	        if (opt != 1 && opt != 2) {
+    	            throw new Exception();
+    	        }
+    	        validInput = true;
+    	    } catch (Exception e) {
+    	        System.out.println("Invalid input!");
+    	        sc.nextLine(); // Clear the input buffer
+    	    }
+    	}
+    	if (opt == 1) {
+    	    currentOrder.setDiningStatus(false);
+    	} else {
+    	    currentOrder.setDiningStatus(true);
+    	}
+    	
        while(true) {
     	   int i = 1;
     	   System.out.println("Select category:");
@@ -213,11 +241,15 @@ public class OrderSystem {
     		   break;
     	   default:
     		   System.out.println("Invalid option");
-    		   break;
+    		    break;
     	   }
     	   if(opt <= 4) {
+    		   try {
     		   int opt2 = sc.nextInt();
     		   currentOrder.addOrderItem(new OrderEntry(catMenu.get(opt2-1)));
+    		   }catch(Exception e) {
+    			   System.out.println("Invalid option");
+    		   }
     	   	}
     	   else if(opt == 5) {
     		   if(rc == 1) {
