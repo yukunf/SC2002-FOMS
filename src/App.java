@@ -23,11 +23,9 @@ import java.util.ArrayList;
 public class App {
 	private static final Scanner sc = new Scanner(System.in);
     public static List<Branch> branchList;  // Stores every branch
-    public static List<Order> orderList = new ArrayList<>();  // Stores every order; Keeps orderID ascending
-
+    public static List<Order> orderList;  // Stores every order; Keeps orderID ascending
 	public static List<Food> foodList;
 	public static List<Staff> staffList;
-
 	public static List<Admin> adminList;
 
 
@@ -53,6 +51,14 @@ public class App {
 	}
 
 
+	//TODO Actually I don know where to put this in...
+	public static Order searchOrderByID(int id){
+		for(Order o:
+		orderList){
+			if(o.getOrderID() == id)return o;
+		}
+		return null;
+	}
 
 
 
@@ -85,6 +91,34 @@ public class App {
 			secondOpt = sc.nextInt();
 		}
 	}
+	
+	public static void staffDriver() {  //May want to use a HashMap for constant look up time
+		Staff loggedInStaff = null;
+		System.out.println("LoginID:");
+		String input = sc.next();
+		for(Staff staff : staffList) {
+			if(input.equals(staff.getLoginID())){
+				loggedInStaff = staff;
+				break;
+			}
+		}
+		if(loggedInStaff != null) {
+			System.out.println("Password:");
+			input = sc.next();
+			if(input.equals(loggedInStaff.getPassword())) {
+				System.out.println("Login successful, " + loggedInStaff.getStaffName());
+				//Proceed to staff page
+			}
+			else {
+				System.out.println("Wrong password!");
+			}
+		}
+		else {
+			System.out.println("Invalid LoginID!");
+		}
+		
+		
+	}
     public static void main(String[] args) {
 
 
@@ -101,7 +135,8 @@ public class App {
         	case 1: // Customer
 				customerDriver();
         		break;
-        	case 2:
+        	case 2: //Staff
+        		staffDriver();
         		break;
         	case 3:
         		break;

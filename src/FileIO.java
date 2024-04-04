@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import src.branch.Admin;
 import src.branch.Branch;
 import src.branch.Staff;
+import src.branch.Manager;
 import src.menu.Food;
 import src.menu.FoodCategory;
 import src.order.Order;
@@ -51,9 +52,13 @@ public class FileIO {
 				String line = sc.nextLine();
 				String data[] = line.split(",");
 				if(data.length == 0) break;
-				if(data[2].equals("S") || data[2].equals("M")) {
+				if(data[2].equals("S")) {
 				Staff staff = new Staff(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), data[5]);
 				staffList.add(staff);
+				}
+				else if(data[2].equals("M")) {
+					Staff staff = new Manager(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), data[5]);
+					staffList.add(staff);
 				}
 			}
 		}

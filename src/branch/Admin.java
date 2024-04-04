@@ -132,7 +132,6 @@ public void DisplayStaff(Branch branch) {
 		System.out.println(st.getStaffName());
 	}
 	
-
 public void AssignManager(Branch branch,Manager manager) {
 	List<Manager> mnglist;
 	mnglist=branch.getmanagerlist();

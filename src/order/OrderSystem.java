@@ -42,15 +42,9 @@ public class OrderSystem {
 
     public void addToCart(Food food){
 
-        currentOrder.addOrderItem(food);
+        currentOrder.addOrderItem(new OrderEntry(food));
     }
 
-
-    public  Order generateOrder(){ // #TODO Send Order to payment or what
-        Order temp = currentOrder;
-        currentOrder = new Order(); // Reset the order don't care about nulls
-        return temp;
-    }
 
 
     /*-------------------- User Methods -----------------------------*/
@@ -83,8 +77,8 @@ public class OrderSystem {
 	       while(true) {
 	    	   int i = 1;
 	    	   System.out.println("======== Review cart ========");
-	    	   for(Food custFood : currentOrder.getFoodList()) {
-		    	   System.out.println(i + ". " + custFood.getName() + " $" + String.format("%.2f", custFood.getPrice()));
+	    	   for(OrderEntry oe : currentOrder.getFoodList()) {
+		    	   System.out.println(i + ". " + oe.getFood().getName() + " $" + String.format("%.2f", oe.getFood().getPrice()));
 		    	   i++;
 		       }
 	    	   System.out.println();
@@ -100,8 +94,8 @@ public class OrderSystem {
 	    	   else if(opt == 2) {
 	    		   i = 1;
 				  System.out.println("Select items to remove:");
-				  for(Food custFood : currentOrder.getFoodList()) {
-					  System.out.println(i + ". " + custFood.getName() + " $" + String.format("%.2f", custFood.getPrice()));
+				  for(OrderEntry oe : currentOrder.getFoodList()) {
+					  System.out.println(i + ". " + oe.getFood().getName() + " $" + String.format("%.2f", oe.getFood().getPrice()));
 					  i++;
 			   }
 				   int opt2 = sc.nextInt();
@@ -121,7 +115,9 @@ public class OrderSystem {
     public void createNewOrder(){
         // TODO: Do everything here if users need to create an order
         // including I/O with command line
-    	//input handling
+    	//left input handling
+
+		currentOrder = new Order(); //refresh the order object
     	List<Food> catMenu = null;
     	int l = 0;
     	int rc = -1;
@@ -134,8 +130,19 @@ public class OrderSystem {
         int opt = sc.nextInt();
         Menu menu = new Menu(App.foodList);
         Branch branch = App.branchList.get(opt-1);
+        currentOrder.setBranch(branch.getBranchName());
         //Setting the menu according to the branch selected
         branch.setBranchMenu(menu.getFoodListByBranch(branch.getBranchName()));
+        System.out.println("Select Dining status:");
+        System.out.println("1. Takeaway");
+        System.out.println("2. Dine-in");
+        opt = sc.nextInt();
+        if(opt == 1) {
+        	currentOrder.setDiningStatus(false);
+        }
+        else if(opt == 2) {
+        	currentOrder.setDiningStatus(true);
+        }
        while(true) {
     	   int i = 1;
     	   System.out.println("Select category:");
@@ -210,16 +217,19 @@ public class OrderSystem {
     	   }
     	   if(opt <= 4) {
     		   int opt2 = sc.nextInt();
-    		   currentOrder.addOrderItem(catMenu.get(opt2-1));
+    		   currentOrder.addOrderItem(new OrderEntry(catMenu.get(opt2-1)));
     	   	}
     	   else if(opt == 5) {
     		   if(rc == 1) {
-    			   Payment payment = new Payment(currentOrder.getTotalCost(), "Credit Card");
-    			   payment.processPayment();
-    			   System.out.println();
-    			   Receipt.printReceipt(branch.getBranchName(), currentOrder.getOrderID(), currentOrder.getFoodList(), currentOrder.getTotalCost());
-    			   currentOrder.setStatus(OrderStatus.PREPARING);
-    			   App.orderList.add(currentOrder);
+				   boolean paymentSuccess = Payment.processPayment(currentOrder);
+				   if(paymentSuccess) {
+					   Receipt.printReceipt(currentOrder);
+					   // currentOrder.setStatus(OrderStatus.PREPARING); Done by payment
+					   App.orderList.add(currentOrder);
+				   }
+				   else{
+					   System.out.println("Payment Failed. Order will be dropped");
+				   }
     			   break;
     		   }
     	   }
