@@ -4,9 +4,9 @@ import java.util.Scanner;
 import src.order.Payment;
 
 public class Admin {
-	
+
 	private List<Branch> branchlist;
-	private List<String> paymentMethodsList;	 
+	private List<String> paymentMethodsList;
 	private String name;
 	private String loginID;
 	private char gender;
@@ -96,8 +96,8 @@ public void EditStaff(Staff a,Branch branch) {
 
 			int branchindex = -1;
 
-			for (int i=0;i<this.branchlist.size();++i){
-				if (this.branchlist.get(0).getBranchName().equals(branchnm)){
+			for (int i=0;i<branchlist.size();++i){
+				if (branchlist.get(0).getBranchName().equals(branchnm)){
 					branchindex=i;
 					break;
 				}
@@ -107,7 +107,7 @@ public void EditStaff(Staff a,Branch branch) {
 				System.out.println("Branch does not exist.");
 				return;
 			}
-			Branch bh=this.branchlist.get(branchindex);
+			Branch bh=branchlist.get(branchindex);
 			List<Staff> stflist=bh.getStaffList();
 			stflist.add(a);
 			bh.setStaffList(stflist);
@@ -145,7 +145,7 @@ public void TransferStaffManager(Branch newBranch, Branch originalBranch, Manage
 	managerlist.remove(manager);
 	originalBranch.setmanagerlist(managerlist);
 	managerlist=newBranch.getmanagerlist();
-	AssignManager(newBranch, manager);	
+	AssignManager(newBranch, manager);
 }
 
 public List<String> getPaymentMethod(){
@@ -163,22 +163,12 @@ private List<String> removepaymentmethod(String removingpaymentmethod) {
 }
 private void open(Branch branch) {
 	branch.setstate(true);
-	
+
 	
 }
 private void close(Branch branch) {
-	branch.setstate(false);	
+	branch.setstate(false);
 }
 }
 
-
-
-
-
-
-
-
-
-
-}
 
