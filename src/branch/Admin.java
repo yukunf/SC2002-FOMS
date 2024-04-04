@@ -6,7 +6,6 @@ import src.order.Payment;
 public class Admin {
 
 	private List<Branch> branchlist;
-	private List<String> paymentMethodsList;
 	private String name;
 	private String loginID;
 	private char gender;
@@ -148,9 +147,7 @@ public void TransferStaffManager(Branch newBranch, Branch originalBranch, Manage
 	AssignManager(newBranch, manager);
 }
 
-public List<String> getPaymentMethod(){
-	return paymentMethodsList;
-}
+
 
 private List<String> addpaymentmethod(String newpaymentmethod) {
 	paymentMethodsList.add(newpaymentmethod);
