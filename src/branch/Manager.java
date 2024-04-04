@@ -8,18 +8,20 @@ import static src.App.staffList;
 import static src.menu.FoodCategory.*;
 
 public class Manager extends Staff {
-  public Manager() {
-      super("NA","NA",'M',-1,"NA");
-  }
-  public Manager(String name, String loginID, char gender, int age, String branch) {
-	  super(name, loginID, gender, age, branch);
-  }
-  
-  public void displayStaff() {
-	for(Staff staff : staffList){
-		System.out.println(staff.getStaffName());
+	public Manager() {
+		super("NA","NA",'X',-1,"NA",'X');
 	}
-  }
+	public Manager(String name, String loginID, char gender, int age, String branch, char role) {
+		super(name, loginID, gender, age, branch, role);
+	}
+  
+	public void displayStaff(String branch) {
+		for(Staff staff : staffList){
+			if (staff.getBranch() == branch) {
+				System.out.println(staff.getStaffName());
+			}
+		}
+	}
 	
   public void editMenu() {
 	  System.out.println("Select action: 1. Add 2. Edit 3. Remove");

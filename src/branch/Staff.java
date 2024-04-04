@@ -18,9 +18,11 @@ public class Staff {
 	private char gender;
 	private int age;
 	private String branch;
-	private String password; 
+	private char role;
+	private String password;
+	private int loginTry=0; 
 	
-	public Staff(String name, String loginID, char gender, int age, String branch) {
+	public Staff(String name, String loginID, char gender, int age, String branch, char role) {
 		this.name=name;
 		this.loginID=loginID;
 		this.gender=gender;
@@ -30,8 +32,10 @@ public class Staff {
 	}
 	
 	public void displayOrders() {
-		for (Order order : orderList) {		
-	      System.out.println(order.getOrderID());
+		for (Order order : orderList) {	
+		  if (order.getStatus()==OrderStatus.UNPAID) {
+			  System.out.println(order.getOrderID());  
+		  }
 	    }
 	}
 	public void viewDetails() {
@@ -104,6 +108,21 @@ public class Staff {
 		}
 		public void setPassword (String password){  //For staff to change password
 			this.password = password;
+		}
+		public void setRole(char role) {
+			this.role=role;
+		}
+		public char getRole() {
+			return role;
+		}
+		public void SetLoginTry () {
+			this.loginTry++;
+		}
+		public int getLoginTry () {
+			return loginTry;
+		}
+		public String getBranch() {
+			return branch;
 		}
 
 	}
