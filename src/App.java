@@ -2,6 +2,7 @@ package src;
 
 import src.branch.Admin;
 import src.branch.Branch;
+import src.branch.Manager;
 
 import java.util.Scanner;
 
@@ -113,12 +114,50 @@ public class App {
 			input = sc.next();
 			if(input.equals(loggedInStaff.getPassword())) {
 				System.out.println("Login successful, " + loggedInStaff.getStaffName());
-				break;
+				// reset password if first successful login
+				if (loggedInStaff.getLoginTry()==1) {
+					System.out.println("Input new password: ");
+					String newPassword = sc.next();
+					loggedInStaff.setPassword(newPassword);
+					System.out.println("Password updated succesfully.");
+				}
 				//Proceed to staff page
+				char role=loggedInStaff.getRole(); 
+				switch (role) {
+					case 'S': System.out.println("Select action: 1. Display new orders 2. View order details 3. Process order");
+						int choice = sc.nextInt();
+						switch (choice) {
+							case 1: loggedInStaff.displayOrders();
+								break;
+							case 2: loggedInStaff.viewDetails();
+								break;
+							case 3: loggedInStaff.processOrder();
+								break;
+						}
+						break;
+					case 'M': 
+						Manager loggedInManager = (Manager) loggedInStaff;
+						System.out.println("Select action: 1. Display new orders 2. View order details 3. Process order 4. Display staff list 5. Edit Menu");
+						int answer = sc.nextInt();
+						switch (answer) {
+							case 1: loggedInManager.displayOrders();
+								break;
+							case 2: loggedInManager.viewDetails();
+								break;
+							case 3: loggedInManager.processOrder();
+								break;
+							case 4: loggedInManager.displayStaff(loggedInManager.getBranch());
+								break;
+							case 5: loggedInManager.editMenu();
+								break;
+						}
+						break;
+					case 'A':
+						break;
+				}
 			}
 			else {
 				System.out.println("Wrong password!");
-				System.out.println();
 			}
 		}
 		else {
