@@ -10,9 +10,17 @@ public class Branch {
   private List<Staff> staffList;
   private List<Food> branchMenu;
   private List<Manager> managerList;
-  
+  private Boolean state;
   public Branch(String branchName){
 	  this.branchName = branchName;
+  }
+  
+
+  public Branch(String branchName, int staffQuota){
+    this.branchName = branchName;
+    this.staffQuota = staffQuota;
+    this.branchMenu = branchMenu;
+    this.state=true;
   }
 
   public int getBranchID() {
@@ -46,21 +54,30 @@ public class Branch {
   public void setStaffList(List<Staff> staffList) {
     this.staffList = staffList;
   }
-  
+
   public void setBranchMenu(List<Food> branchMenu) {
-	  this.branchMenu = branchMenu;
+    this.branchMenu = branchMenu;
   }
-  
+
   public List<Food> getBranchMenu() {
-	  return branchMenu;
+    return branchMenu;
   }
-  
+
   public List<Manager> getmanagerlist(){
     return this.managerList;
-    
+
   }
 
   public void setmanagerlist(List<Manager> managerList){
+
     this.managerList=managerList;    
+  }
+
+  public Boolean getState(){
+    return this.state;
+  }
+
+  public void setstate(Boolean open){
+    this.state=open;
   }
 }

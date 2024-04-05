@@ -9,19 +9,35 @@ import static src.menu.FoodCategory.*;
 import java.util.List;
 
 public class Manager extends Staff {
+
 	private char role='M';
   
-  public Manager(String name, String loginID, char gender, int age, Branch branch) {
-	  super(name, loginID, gender, age, branch);
-  }
   
   public void displayStaff() {
 	List<Staff> list=this.gettaffbranch().getStaffList();
 	for(Staff staff : list){
 		System.out.println(staff.getStaffName());
+
+	public Manager() {
+		super("NA","NA",'X',-1,"NA",'X');
 	}
-  }
+	public Manager(String name, String loginID, char gender, int age, String branch, char role) {
+		super(name, loginID, gender, age, branch, role);
+	}
+  
+	public void displayStaff(String branch) {
+		for(Staff staff : staffList){
+			if (staff.getBranch() == branch) {
+				System.out.println(staff.getStaffName());
+			}
+		}
+	}
 	
+   public Manager(String name, String loginID, char gender, int age, Branch branch) {
+	  super(name, loginID, gender, age, branch);
+  }
+    
+    
   public void editMenu() {
 	  System.out.println("Select action: 1. Add 2. Edit 3. Remove");
 	  int choice = sc.nextInt();

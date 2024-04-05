@@ -126,5 +126,22 @@ public class Staff {
 		public void setPassword (String password){  //For staff to change password
 			this.password = password;
 		}
+  
+  
+    public void setRole(char role) {
+			this.role=role;
+		}
+		public char getRole() {
+			return role;
+		}
+		public void SetLoginTry () {
+			this.loginTry++;
+		}
+		public int getLoginTry () {
+			return loginTry;
+		}
+		public String getBranch() {
+			return branch;
+		}
 
 	}

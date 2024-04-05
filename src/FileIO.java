@@ -58,9 +58,14 @@ public class FileIO {
 				if(data.length == 0) break;
 				b.setBranchName(data[5]);
 				if(data[2].equals("S")) {
-				Staff staff = new Staff(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), b);
+				Staff staff = new Staff(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), data[5], data[2].charAt(0));
 				staffList.add(staff);
 				}
+				else if(data[2].equals("M")) {
+					Staff staff = new Manager(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), data[5], data[2].charAt(0));
+					staffList.add(staff);
+				}
+
 			}
 		}
 		catch(FileNotFoundException f) {

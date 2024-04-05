@@ -340,6 +340,7 @@ public class App {
 	
 	public static void staffDriver() {  //May want to use a HashMap for constant look up time
 		String input;
+
 		int option;
 		Staff loggedInStaff = null;
 		Manager loggedInManager=null;
@@ -394,15 +395,8 @@ public class App {
 				loggedInAdmin=a;
 				break;
 			}
-	}
-		option=checkpassword(loggedInAdmin.getPassword(), loggedInAdmin.getStaffName());
-		while(option==1) checkpassword(loggedInAdmin.getPassword(), loggedInAdmin.getStaffName());
-		if(option==0) AdminPage(loggedInAdmin);
-	}
 
-	if(option==2) return;
-	}
-
+}
 
 	
 

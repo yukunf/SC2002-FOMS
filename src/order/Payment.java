@@ -1,5 +1,6 @@
 package src.order;
 
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -10,6 +11,8 @@ import java.util.Scanner;
  * @version 1.00.00
  */
 public class Payment {
+	private static List<String> paymentMethodsList;
+	
     public enum PaymentMethod {CREDIT_CARD,CASH,PAYPAL,PAYNOW}
 
 
@@ -26,7 +29,7 @@ public class Payment {
         }
 
         double amount = calculate(currentOrder);
-        System.out.println("Due Amount: S$ "+amount);
+        System.out.println("Due Amount: S$ "+String.format("%.2f",amount));
         System.out.println("All possible payment method are:");
         for (int i = 0; i < PaymentMethod.values().length; i++) {
             System.out.println((i+1)+" ："+PaymentMethod.values()[i]);
@@ -51,7 +54,11 @@ public class Payment {
         currentOrder.setStatus(OrderStatus.PREPARING);
         return true;
     }
-
+    public List<String> getPaymentMethod(){
+    	return paymentMethodsList;
+    }
+    
+    //public void setPaymentMethod(List<String> p)
 
     private static double calculate(Order currentOrder){
         double amount = 0;
