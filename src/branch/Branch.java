@@ -2,20 +2,17 @@ package src.branch;
 
 import src.menu.Food;
 import java.util.List;
-import java.util.ArrayList;
 
 public class Branch {
   private int BranchID;
   private String branchName;
-  private int staffQuota;
+  private int staffQuota=0;
   private List<Staff> staffList;
   private List<Food> branchMenu;
   private List<Manager> managerList;
   
-  public Branch(String branchName, int staffQuota){
+  public Branch(String branchName){
 	  this.branchName = branchName;
-	  this.staffQuota = staffQuota;
-	  this.branchMenu = branchMenu;
   }
 
   public int getBranchID() {
@@ -64,6 +61,6 @@ public class Branch {
   }
 
   public void setmanagerlist(List<Manager> managerList){
-    
+    this.managerList=managerList;    
   }
 }
