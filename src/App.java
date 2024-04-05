@@ -114,6 +114,7 @@ public class App {
 			input = sc.next();
 			if(input.equals(loggedInStaff.getPassword())) {
 				System.out.println("Login successful, " + loggedInStaff.getStaffName());
+
 				// reset password if first successful login
 				if (loggedInStaff.getLoginTry()==1) {
 					System.out.println("Input new password: ");
@@ -121,6 +122,7 @@ public class App {
 					loggedInStaff.setPassword(newPassword);
 					System.out.println("Password updated succesfully.");
 				}
+
 				//Proceed to staff page
 				char role=loggedInStaff.getRole(); 
 				switch (role) {
@@ -158,6 +160,7 @@ public class App {
 			}
 			else {
 				System.out.println("Wrong password!");
+				System.out.println();
 			}
 		}
 		else {

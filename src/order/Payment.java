@@ -29,7 +29,7 @@ public class Payment {
         }
 
         double amount = calculate(currentOrder);
-        System.out.println("Due Amount: S$ "+amount);
+        System.out.println("Due Amount: S$ "+String.format("%.2f",amount));
         System.out.println("All possible payment method are:");
         for (int i = 0; i < PaymentMethod.values().length; i++) {
             System.out.println((i+1)+" ："+PaymentMethod.values()[i]);

@@ -102,6 +102,17 @@ public class OrderSystem {
 					  i++;
 			   }
 				   int opt2 = sc.nextInt();
+				   while(opt2 < 1 || opt2 > currentOrder.getFoodList().size()) {
+					   System.out.println("Invalid input");
+					   i = 1;
+					   System.out.println("Select items to remove:");
+						  for(OrderEntry oe : currentOrder.getFoodList()) {
+							  System.out.printf("%d. %-20s $%-10s Qty: %-4d%n", i, oe.getFood().getName(), String.format("%.2f", oe.getFood().getPrice()),oe.getQuantity());
+							  i++;
+					   }
+						   opt2 = sc.nextInt();
+				   }
+				   
 				   if (currentOrder.getFoodList().get(opt2 - 1).getQuantity() >= 1) {
 		
 					    int quant = 0;
@@ -271,17 +282,48 @@ public class OrderSystem {
     		    break;
     	   }
     	   if(opt <= 4) {
-    		   try {
-    		   int opt2 = sc.nextInt();
-    		   currentOrder.addOrderItem(new OrderEntry(catMenu.get(opt2-1)));
-    		   }catch(Exception e) {
-    			   System.out.println("Invalid option");
+    		   int opt2 = 0;
+    		   boolean validOption = false;
+    		   
+    		   while (!validOption) {
+    		       try {
+    		           System.out.println("Enter the option: ");
+    		           opt2 = sc.nextInt();
+    		           if (opt2 < 1 || opt2 > catMenu.size()) {
+    		               throw new Exception();
+    		           }
+    		           validOption = true;
+    		       } catch (Exception e) {
+    		           System.out.println("Invalid input! Please enter a valid number.");
+    		           sc.nextLine(); // Clear the input buffer
+    		       } 
     		   }
+
+    		   int quant = 0;
+    		   boolean validQuantity = false;
+    		   while (!validQuantity) {
+    		       try {
+    		           System.out.println("Enter quantity: ");
+    		           quant = sc.nextInt();
+    		           if (quant <= 0) {
+    		               throw new Exception();
+    		           }
+    		           validQuantity = true;
+    		       } catch (Exception e) {
+    		           System.out.println("Invalid input! Please enter a valid number.");
+    		           sc.nextLine(); // Clear the input buffer
+    		       } 
+    		   }
+
+    		   OrderEntry oe = new OrderEntry(catMenu.get(opt2 - 1));
+    		   oe.setQuantity(quant);
+    		   currentOrder.addOrderItem(oe);
     	   	}
     	   else if(opt == 5) {
     		   if(rc == 1) {
 				   boolean paymentSuccess = Payment.processPayment(currentOrder);
 				   if(paymentSuccess) {
+					   System.out.println();
 					   Receipt.printReceipt(currentOrder);
 					   // currentOrder.setStatus(OrderStatus.PREPARING); Done by payment
 					   App.orderList.add(currentOrder);
