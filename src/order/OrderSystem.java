@@ -77,14 +77,16 @@ public class OrderSystem {
     	int opt = 0;
 	       while(true) {
 	    	   int i = 1;
-	    	   System.out.println("======== Review cart ========");
+	    	   System.out.println("======================= Review cart =======================");
+	    	   System.out.printf("Item %-15s Quantity %-4s Unit Price %-2s Net Price%n", "", "", "");
+	    	   System.out.println();
 	    	   for(OrderEntry oe : currentOrder.getFoodList()) {
-		    	   System.out.println(i + ". " + oe.getFood().getName() + " $" + String.format("%.2f", oe.getFood().getPrice()));
+	    		   System.out.printf("%d. %-18s Qty: %-9d $%-10s $%-12s%n", i, oe.getFood().getName(), oe.getQuantity(), String.format("%.2f", oe.getFood().getPrice()), String.format("%.2f", oe.getQuantity()*oe.getFood().getPrice()));
 		    	   i++;
 		       }
 	    	   System.out.println();
 	    	   System.out.println("Total: " + "$" + String.format("%.2f", currentOrder.getTotalCost()));
-	    	   System.out.println("=============================");
+	    	   System.out.println("===========================================================");
 	    	   System.out.println("1. Add more items");
 	    	   System.out.println("2. Remove items");
 	    	   System.out.println("3. Payment");
@@ -96,12 +98,37 @@ public class OrderSystem {
 	    		   i = 1;
 				  System.out.println("Select items to remove:");
 				  for(OrderEntry oe : currentOrder.getFoodList()) {
-					  System.out.println(i + ". " + oe.getFood().getName() + " $" + String.format("%.2f", oe.getFood().getPrice()));
+					  System.out.printf("%d. %-20s $%-10s Qty: %-4d%n", i, oe.getFood().getName(), String.format("%.2f", oe.getFood().getPrice()),oe.getQuantity());
 					  i++;
 			   }
 				   int opt2 = sc.nextInt();
-				   currentOrder.removeOrderItem(opt2-1);
-	      }
+				   if (currentOrder.getFoodList().get(opt2 - 1).getQuantity() >= 1) {
+		
+					    int quant = 0;
+					    boolean validInput = false;
+					    while (!validInput) {
+					    	System.out.println("Enter the quantity to remove:");
+					        try {
+					            quant = sc.nextInt();
+					            if (quant <= 0 || quant > currentOrder.getFoodList().get(opt2 - 1).getQuantity()) {
+					                throw new Exception();
+					            }
+					            validInput = true;
+					        } catch (Exception e) {
+					            System.out.println("Invalid input! Please enter a valid quantity.");
+					            sc.nextLine(); // Clear the input buffer
+					        } 
+					    }
+
+					    if (currentOrder.getFoodList().get(opt2 - 1).getQuantity() == quant) {
+					        currentOrder.removeOrderItem(opt2 - 1);
+					    } else if (currentOrder.getFoodList().get(opt2 - 1).getQuantity() > quant) {
+					        currentOrder.getFoodList().get(opt2 - 1).setQuantity(currentOrder.getFoodList().get(opt2 - 1).getQuantity()-quant);
+					    }
+					}
+				   }
+
+	      
 		      else if(opt == 3) {
 		    	  System.out.println("Proceeding to payment");
 		    	  return 1;
