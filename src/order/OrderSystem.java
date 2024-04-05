@@ -102,6 +102,17 @@ public class OrderSystem {
 					  i++;
 			   }
 				   int opt2 = sc.nextInt();
+				   while(opt2 < 1 || opt2 > currentOrder.getFoodList().size()) {
+					   System.out.println("Invalid input");
+					   i = 1;
+					   System.out.println("Select items to remove:");
+						  for(OrderEntry oe : currentOrder.getFoodList()) {
+							  System.out.printf("%d. %-20s $%-10s Qty: %-4d%n", i, oe.getFood().getName(), String.format("%.2f", oe.getFood().getPrice()),oe.getQuantity());
+							  i++;
+					   }
+						   opt2 = sc.nextInt();
+				   }
+				   
 				   if (currentOrder.getFoodList().get(opt2 - 1).getQuantity() >= 1) {
 		
 					    int quant = 0;
