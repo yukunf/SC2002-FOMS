@@ -1,11 +1,10 @@
 package src.branch;
 import java.util.List;
 import java.util.Scanner;
-import src.App;
-
+import src.order.Payment;
 
 public class Admin {
-  private char role='A';
+
 	private List<Branch> branchlist;
 	private String name;
 	private String loginID;
@@ -15,11 +14,17 @@ public class Admin {
 
 
 // default constructor
-	public Admin(String name, String loginID, char gender, int age, Branch branch) {
-		super(name, loginID, gender, age, branch);
-		}
-//Constructor
+	public Admin(){
 
+	}
+
+//Constructor
+public Admin(String name, String loginID, char gender, int age) {
+	this.name = name;
+	this.loginID = loginID;
+	this.gender = gender;
+	this.age = age;
+	}
 	
 	
 public void AddStaff(Branch branch) {
@@ -36,7 +41,8 @@ public void AddStaff(Branch branch) {
 		System.out.println("Enter the age of the new staff");
 		int age=sc.nextInt();
 
-		Staff newsStaff=new Staff(name,ID,gender,age,branch);
+		String branchname=branch.getBranchName();
+		Staff newsStaff=new Staff(name,ID,gender,age,branchname);
 		staffList.add(newsStaff);
 		branch.setStaffList(staffList);
 	}
@@ -82,7 +88,7 @@ public void EditStaff(Staff a,Branch branch) {
 		case 5:
 			System.out.println("key in the new branch");
 			String branchnm=sc.nextLine();
-			a.changeStaffbranch(a, branch);
+			a.changeStaffbranch(a, branchnm);
 			stlist=branch.getStaffList();
 			stlist.remove(ind);
 			branch.setStaffList(stlist);
@@ -121,88 +127,44 @@ public void RemoveStaff(Staff a,Branch branch) {
 	
 }
 public void DisplayStaff(Branch branch) {
-	System.out.println("Manahers:");
-	for(Manager m:branch.getmanagerlist()){
-		System.out.println(m.getStaffName());
-	}
-	System.out.println("staffs:");
 	for(Staff st:branch.getStaffList())
 		System.out.println(st.getStaffName());
 	}
 	
-
-private Manager addManager(Branch branch){
-	System.out.println("Enter the name of the new staff");
-	String name=sc.nextLine();
-	System.out.println("Enter the loginID of the new staff");
-	String ID=sc.nextLine();
-	System.out.println("Enter the gender of the new staff");
-	char gender=sc.nextLine().charAt(0);
-	System.out.println("Enter the age of the new staff");
-	int age=sc.nextInt();
-	Manager m=new Manager(name,ID,gender,age,branch);
-	return m;
-
-}
-public void AssignManager(Branch branch) {
-	List<Manager> mnglist;
-	Manager m=addManager(branch);
-	mnglist=branch.getmanagerlist();
-	mnglist.add(m);
-	branch.setmanagerlist(mnglist);
-}
-public void AssignManager(Branch branch,Manager m) {
+public void AssignManager(Branch branch,Manager manager) {
 	List<Manager> mnglist;
 	mnglist=branch.getmanagerlist();
-	mnglist.add(m);
+	mnglist.add(manager);
 	branch.setmanagerlist(mnglist);
 }
 
-public void TransferManager(Branch newBranch, Branch originalBranch, Manager manager) {
+public void TransferStaffManager(Branch newBranch, Branch originalBranch, Manager manager) {
 	List<Manager> managerlist;
 	managerlist=originalBranch.getmanagerlist();
 	managerlist.remove(manager);
 	originalBranch.setmanagerlist(managerlist);
 	managerlist=newBranch.getmanagerlist();
-
-	List<Manager> mnglist;
-	mnglist=originalBranch.getmanagerlist();
-	mnglist.add(manager);
-	newBranch.setmanagerlist(mnglist);
-}
-
-public void TransferStaff(Branch newBranch, Branch originalBranch, Staff staff) {
-	List<Staff> stafflist;
-	stafflist=newBranch.getStaffList();
-	stafflist.add(staff);
-	newBranch.setStaffList(stafflist);
-
-	stafflist=originalBranch.getStaffList();
-	stafflist.remove(staff);
-	originalBranch.setStaffList(stafflist);
 	AssignManager(newBranch, manager);
-
 }
 
 
 
-public List<String> addpaymentmethod(String newpaymentmethod) {
+private List<String> addpaymentmethod(String newpaymentmethod) {
 	paymentMethodsList.add(newpaymentmethod);
 	return paymentMethodsList;
 }
-public List<String> removepaymentmethod(String removingpaymentmethod) {
+private List<String> removepaymentmethod(String removingpaymentmethod) {
 	paymentMethodsList.remove(removingpaymentmethod);
 	return paymentMethodsList;
 	
 }
+private void open(Branch branch) {
+	branch.setstate(true);
 
-public void open(Branch branch) {
-  branch.setstate(true);
-	App.branchList.add(branch);
+	
 }
-public void close(Branch branch) {
-  branch.setstate(false);
-	App.branchList.remove(branch);
+private void close(Branch branch) {
+	branch.setstate(false);
 }
 }
 

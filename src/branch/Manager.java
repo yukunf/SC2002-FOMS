@@ -4,20 +4,10 @@ import src.menu.Food;
 import src.menu.FoodCategory;
 
 import static src.App.foodList;
+import static src.App.staffList;
 import static src.menu.FoodCategory.*;
 
-import java.util.List;
-
 public class Manager extends Staff {
-
-	private char role='M';
-  
-  
-  public void displayStaff() {
-	List<Staff> list=this.gettaffbranch().getStaffList();
-	for(Staff staff : list){
-		System.out.println(staff.getStaffName());
-
 	public Manager() {
 		super("NA","NA",'X',-1,"NA",'X');
 	}
@@ -33,11 +23,6 @@ public class Manager extends Staff {
 		}
 	}
 	
-   public Manager(String name, String loginID, char gender, int age, Branch branch) {
-	  super(name, loginID, gender, age, branch);
-  }
-    
-    
   public void editMenu() {
 	  System.out.println("Select action: 1. Add 2. Edit 3. Remove");
 	  int choice = sc.nextInt();

@@ -3,9 +3,6 @@ package src;
 
 import java.util.List;
 import java.util.ArrayList;
-
-import static src.App.adminList;
-
 import java.io.File;
 import java.util.Scanner;
 import java.io.FileNotFoundException;
@@ -47,7 +44,6 @@ public class FileIO {
 	//This reads the file and returns the list of all staff
 	public static List<Staff> readStaffList(){
 		List<Staff> staffList = new ArrayList<Staff>();
-		Branch b=new Branch("na");
 		try {
 			File staffCsv = new File("staff_list.csv");
 			Scanner sc = new Scanner(staffCsv);
@@ -56,7 +52,6 @@ public class FileIO {
 				String line = sc.nextLine();
 				String data[] = line.split(",");
 				if(data.length == 0) break;
-				b.setBranchName(data[5]);
 				if(data[2].equals("S")) {
 				Staff staff = new Staff(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), data[5], data[2].charAt(0));
 				staffList.add(staff);
@@ -65,7 +60,6 @@ public class FileIO {
 					Staff staff = new Manager(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), data[5], data[2].charAt(0));
 					staffList.add(staff);
 				}
-
 			}
 		}
 		catch(FileNotFoundException f) {
@@ -73,34 +67,6 @@ public class FileIO {
 		}
 		return staffList;
 	}
-
-	//This reads the file and returns the list of all managers
-	public static List<Manager> readManagerList(){
-		List<Manager> ManagerList = new ArrayList<Manager>();
-		Branch b=new Branch("na");
-		try {
-			File staffCsv = new File("staff_list.csv");
-			Scanner sc = new Scanner(staffCsv);
-			sc.nextLine(); //skip the header row
-			while(sc.hasNextLine()) {
-				String line = sc.nextLine();
-				String data[] = line.split(",");
-				if(data.length == 0) break;
-				b.setBranchName(data[5]);
-				if(data[2].equals("S")) {
-					Manager manager = new Manager(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), b);
-					ManagerList.add(manager);
-				}
-
-			}
-		}
-		catch(FileNotFoundException f) {
-			System.out.println("Invalid file");
-		}
-		return ManagerList;
-	}
-
-
 	
 	//This reads the file and return the list of branches
 	public static List<Branch> readBranchList(){
@@ -113,7 +79,7 @@ public class FileIO {
 			String line = sc.nextLine();
 			String data[] =line.split(",");
 			if(data.length == 0) break;
-			Branch branch = new Branch(data[0]);
+			Branch branch = new Branch(data[0], Integer.parseInt(data[2]));
 			branchList.add(branch);	
 			}
  		}
@@ -126,20 +92,17 @@ public class FileIO {
 	//reads the file and return the list of admins
 	public static List<Admin> readAdminList(){
 	List<Admin> adminList = new ArrayList<>();
-	Branch b=new Branch("na");
-		try {
-			File staffCsv = new File("staff_list.csv");
-			Scanner sc = new Scanner(staffCsv);
-			sc.nextLine(); //skip the header row
-			while(sc.hasNextLine()) {
-				String line = sc.nextLine();
-				String data[] = line.split(",");
-				if(data.length == 0) break;
-				b.setBranchName(data[5]);
+	try {
+		File staffCsv = new File("staff_list.csv");
+		Scanner sc = new Scanner(staffCsv);
+		sc.nextLine(); //skip the header row
+		while(sc.hasNextLine()) {
+			String line = sc.nextLine();
+			String data[] = line.split(",");
+			if(data.length == 0) break;
 			if(data[2].equals("A")) {
-				Admin admin = new Admin(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), b);
-				adminList.add(admin);
-
+			Admin admin = new Admin(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]));
+			adminList.add(admin);
 			}
 		}
 	}

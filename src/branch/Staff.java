@@ -15,14 +15,14 @@ public class Staff {
 	
 	private String name;
 	private String loginID;
-	private char role='S';
 	private char gender;
 	private int age;
-	private Branch branch;
-	private String password; 
+	private String branch;
+	private char role;
+	private String password;
+	private int loginTry=0; 
 	
-	
-	public Staff(String name, String loginID, char gender, int age, Branch branch) {
+	public Staff(String name, String loginID, char gender, int age, String branch, char role) {
 		this.name=name;
 		this.loginID=loginID;
 		this.gender=gender;
@@ -32,8 +32,10 @@ public class Staff {
 	}
 	
 	public void displayOrders() {
-		for (Order order : orderList) {		
-	      System.out.println(order.getOrderID());
+		for (Order order : orderList) {	
+		  if (order.getStatus()==OrderStatus.UNPAID) {
+			  System.out.println(order.getOrderID());  
+		  }
 	    }
 	}
 	public void viewDetails() {
@@ -85,22 +87,6 @@ public class Staff {
 		public void changeStaffName (Staff a, String newname){
 			a.name = newname;
 		}
-		public char getstaffgender(){
-			return this.gender;
-		}
-
-		public int getstaffage(){
-			return this.age;
-		}
-
-		public char getStaffRole () {
-			return role;
-		}
-		public void changeStaffRole(char newrole){
-			this.role=newrole;
-		}
-
-
 		public void changeStaffID (Staff a, String newID){
 			a.loginID = newID;
 
@@ -111,10 +97,7 @@ public class Staff {
 		public void changeStaffage (Staff a,int newage){
 			a.age = newage;
 		}
-		public Branch gettaffbranch (){
-			return this.branch;
-		}
-		public void changeStaffbranch (Staff a, Branch newbranch){
+		public void changeStaffbranch (Staff a, String newbranch){
 			a.branch = newbranch;
 		}
 		public String getLoginID () {
@@ -126,9 +109,7 @@ public class Staff {
 		public void setPassword (String password){  //For staff to change password
 			this.password = password;
 		}
-  
-  
-    public void setRole(char role) {
+		public void setRole(char role) {
 			this.role=role;
 		}
 		public char getRole() {

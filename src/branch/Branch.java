@@ -6,15 +6,11 @@ import java.util.List;
 public class Branch {
   private int BranchID;
   private String branchName;
-  private int staffQuota=0;
+  private int staffQuota;
   private List<Staff> staffList;
   private List<Food> branchMenu;
   private List<Manager> managerList;
   private Boolean state;
-  public Branch(String branchName){
-	  this.branchName = branchName;
-  }
-  
 
   public Branch(String branchName, int staffQuota){
     this.branchName = branchName;
@@ -70,7 +66,6 @@ public class Branch {
 
   public void setmanagerlist(List<Manager> managerList){
 
-    this.managerList=managerList;    
   }
 
   public Boolean getState(){
