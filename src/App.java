@@ -4,6 +4,8 @@ import src.branch.Admin;
 import src.branch.Branch;
 import src.branch.Manager;
 
+import java.io.*;
+import java.lang.reflect.Array;
 import java.util.Scanner;
 
 import src.branch.Staff;
@@ -25,6 +27,7 @@ public class App {
 	private static final Scanner sc = new Scanner(System.in);
     public static List<Branch> branchList;  // Stores every branch
     public static List<Order> orderList;  // Stores every order; Keeps orderID ascending
+	private static String orderFilePath = "orders.ser";
 	public static List<Food> foodList;
 	public static List<Staff> staffList;
 	public static List<Admin> adminList;
@@ -43,14 +46,48 @@ public class App {
 		staffList = FileIO.readStaffList();
 		adminList = FileIO.readAdminList();
 		// TODO orderList
-		orderList = new ArrayList<Order>();
 
+
+		orderList = deserializeOrderList();
 
 
 		//Order.setOrderIDCounter(orderList.get(orderList.size() - 1).getOrderID() + 1);
 		// Set the counter 1 more than the biggest existing orderID
 	}
 
+	private static void serializeOrderList(){
+
+		try {
+			FileOutputStream fos = new FileOutputStream(orderFilePath);
+			ObjectOutputStream outputStream = new ObjectOutputStream(fos);
+			outputStream.writeObject(orderList);
+			outputStream.close();
+		} catch (IOException ex) {
+			System.err.println(ex);
+		}
+	}
+
+	private static List<Order> deserializeOrderList(){
+		List<Order> ol = new ArrayList<>();
+		try {
+			FileInputStream fis = new FileInputStream(orderFilePath);
+			ObjectInputStream inputStream = new ObjectInputStream(fis);
+			Object o = inputStream.readObject();
+			if(o == null){
+				inputStream.close();
+				return ol;
+			}else{
+				ol = (ArrayList<Order>)o;
+			}
+			inputStream.close();
+		} catch (FileNotFoundException ex) {
+			return ol;
+		}
+		catch (IOException | ClassNotFoundException e){
+			System.out.println(e);
+		}
+		return ol;
+	}
 
 	//TODO Actually I don know where to put this in...
 	public static Order searchOrderByID(int id){
@@ -68,7 +105,7 @@ public class App {
 	 * That is, all I/O functions, including saving Branch, Menu, Staff to .xls or .csv files.
 	 * */
 	public static void deinitialize(){ // TODO
-
+		serializeOrderList();
 	}
 
 
