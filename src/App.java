@@ -112,7 +112,7 @@ public class App {
 		if(loggedInStaff != null) {
 			System.out.println("Password:");
 			input = sc.next();
-			if(input.equals(loggedInStaff.getPassword())) {
+			if(loggedInStaff.login(input)==1) {
 				System.out.println("Login successful, " + loggedInStaff.getStaffName());
 				// reset password if first successful login
 				if (loggedInStaff.getLoginTry()==1) {
@@ -155,7 +155,7 @@ public class App {
 					case 'A':
 						break;
 				}
-			}
+			} // end of successful password
 			else {
 				System.out.println("Wrong password!");
 			}

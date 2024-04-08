@@ -81,6 +81,13 @@ public class Staff {
 		}
 	}
 
+	public int login(String input) {
+		if (password == input) {
+			return 1;
+		}
+		return 0;
+	}
+ 
 		public String getStaffName () {
 			return name;
 		}
@@ -102,9 +109,6 @@ public class Staff {
 		}
 		public String getLoginID () {
 			return loginID;
-		}
-		public String getPassword () {
-			return password;
 		}
 		public void setPassword (String password){  //For staff to change password
 			this.password = password;
