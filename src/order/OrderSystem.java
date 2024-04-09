@@ -62,6 +62,7 @@ public class OrderSystem {
                 o = getOrderByID(id);
             } catch (Exception e) {
                 System.out.println("Order Not Found! Please check your input and try again");
+                break;
             }
             if(o != null){
                 System.out.println("Status of Order "+id+" : "+o.getStatus());
@@ -76,14 +77,16 @@ public class OrderSystem {
     	int opt = 0;
 	       while(true) {
 	    	   int i = 1;
-	    	   System.out.println("======== Review cart ========");
+	    	   System.out.println("======================= Review cart =======================");
+	    	   System.out.printf("Item %-15s Quantity %-4s Unit Price %-2s Net Price%n", "", "", "");
+	    	   System.out.println();
 	    	   for(OrderEntry oe : currentOrder.getFoodList()) {
-		    	   System.out.println(i + ". " + oe.getFood().getName() + " $" + String.format("%.2f", oe.getFood().getPrice()));
+	    		   System.out.printf("%d. %-18s Qty: %-9d $%-10s $%-12s%n", i, oe.getFood().getName(), oe.getQuantity(), String.format("%.2f", oe.getFood().getPrice()), String.format("%.2f", oe.getQuantity()*oe.getFood().getPrice()));
 		    	   i++;
 		       }
 	    	   System.out.println();
 	    	   System.out.println("Total: " + "$" + String.format("%.2f", currentOrder.getTotalCost()));
-	    	   System.out.println("=============================");
+	    	   System.out.println("===========================================================");
 	    	   System.out.println("1. Add more items");
 	    	   System.out.println("2. Remove items");
 	    	   System.out.println("3. Payment");
@@ -95,12 +98,48 @@ public class OrderSystem {
 	    		   i = 1;
 				  System.out.println("Select items to remove:");
 				  for(OrderEntry oe : currentOrder.getFoodList()) {
-					  System.out.println(i + ". " + oe.getFood().getName() + " $" + String.format("%.2f", oe.getFood().getPrice()));
+					  System.out.printf("%d. %-20s $%-10s Qty: %-4d%n", i, oe.getFood().getName(), String.format("%.2f", oe.getFood().getPrice()),oe.getQuantity());
 					  i++;
 			   }
 				   int opt2 = sc.nextInt();
-				   currentOrder.removeOrderItem(opt2-1);
-	      }
+				   while(opt2 < 1 || opt2 > currentOrder.getFoodList().size()) {
+					   System.out.println("Invalid input");
+					   i = 1;
+					   System.out.println("Select items to remove:");
+						  for(OrderEntry oe : currentOrder.getFoodList()) {
+							  System.out.printf("%d. %-20s $%-10s Qty: %-4d%n", i, oe.getFood().getName(), String.format("%.2f", oe.getFood().getPrice()),oe.getQuantity());
+							  i++;
+					   }
+						   opt2 = sc.nextInt();
+				   }
+				   
+				   if (currentOrder.getFoodList().get(opt2 - 1).getQuantity() >= 1) {
+		
+					    int quant = 0;
+					    boolean validInput = false;
+					    while (!validInput) {
+					    	System.out.println("Enter the quantity to remove:");
+					        try {
+					            quant = sc.nextInt();
+					            if (quant <= 0 || quant > currentOrder.getFoodList().get(opt2 - 1).getQuantity()) {
+					                throw new Exception();
+					            }
+					            validInput = true;
+					        } catch (Exception e) {
+					            System.out.println("Invalid input! Please enter a valid quantity.");
+					            sc.nextLine(); // Clear the input buffer
+					        } 
+					    }
+
+					    if (currentOrder.getFoodList().get(opt2 - 1).getQuantity() == quant) {
+					        currentOrder.removeOrderItem(opt2 - 1);
+					    } else if (currentOrder.getFoodList().get(opt2 - 1).getQuantity() > quant) {
+					        currentOrder.getFoodList().get(opt2 - 1).setQuantity(currentOrder.getFoodList().get(opt2 - 1).getQuantity()-quant);
+					    }
+					}
+				   }
+
+	      
 		      else if(opt == 3) {
 		    	  System.out.println("Proceeding to payment");
 		    	  return 1;
@@ -119,30 +158,57 @@ public class OrderSystem {
 
 		currentOrder = new Order(); //refresh the order object
     	List<Food> catMenu = null;
-    	int l = 0;
+    	int l;
     	int rc = -1;
     	Scanner sc = new Scanner(System.in);
-    	System.out.println("Select Branch:");
-        for (Branch branch : App.branchList) {
-            System.out.println(l+1+" : "+ App.branchList.get(l).getBranchName());
-            l++;
-        }
-        int opt = sc.nextInt();
-        Menu menu = new Menu(App.foodList);
-        Branch branch = App.branchList.get(opt-1);
-        currentOrder.setBranch(branch.getBranchName());
-        //Setting the menu according to the branch selected
-        branch.setBranchMenu(menu.getFoodListByBranch(branch.getBranchName()));
-        System.out.println("Select Dining status:");
-        System.out.println("1. Takeaway");
-        System.out.println("2. Dine-in");
-        opt = sc.nextInt();
-        if(opt == 1) {
-        	currentOrder.setDiningStatus(false);
-        }
-        else if(opt == 2) {
-        	currentOrder.setDiningStatus(true);
-        }
+    	int opt = 0;
+    	boolean validInput = false;
+    	while (!validInput) {
+    		System.out.println("Select Branch:");
+    		l = 0;
+        	for (Branch branch : App.branchList) {
+        	    System.out.println((l+1) + " : " + branch.getBranchName());
+        	    l++;
+        	}
+    	    try {
+    	        opt = sc.nextInt();
+    	        if (opt < 1 || opt > App.branchList.size()) {
+    	            throw new Exception();
+    	        }
+    	        validInput = true;
+    	    } catch (Exception e) {
+    	        System.out.println("Invalid input!");
+    	        sc.nextLine(); // Clear the input buffer
+    	    } 
+    	}
+    	Menu menu = new Menu(App.foodList);
+    	Branch branch = App.branchList.get(opt-1);
+    	currentOrder.setBranch(branch.getBranchName());
+    	// Setting the menu according to the branch selected
+    	branch.setBranchMenu(menu.getFoodListByBranch(branch.getBranchName()));
+
+    	validInput = false;
+    	while (!validInput) {
+        	System.out.println("Select Dining status:");
+        	System.out.println("1. Takeaway");
+        	System.out.println("2. Dine-in");
+    	    try {
+    	        opt = sc.nextInt();
+    	        if (opt != 1 && opt != 2) {
+    	            throw new Exception();
+    	        }
+    	        validInput = true;
+    	    } catch (Exception e) {
+    	        System.out.println("Invalid input!");
+    	        sc.nextLine(); // Clear the input buffer
+    	    }
+    	}
+    	if (opt == 1) {
+    	    currentOrder.setDiningStatus(false);
+    	} else {
+    	    currentOrder.setDiningStatus(true);
+    	}
+    	
        while(true) {
     	   int i = 1;
     	   System.out.println("Select category:");
@@ -213,16 +279,51 @@ public class OrderSystem {
     		   break;
     	   default:
     		   System.out.println("Invalid option");
-    		   break;
+    		    break;
     	   }
     	   if(opt <= 4) {
-    		   int opt2 = sc.nextInt();
-    		   currentOrder.addOrderItem(new OrderEntry(catMenu.get(opt2-1)));
+    		   int opt2 = 0;
+    		   boolean validOption = false;
+    		   
+    		   while (!validOption) {
+    		       try {
+    		           System.out.println("Enter the option: ");
+    		           opt2 = sc.nextInt();
+    		           if (opt2 < 1 || opt2 > catMenu.size()) {
+    		               throw new Exception();
+    		           }
+    		           validOption = true;
+    		       } catch (Exception e) {
+    		           System.out.println("Invalid input! Please enter a valid number.");
+    		           sc.nextLine(); // Clear the input buffer
+    		       } 
+    		   }
+
+    		   int quant = 0;
+    		   boolean validQuantity = false;
+    		   while (!validQuantity) {
+    		       try {
+    		           System.out.println("Enter quantity: ");
+    		           quant = sc.nextInt();
+    		           if (quant <= 0) {
+    		               throw new Exception();
+    		           }
+    		           validQuantity = true;
+    		       } catch (Exception e) {
+    		           System.out.println("Invalid input! Please enter a valid number.");
+    		           sc.nextLine(); // Clear the input buffer
+    		       } 
+    		   }
+
+    		   OrderEntry oe = new OrderEntry(catMenu.get(opt2 - 1));
+    		   oe.setQuantity(quant);
+    		   currentOrder.addOrderItem(oe);
     	   	}
     	   else if(opt == 5) {
     		   if(rc == 1) {
 				   boolean paymentSuccess = Payment.processPayment(currentOrder);
 				   if(paymentSuccess) {
+					   System.out.println();
 					   Receipt.printReceipt(currentOrder);
 					   // currentOrder.setStatus(OrderStatus.PREPARING); Done by payment
 					   App.orderList.add(currentOrder);

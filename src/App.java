@@ -4,6 +4,8 @@ import src.branch.Admin;
 import src.branch.Branch;
 import src.branch.Manager;
 
+import java.io.*;
+import java.lang.reflect.Array;
 import java.util.Scanner;
 
 import src.branch.Staff;
@@ -25,6 +27,7 @@ public class App {
 	private static final Scanner sc = new Scanner(System.in);
     public static List<Branch> branchList;  // Stores every branch
     public static List<Order> orderList;  // Stores every order; Keeps orderID ascending
+	private static String orderFilePath = "orders.ser";
 	public static List<Food> foodList;
 	public static List<Staff> staffList;
 	public static List<Manager> ManagerList;
@@ -47,12 +50,46 @@ public class App {
 		// TODO orderList
 		orderList = new ArrayList<Order>();
 
+		orderList = deserializeOrderList();
 
 
 		//Order.setOrderIDCounter(orderList.get(orderList.size() - 1).getOrderID() + 1);
 		// Set the counter 1 more than the biggest existing orderID
 	}
 
+	private static void serializeOrderList(){
+
+		try {
+			FileOutputStream fos = new FileOutputStream(orderFilePath);
+			ObjectOutputStream outputStream = new ObjectOutputStream(fos);
+			outputStream.writeObject(orderList);
+			outputStream.close();
+		} catch (IOException ex) {
+			System.err.println(ex);
+		}
+	}
+
+	private static List<Order> deserializeOrderList(){
+		List<Order> ol = new ArrayList<>();
+		try {
+			FileInputStream fis = new FileInputStream(orderFilePath);
+			ObjectInputStream inputStream = new ObjectInputStream(fis);
+			Object o = inputStream.readObject();
+			if(o == null){
+				inputStream.close();
+				return ol;
+			}else{
+				ol = (ArrayList<Order>)o;
+			}
+			inputStream.close();
+		} catch (FileNotFoundException ex) {
+			return ol;
+		}
+		catch (IOException | ClassNotFoundException e){
+			System.out.println(e);
+		}
+		return ol;
+	}
 
 	//TODO Actually I don know where to put this in...
 	public static Order searchOrderByID(int id){
@@ -70,7 +107,7 @@ public class App {
 	 * That is, all I/O functions, including saving Branch, Menu, Staff to .xls or .csv files.
 	 * */
 	public static void deinitialize(){ // TODO
-
+		serializeOrderList();
 	}
 
 
@@ -340,6 +377,7 @@ public class App {
 	
 	public static void staffDriver() {  //May want to use a HashMap for constant look up time
 		String input;
+
 		int option;
 		Staff loggedInStaff = null;
 		Manager loggedInManager=null;
@@ -394,6 +432,83 @@ public class App {
 				loggedInAdmin=a;
 				break;
 			}
+
+		Staff loggedInStaff = null;
+		do { 	
+		System.out.println("LoginID:");
+		System.out.println("Enter 'q' to exit");
+		input = sc.next();
+		if(input.equals("q")) {
+			break;
+		}
+		for(Staff staff : staffList) {
+			if(input.equals(staff.getLoginID())){
+				loggedInStaff = staff;
+				break;
+			}
+		}
+		if(loggedInStaff != null) {
+			System.out.println("Password:");
+			input = sc.next();
+			if(input.equals(loggedInStaff.getPassword())) {
+				System.out.println("Login successful, " + loggedInStaff.getStaffName());
+
+				// reset password if first successful login
+				if (loggedInStaff.getLoginTry()==1) {
+					System.out.println("Input new password: ");
+					String newPassword = sc.next();
+					loggedInStaff.setPassword(newPassword);
+					System.out.println("Password updated succesfully.");
+				}
+
+				//Proceed to staff page
+				char role=loggedInStaff.getRole(); 
+				switch (role) {
+					case 'S': System.out.println("Select action: 1. Display new orders 2. View order details 3. Process order");
+						int choice = sc.nextInt();
+						switch (choice) {
+							case 1: loggedInStaff.displayOrders();
+								break;
+							case 2: loggedInStaff.viewDetails();
+								break;
+							case 3: loggedInStaff.processOrder();
+								break;
+						}
+						break;
+					case 'M': 
+						Manager loggedInManager = (Manager) loggedInStaff;
+						System.out.println("Select action: 1. Display new orders 2. View order details 3. Process order 4. Display staff list 5. Edit Menu");
+						int answer = sc.nextInt();
+						switch (answer) {
+							case 1: loggedInManager.displayOrders();
+								break;
+							case 2: loggedInManager.viewDetails();
+								break;
+							case 3: loggedInManager.processOrder();
+								break;
+							case 4: loggedInManager.displayStaff(loggedInManager.getBranch());
+								break;
+							case 5: loggedInManager.editMenu();
+								break;
+						}
+						break;
+					case 'A':
+						break;
+				}
+			}
+			else {
+				System.out.println("Wrong password!");
+				System.out.println();
+			}
+		}
+		else {
+			if(!input.equals("q")) {
+			System.out.println("Invalid LoginID!");
+			System.out.println();
+			}
+		}
+	}while(!input.equals("q"));
+		
 	}
 		option=checkpassword(loggedInAdmin.getPassword(), loggedInAdmin.getStaffName());
 		while(option==1) checkpassword(loggedInAdmin.getPassword(), loggedInAdmin.getStaffName());

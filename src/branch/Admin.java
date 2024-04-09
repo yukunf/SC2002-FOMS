@@ -3,12 +3,14 @@ import java.util.List;
 import java.util.Scanner;
 import src.App;
 
+
 public class Admin extends Staff {
 
 	private char role='A';
 	
 	private List<Branch> branchlist;
 	private List<String> paymentMethodsList;	 
+
 	Scanner sc = new Scanner(System.in);
 
 
@@ -87,8 +89,8 @@ public void EditStaff(Staff a,Branch branch) {
 
 			int branchindex = -1;
 
-			for (int i=0;i<this.branchlist.size();++i){
-				if (this.branchlist.get(0).getBranchName().equals(branchnm)){
+			for (int i=0;i<branchlist.size();++i){
+				if (branchlist.get(0).getBranchName().equals(branchnm)){
 					branchindex=i;
 					break;
 				}
@@ -98,7 +100,7 @@ public void EditStaff(Staff a,Branch branch) {
 				System.out.println("Branch does not exist.");
 				return;
 			}
-			Branch bh=this.branchlist.get(branchindex);
+			Branch bh=branchlist.get(branchindex);
 			List<Staff> stflist=bh.getStaffList();
 			stflist.add(a);
 			bh.setStaffList(stflist);
@@ -162,6 +164,7 @@ public void TransferManager(Branch newBranch, Branch originalBranch, Manager man
 	managerlist.remove(manager);
 	originalBranch.setmanagerlist(managerlist);
 	managerlist=newBranch.getmanagerlist();
+
 	List<Manager> mnglist;
 	mnglist=originalBranch.getmanagerlist();
 	mnglist.add(manager);
@@ -177,11 +180,11 @@ public void TransferStaff(Branch newBranch, Branch originalBranch, Staff staff) 
 	stafflist=originalBranch.getStaffList();
 	stafflist.remove(staff);
 	originalBranch.setStaffList(stafflist);
+
+	AssignManager(newBranch, manager);
 }
 
-public List<String> getPaymentMethod(){
-	return paymentMethodsList;
-}
+
 
 public List<String> addpaymentmethod(String newpaymentmethod) {
 	paymentMethodsList.add(newpaymentmethod);
@@ -192,6 +195,7 @@ public List<String> removepaymentmethod(String removingpaymentmethod) {
 	return paymentMethodsList;
 	
 }
+
 public void open(Branch branch) {
 	App.branchList.add(branch);	
 }
