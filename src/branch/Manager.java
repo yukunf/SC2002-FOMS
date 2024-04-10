@@ -10,18 +10,19 @@ import java.util.List;
 
 public class Manager extends Staff {
 
-	private char role='M';
+	private char role = 'M';
   
   public Manager(String name, String loginID, char gender, int age, Branch branch) {
 	  super(name, loginID, gender, age, branch);
   }
   
   public void displayStaff() {
-	List<Staff> list=this.gettaffbranch().getStaffList();
+	List<Staff> list = this.getBranch().getStaffList();  
 	for(Staff staff : list){
 		System.out.println(staff.getStaffName());
 
 	}
+  }
 	
   public void editMenu() {
 	  System.out.println("Select action: 1. Add 2. Edit 3. Remove");
