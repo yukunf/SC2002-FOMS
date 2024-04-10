@@ -32,6 +32,7 @@ public class App {
 	public static List<Staff> staffList;
 	public static List<Manager> ManagerList;
 	public static List<Admin> adminList;
+	public static List<Staff> allEmployeesList;
 
 
 
@@ -47,6 +48,7 @@ public class App {
 		staffList = FileIO.readStaffList();
 		adminList = FileIO.readAdminList();
 		ManagerList=FileIO.readManagerList();
+		allEmployeesList = FileIO.readAllEmployees();
 		// TODO orderList
 		orderList = new ArrayList<Order>();
 
@@ -132,35 +134,15 @@ public class App {
 		}
 	}
 
-	public static String findtherole(String str){
-		for(Staff s:staffList){
-			if(s.getLoginID()==str) return "S";
-		}
-
-		for(Manager m: ManagerList){
-			if(m.getLoginID()==str) return "M";
-		}
-		for(Admin a: adminList){
-			if(a.getLoginID()==str) return "A";
-		}
-		return "z";
-	}
-
-	public static int checkpassword(String correctpassword, String staffname){
-		System.out.println("Password:(if quite enter 'q')");
-            String input = sc.next();
-			if (input=="q") return 2;
-            if(input.equals(correctpassword)) {
-                System.out.println("Login successful, " + staffname);
-				return 1;
-			}
-			System.out.println("Wrong password, try again.");          
-			return 0;
-	}
-
 	public static void Staffpage(Staff loggedInStaff){
-		System.out.println("Select action: 1. Display new orders 2. View order details 3. Process order");
-                        int choice = sc.nextInt();
+		int choice;
+		do {
+		System.out.println("Select action:");
+		System.out.println("1. Display new orders");
+		System.out.println("2. View order details");
+		System.out.println("3. Process order");
+		System.out.println("4. Exit");
+                        choice = sc.nextInt();
                         switch (choice) {
                             case 1: loggedInStaff.displayOrders();
                                 break;
@@ -168,12 +150,20 @@ public class App {
                                 break;
                             case 3: loggedInStaff.processOrder();
 						}
-                    
+		}while(choice < 4);       
 	}
 
 	public static void Managerpage(Manager loggedInManager){
-		System.out.println("Select action: 1. Display new orders 2. View order details 3. Process order 4. Display staff list 5. Edit Menu");
-		int answer = sc.nextInt();
+		int answer;
+		do {
+		System.out.println("Select action:");
+		System.out.println("1. Display new orders");
+		System.out.println("2. View order details");
+		System.out.println("3. Process order");
+		System.out.println("4. Display staff list");
+		System.out.println("5. Edit Menu");
+		System.out.println("6. Exit");
+		answer = sc.nextInt();
 		switch (answer) {
 			case 1: loggedInManager.displayOrders();
 				break;
@@ -186,12 +176,22 @@ public class App {
 			case 5: loggedInManager.editMenu();
 				break;
 		}
-
+		}while(answer < 6);
 		
 	}
 	public static void AdminPage(Admin loggedInAdmin){
-		System.out.println("Select action: 1.Add/Edit/Remove Staff 2. Display staff  3. Assign managers to a branch 4.Promote a staff to a Branch manager 5.Transfer a staff/manger among branches 6. Add/Remove paymeny method 7.Open.Close Branch.");
-		int answer = sc.nextInt();
+		int answer;
+		do {
+		System.out.println("Select action:");
+		System.out.println("1. Add/Edit/Remove Staff");
+		System.out.println("2. Display staff");
+		System.out.println("3. Assign managers to a branch");
+		System.out.println("4. Promote a staff to a Branch manager");
+		System.out.println("5. Transfer a staff/manager");
+		System.out.println("6. Add/Remove paymeny method");
+		System.out.println("7. Open.Close Branch");
+		System.out.println("8. Quit");
+		answer = sc.nextInt();
 		switch (answer) {
 			case 1: 
 				System.out.println("1.Add 2.Edit 3. Remove");
@@ -286,7 +286,7 @@ public class App {
 					for(Staff staff:branch.getStaffList()){
 						if(name==staff.getStaffName()) {
 							s=staff;
-							Manager m=new Manager(s.getStaffName(),s.getLoginID(),s.getstaffgender(),s.getstaffage(),s.gettaffbranch());
+							Manager m=new Manager(s.getStaffName(),s.getLoginID(),s.getGender(),s.getAge(),s.getBranch());
 							loggedInAdmin.RemoveStaff(s, branch);
 							loggedInAdmin.AssignManager(branch, m);
 							break;
@@ -332,7 +332,9 @@ public class App {
 			break;
 
 			case 6:
-			System.out.println("Do you want to 1.add 2. remove payment");
+			System.out.println("Do you want to");
+			System.out.println("1. Add Payment");
+			System.out.println("2. Remove Payment");
 			index=sc.nextInt();
 			if(index==1){
 				System.out.println("Enter the new payment method:");
@@ -369,6 +371,7 @@ public class App {
 			}
 
 		}
+	}while(answer < 8);
 		
 	}
 
@@ -384,64 +387,15 @@ public class App {
 		Admin loggedInAdmin=null;
 
 
-		//Getting the Id
-		System.out.println("LoginID:");
-		System.out.println("Enter 'q' to exit");
-		input = sc.next();
-		String role=findtherole(input);
-		if (input=="q") return;
-		while (role=="z"){
-			System.out.println("Invalid Id, enter again.");
-			System.out.println("LoginID:");
-			System.out.println("Enter 'q' to exit");
-			input = sc.next();
-			if(input=="q") return;
-			role=findtherole(input);
-		}
-
-		//Check for password
-		if(role=="S"){
-			for(Staff s : staffList) {
-				if(input.equals(s.getLoginID())){
-					loggedInStaff=s;
-					break;
-				}
-		}
-		option=checkpassword(loggedInStaff.getPassword(), loggedInStaff.getStaffName());
-		while(option==1) checkpassword(loggedInStaff.getPassword(), loggedInStaff.getStaffName());
-		if(option==0) Staffpage(loggedInStaff);
-	}
-
-
-	else if(role=="M"){
-		for(Manager m:ManagerList) {
-			if(input.equals(m.getLoginID())){
-				loggedInManager=m;
-				break;
-			}
-	}
-		option=checkpassword(loggedInManager.getPassword(), loggedInManager.getStaffName());
-		while(option==1) checkpassword(loggedInManager.getPassword(), loggedInManager.getStaffName());
-		if(option==0) Managerpage(loggedInManager);
-	}
-
-
-	else{
-		for(Admin a:adminList) {
-			if(input.equals(a.getLoginID())){
-				loggedInAdmin=a;
-				break;
-			}
-
-		Staff loggedInStaff = null;
-		do { 	
+		do {
+		loggedInStaff = null;
 		System.out.println("LoginID:");
 		System.out.println("Enter 'q' to exit");
 		input = sc.next();
 		if(input.equals("q")) {
 			break;
 		}
-		for(Staff staff : staffList) {
+		for(Staff staff : allEmployeesList) {
 			if(input.equals(staff.getLoginID())){
 				loggedInStaff = staff;
 				break;
@@ -451,6 +405,7 @@ public class App {
 			System.out.println("Password:");
 			input = sc.next();
 			if(input.equals(loggedInStaff.getPassword())) {
+				System.out.println();
 				System.out.println("Login successful, " + loggedInStaff.getStaffName());
 
 				// reset password if first successful login
@@ -459,40 +414,21 @@ public class App {
 					String newPassword = sc.next();
 					loggedInStaff.setPassword(newPassword);
 					System.out.println("Password updated succesfully.");
+					System.out.println();
+					loggedInStaff.SetLoginTry();
 				}
 
 				//Proceed to staff page
 				char role=loggedInStaff.getRole(); 
 				switch (role) {
-					case 'S': System.out.println("Select action: 1. Display new orders 2. View order details 3. Process order");
-						int choice = sc.nextInt();
-						switch (choice) {
-							case 1: loggedInStaff.displayOrders();
-								break;
-							case 2: loggedInStaff.viewDetails();
-								break;
-							case 3: loggedInStaff.processOrder();
-								break;
-						}
+					case 'S': 
+						Staffpage(loggedInStaff);
 						break;
 					case 'M': 
-						Manager loggedInManager = (Manager) loggedInStaff;
-						System.out.println("Select action: 1. Display new orders 2. View order details 3. Process order 4. Display staff list 5. Edit Menu");
-						int answer = sc.nextInt();
-						switch (answer) {
-							case 1: loggedInManager.displayOrders();
-								break;
-							case 2: loggedInManager.viewDetails();
-								break;
-							case 3: loggedInManager.processOrder();
-								break;
-							case 4: loggedInManager.displayStaff(loggedInManager.getBranch());
-								break;
-							case 5: loggedInManager.editMenu();
-								break;
-						}
+						Managerpage((Manager)loggedInStaff);
 						break;
 					case 'A':
+						AdminPage((Admin)loggedInStaff);
 						break;
 				}
 			}
@@ -510,18 +446,7 @@ public class App {
 	}while(!input.equals("q"));
 		
 	}
-		option=checkpassword(loggedInAdmin.getPassword(), loggedInAdmin.getStaffName());
-		while(option==1) checkpassword(loggedInAdmin.getPassword(), loggedInAdmin.getStaffName());
-		if(option==0) AdminPage(loggedInAdmin);
-	}
-
-	if(option==2) return;
-	}
-
-
-	
-
-		
+				
 	
     public static void main(String[] args) {
 

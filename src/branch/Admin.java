@@ -72,7 +72,7 @@ public void EditStaff(Staff a,Branch branch) {
 		case 3:
 			System.out.println("key in the new gender");
 			char gender =sc.nextLine().charAt(0);
-			a.changeStaffgender(a, gender);
+			a.changeStaffgender(gender);
 			break;
 		case 4:
 			System.out.println("key in the new age");
@@ -121,7 +121,7 @@ public void RemoveStaff(Staff a,Branch branch) {
 	
 }
 public void DisplayStaff(Branch branch) {
-	System.out.println("Manahers:");
+	System.out.println("Managers:");
 	for(Manager m:branch.getmanagerlist()){
 		System.out.println(m.getStaffName());
 	}
@@ -181,7 +181,7 @@ public void TransferStaff(Branch newBranch, Branch originalBranch, Staff staff) 
 	stafflist.remove(staff);
 	originalBranch.setStaffList(stafflist);
 
-	AssignManager(newBranch, manager);
+	//AssignManager(newBranch, manager);  Why assignManager method is called?
 }
 
 

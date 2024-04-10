@@ -4,7 +4,6 @@ package src;
 import java.util.List;
 import java.util.ArrayList;
 
-import static src.App.adminList;
 
 import java.io.File;
 import java.util.Scanner;
@@ -56,9 +55,8 @@ public class FileIO {
 				String line = sc.nextLine();
 				String data[] = line.split(",");
 				if(data.length == 0) break;
-				b.setBranchName(data[5]);
 				if(data[2].equals("S")) {
-
+				b.setBranchName(data[5]);
 				Staff staff = new Staff(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), b);
 				staffList.add(staff);
 				}
@@ -83,8 +81,8 @@ public class FileIO {
 				String line = sc.nextLine();
 				String data[] = line.split(",");
 				if(data.length == 0) break;
-				b.setBranchName(data[5]);
-				if(data[2].equals("S")) {
+				if(data[2].equals("M")) {
+					b.setBranchName(data[5]);
 					Manager manager = new Manager(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), b);
 					ManagerList.add(manager);
 				}
@@ -95,6 +93,41 @@ public class FileIO {
 			System.out.println("Invalid file");
 		}
 		return ManagerList;
+	}
+	
+	//Stores everyone into this list including the admin
+	public static List<Staff> readAllEmployees(){
+		List<Staff> employeeList = new ArrayList<Staff>();
+		Branch b=new Branch("na");
+		try {
+			File staffCsv = new File("staff_list.csv");
+			Scanner sc = new Scanner(staffCsv);
+			sc.nextLine(); //skip the header row
+			while(sc.hasNextLine()) {
+				String line = sc.nextLine();
+				String data[] = line.split(",");
+				if(data.length == 0) break;
+				if(data[2].equals("M")) {
+					b.setBranchName(data[5]);
+					Staff manager = new Manager(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), b);
+					employeeList.add(manager);
+				}
+				else if(data[2].equals("S")){
+					b.setBranchName(data[5]);
+					Staff staff = new Staff(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), b);
+					employeeList.add(staff); 
+				}
+				else {
+					Staff admin = new Admin(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), b);
+					employeeList.add(admin);
+				}
+
+			}
+		}
+		catch(FileNotFoundException f) {
+			System.out.println("Invalid file");
+		}
+		return employeeList;
 	}
 
 
@@ -132,7 +165,6 @@ public class FileIO {
 				String line = sc.nextLine();
 				String data[] = line.split(",");
 				if(data.length == 0) break;
-				b.setBranchName(data[5]);
 			if(data[2].equals("A")) {
 				Admin admin = new Admin(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), b);
 				adminList.add(admin);

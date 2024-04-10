@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Branch {
   private int BranchID;
+  private boolean state;
   private String branchName;
   private int staffQuota=0;
   private List<Staff> staffList;
