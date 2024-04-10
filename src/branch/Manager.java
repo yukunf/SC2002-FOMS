@@ -4,23 +4,23 @@ import src.menu.Food;
 import src.menu.FoodCategory;
 
 import static src.App.foodList;
-import static src.App.staffList;
 import static src.menu.FoodCategory.*;
 
+import java.util.List;
+
 public class Manager extends Staff {
-	public Manager() {
-		super("NA","NA",'X',-1,"NA",'X');
-	}
-	public Manager(String name, String loginID, char gender, int age, String branch, char role) {
-		super(name, loginID, gender, age, branch, role);
-	}
+
+	private char role='M';
   
-	public void displayStaff(String branch) {
-		for(Staff staff : staffList){
-			if (staff.getBranch() == branch) {
-				System.out.println(staff.getStaffName());
-			}
-		}
+  public Manager(String name, String loginID, char gender, int age, Branch branch) {
+	  super(name, loginID, gender, age, branch);
+  }
+  
+  public void displayStaff() {
+	List<Staff> list=this.gettaffbranch().getStaffList();
+	for(Staff staff : list){
+		System.out.println(staff.getStaffName());
+
 	}
 	
   public void editMenu() {
