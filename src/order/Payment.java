@@ -1,8 +1,3 @@
-package src.order;
-
-import java.util.List;
-import java.util.Scanner;
-
 /**
  * @author xinyue
  * Created at 26/3/24 13:24
@@ -12,11 +7,6 @@ import java.util.Scanner;
  * @version 1.10.00 
  * Description: updated to allow dynamic manipulation of payment methods (from enum to list)
  */
-
-public class Payment {
-	private static List<String> paymentMethodsList;
-	
-    public enum PaymentMethod {CREDIT_CARD,CASH,PAYPAL,PAYNOW}
 
 package src.order;
 
@@ -98,6 +88,3 @@ public class Payment {
 
 }
 
-
-
-}
