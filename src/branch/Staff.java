@@ -8,7 +8,7 @@ import src.order.OrderStatus;
 import java.util.Scanner;
 
 import static src.App.orderList;
-import static src.App.searchOrderByID;
+
 
 public class Staff {
 	private char role = 'S';
@@ -30,25 +30,37 @@ public class Staff {
 		this.branch=branch;
 		this.password = "password"; //default password
 	}
+	//TODO Actually I don know where to put this in...
+	public Order searchOrderByID(int id){
+		for(Order o : orderList){
+			if(o.getOrderID() == id && o.getStatus().equals(OrderStatus.PREPARING) && o.getBranch().equals(branch.getBranchName()))return o;
+		}
+		return null;
+	}
 	
 	public void displayOrders() {
+		System.out.println("The list of orders:");
 		for (Order order : orderList) {	
-		  if (order.getStatus()==OrderStatus.UNPAID) {
-			  System.out.println(order.getOrderID());  
+		  if (order.getBranch().equals(branch.getBranchName()) && order.getStatus()==OrderStatus.PREPARING) {
+			  System.out.println("OrderID: " + order.getOrderID());  
 		  }
 	    }
 	}
 	public void viewDetails() {
-		System.out.println("Enter order to view (input orderID): ");
+		displayOrders();
+		System.out.println("Enter OrderID to view order: ");
 		int orderID = sc.nextInt();
 		Order orderObject = searchOrderByID(orderID);
 		if(orderObject == null){
 			System.out.println("Order doesn't exist.");
 			return;
 		}
-
-		System.out.println("Order details: ");
-		System.out.println("Branch: "+ orderObject.getBranch()+ ", Time: "+ orderObject.getTime()+", Dine-in: "+orderObject.getBranch()+ ", Current status: "+orderObject.getStatus());
+		String diningStatus;
+		System.out.println("======== Order details ========");
+		if(orderObject.getDiningStatus()) diningStatus = "Dining in";
+		else diningStatus = "Take-away";
+		System.out.println("OrderID: " + orderObject.getOrderID());
+		System.out.println("Branch: "+ orderObject.getBranch() + " \nTime: "+ orderObject.getTime()+" \nDining Status: "+ diningStatus + " \nCurrent status: "+orderObject.getStatus());
 		for (int i=0; i < orderObject.getFoodList().size(); i++) {
 			String customization;
 			if (orderObject.getFoodList().get(i).isHasCustomization()) {
@@ -57,26 +69,46 @@ public class Staff {
 			else {
 				customization= "None";
 			}
-			System.out.println((i+1)+". Food item: " +orderObject.getFoodList().get(i).getFood()+ ", Food item: "
+			System.out.println((i+1)+". " +orderObject.getFoodList().get(i).getFood().getName()+ ", Quantity: "
 					+orderObject.getFoodList().get(i).getQuantity()+ ", Customization: "+customization);
 		}
+		System.out.println("===============================");
+		System.out.println();
 	}
 
 
 	public void processOrder() {
-		System.out.println("Enter orderID: ");
+		displayOrders();
+		System.out.println("Enter orderID to process: ");
 		int currentOrder = sc.nextInt();
-		System.out.println("change status to 1: PREPARING, 2: READY, 3: CANCELLED");
+		int currentID = -1;
+		int i = 0;
+		for(Order order : orderList) {
+			if(order.getOrderID() == currentOrder && order.getBranch().equals(branch.getBranchName()) && order.getStatus().equals(OrderStatus.PREPARING)) {
+				currentID = i;
+				break;
+			}
+			i++;
+		}
+		if(currentID == -1) {
+			System.out.println("Order does not exist!");
+			System.out.println();
+			return;
+		}
+		System.out.println("Change status to:");
+		System.out.println("1: PREPARING");
+		System.out.println("2: READY");
+		System.out.println("3: CANCELLED");
 		int choice = sc.nextInt();
 		switch (choice) { 
 			case 1:
-				orderList.get(currentOrder).setStatus(OrderStatus.PREPARING);
+				orderList.get(currentID).setStatus(OrderStatus.PREPARING);
 				break;
 			case 2:
-				orderList.get(currentOrder).setStatus(OrderStatus.READY);
+				orderList.get(currentID).setStatus(OrderStatus.READY);
 				break;
 			case 3:
-				orderList.get(currentOrder).setStatus(OrderStatus.CANCELLED);
+				orderList.get(currentID).setStatus(OrderStatus.CANCELLED);
 				break;
 		}
 	}

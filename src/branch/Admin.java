@@ -1,12 +1,13 @@
 package src.branch;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Scanner;
 import src.App;
 
 
 public class Admin extends Staff {
 
-	private char role='A';
+	private char role = 'A';
 	
 	private List<Branch> branchlist;
 	private List<String> paymentMethodsList;	 
@@ -20,14 +21,31 @@ public class Admin extends Staff {
 		}
 //Constructor
 
-	
+public static List<Staff> filterStaff(Branch branch){
+	List<Staff> staffList = new ArrayList<>();
+	for(Staff staff: App.staffList) {
+		if(staff.getBranch().getBranchName().equals(branch.getBranchName())) {
+			staffList.add(staff);
+		}		
+	}
+	return staffList;
+}
+public static List<Manager> filterManager(Branch branch){
+	List<Manager> managerList = new ArrayList<>();
+	for(Manager manager: App.ManagerList) {
+		if(manager.getBranch().getBranchName().equals(branch.getBranchName())) {
+			managerList.add(manager);
+		}		
+	}
+	return managerList;
+}
 	
 public void AddStaff(Branch branch) {
 
 	int quota=branch.getStaffQuota();
-	List<Staff> staffList=branch.getStaffList();
+	List<Staff> staffList = filterStaff(branch);
 	if (staffList.size()<quota){
-		System.out.println("Enter the name of the new staff");
+		System.out.println("Enter the name of the new staff:");
 		String name=sc.nextLine();
 		System.out.println("Enter the loginID of the new staff");
 		String ID=sc.nextLine();
@@ -38,6 +56,8 @@ public void AddStaff(Branch branch) {
 
 		Staff newsStaff=new Staff(name,ID,gender,age,branch);
 		staffList.add(newsStaff);
+		App.allEmployeesList.add(newsStaff);
+		App.staffList.add(newsStaff);
 		branch.setStaffList(staffList);
 	}
 
@@ -112,22 +132,47 @@ public void EditStaff(Staff a,Branch branch) {
 	branch.setStaffList(stlist);
 }
 
-public void RemoveStaff(Staff a,Branch branch) {
-	int index=branch.getStaffList().indexOf(a);
-	List<Staff> stflist=branch.getStaffList();
-	stflist.remove(index);
-	branch.setStaffList(stflist);
+public void RemoveStaff(Branch branch) {
+	int i = 1;
+	List<Staff> staffList = filterStaff(branch);
+	System.out.println("Enter the staff to remove:");
+	for(Staff staff: staffList) {
+		System.out.println(i + ". " + staff.getStaffName());
+		i++;
+	}
+	int opt = sc.nextInt();
+	for(Staff s : App.allEmployeesList) {
+		if(staffList.get(opt-1).getStaffName().equals(s.getStaffName())) {
+			App.allEmployeesList.remove(s);
+			break;
+		}
+	}
+	for(Staff s : App.staffList) {
+		if(staffList.get(opt-1).getStaffName().equals(s.getStaffName())) {
+			App.staffList.remove(s);
+			break;
+		}
+	}
+	staffList.remove(opt-1);
+	branch.setStaffList(staffList);
+	System.out.println("Removed successfully!");
+	System.out.println();
 	return;
 	
 }
+
 public void DisplayStaff(Branch branch) {
+	List<Staff> staffList = filterStaff(branch);
+	List<Manager> managerList = filterManager(branch);
 	System.out.println("Managers:");
-	for(Manager m:branch.getmanagerlist()){
+	for(Manager m : managerList){
 		System.out.println(m.getStaffName());
 	}
-	System.out.println("staffs:");
-	for(Staff st:branch.getStaffList())
+	System.out.println();
+	System.out.println("Staffs:");
+	for(Staff st : staffList)
 		System.out.println(st.getStaffName());
+	System.out.println();
 	}
 	
 
