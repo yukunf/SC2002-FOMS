@@ -2,12 +2,14 @@ package src.branch;
 
 import src.menu.Food;
 import java.util.List;
+import java.util.ArrayList;
+import src.App;
 
 public class Branch {
   private int BranchID;
   private boolean state;
   private String branchName;
-  private int staffQuota=0;
+  private int quota;
   private List<Staff> staffList;
   private List<Food> branchMenu;
   private List<Manager> managerList;
@@ -34,11 +36,11 @@ public class Branch {
   }
 
   public int getStaffQuota() {
-    return staffQuota;
+    return quota;
   }
 
   public void setStaffQuota(int staffQuota) {
-    this.staffQuota = staffQuota;
+    this.quota = staffQuota;
   }
 
   public List<Staff> getStaffList() {

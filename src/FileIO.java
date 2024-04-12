@@ -46,7 +46,6 @@ public class FileIO {
 	//This reads the file and returns the list of all staff
 	public static List<Staff> readStaffList(){
 		List<Staff> staffList = new ArrayList<Staff>();
-		Branch b=new Branch("na");
 		try {
 			File staffCsv = new File("staff_list.csv");
 			Scanner sc = new Scanner(staffCsv);
@@ -56,7 +55,7 @@ public class FileIO {
 				String data[] = line.split(",");
 				if(data.length == 0) break;
 				if(data[2].equals("S")) {
-				b.setBranchName(data[5]);
+				Branch b=new Branch(data[5]);
 				Staff staff = new Staff(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), b);
 				staffList.add(staff);
 				}
@@ -72,7 +71,6 @@ public class FileIO {
 	//This reads the file and returns the list of all managers
 	public static List<Manager> readManagerList(){
 		List<Manager> ManagerList = new ArrayList<Manager>();
-		Branch b=new Branch("na");
 		try {
 			File staffCsv = new File("staff_list.csv");
 			Scanner sc = new Scanner(staffCsv);
@@ -82,7 +80,7 @@ public class FileIO {
 				String data[] = line.split(",");
 				if(data.length == 0) break;
 				if(data[2].equals("M")) {
-					b.setBranchName(data[5]);
+					Branch b=new Branch(data[5]);
 					Manager manager = new Manager(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), b);
 					ManagerList.add(manager);
 				}
@@ -98,7 +96,6 @@ public class FileIO {
 	//Stores everyone into this list including the admin
 	public static List<Staff> readAllEmployees(){
 		List<Staff> employeeList = new ArrayList<Staff>();
-		Branch b=new Branch("na");
 		try {
 			File staffCsv = new File("staff_list.csv");
 			Scanner sc = new Scanner(staffCsv);
@@ -108,16 +105,17 @@ public class FileIO {
 				String data[] = line.split(",");
 				if(data.length == 0) break;
 				if(data[2].equals("M")) {
-					b.setBranchName(data[5]);
+					Branch b=new Branch(data[5]);
 					Staff manager = new Manager(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), b);
 					employeeList.add(manager);
 				}
 				else if(data[2].equals("S")){
-					b.setBranchName(data[5]);
+					Branch b=new Branch(data[5]);
 					Staff staff = new Staff(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), b);
 					employeeList.add(staff); 
 				}
 				else {
+					Branch b=new Branch("na");
 					Staff admin = new Admin(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), b);
 					employeeList.add(admin);
 				}
@@ -144,6 +142,7 @@ public class FileIO {
 			String data[] =line.split(",");
 			if(data.length == 0) break;
 			Branch branch = new Branch(data[0]);
+			branch.setStaffQuota(Integer.parseInt(data[2]));
 			branchList.add(branch);	
 			}
  		}
@@ -156,7 +155,6 @@ public class FileIO {
 	//reads the file and return the list of admins
 	public static List<Admin> readAdminList(){
 	List<Admin> adminList = new ArrayList<>();
-	Branch b=new Branch("na");
 		try {
 			File staffCsv = new File("staff_list.csv");
 			Scanner sc = new Scanner(staffCsv);
@@ -166,6 +164,7 @@ public class FileIO {
 				String data[] = line.split(",");
 				if(data.length == 0) break;
 			if(data[2].equals("A")) {
+				Branch b=new Branch("na");
 				Admin admin = new Admin(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), b);
 				adminList.add(admin);
 

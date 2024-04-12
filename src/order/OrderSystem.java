@@ -69,6 +69,7 @@ public class OrderSystem {
                 found = true;
             }
         }
+        //need to remove order from orderlist upon collection
 
     }
     
