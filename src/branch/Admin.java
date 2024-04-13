@@ -47,11 +47,12 @@ public void AddStaff(Branch branch) {
 	List<Staff> staffList = filterStaff(branch);
 	if (staffList.size()<quota){
 		System.out.println("Enter the name of the new staff:");
+		sc.nextLine(); //Clear input buffer
 		String name=sc.nextLine();
 		System.out.println("Enter the loginID of the new staff");
-		String ID=sc.nextLine();
+		String ID=sc.next();
 		System.out.println("Enter the gender of the new staff");
-		char gender=sc.nextLine().charAt(0);
+		char gender=sc.next().charAt(0);
 		System.out.println("Enter the age of the new staff");
 		int age=sc.nextInt();
 
@@ -77,6 +78,7 @@ public void EditStaff(Branch branch) {
 	}
 	System.out.println();
 	int opt = sc.nextInt();
+	sc.nextLine(); //clear input buffer
 	Staff staff = staffList.get(opt-1);
 	System.out.println("What do you want to edit");
 	System.out.println("1. Name");
@@ -84,15 +86,16 @@ public void EditStaff(Branch branch) {
 	System.out.println("3. Gender");
 	System.out.println("4. Age");
 	int choice=sc.nextInt();
+	sc.nextLine();
 	switch (choice) {
 		case 1:
 			System.out.println("Enter new name:");
-			String name=sc.next();
+			String name=sc.nextLine();
 			staff.changeStaffName(name);
 			break;
 		case 2:
 			System.out.println("Enter new LoginID:");
-			String id=sc.next();
+			String id=sc.nextLine();
 			staff.changeStaffID(id);
 			break;
 		case 3:
@@ -112,6 +115,7 @@ public void EditStaff(Branch branch) {
             s.changeStaffName(staff.getStaffName());
             s.changeStaffgender(staff.getGender());
             s.changeStaffage(staff.getAge());
+            s.changeStaffID(staff.getLoginID());
             break;
         }
     }
@@ -122,6 +126,7 @@ public void EditStaff(Branch branch) {
         	s.changeStaffName(staff.getStaffName());
             s.changeStaffgender(staff.getGender());
             s.changeStaffage(staff.getAge());
+            s.changeStaffID(staff.getLoginID());
             break;
         }
     }
@@ -157,19 +162,49 @@ public void RemoveStaff(Branch branch) {
 	
 }
 
-public void DisplayStaff(Branch branch) {
-	List<Staff> staffList = filterStaff(branch);
-	List<Manager> managerList = filterManager(branch);
-	System.out.println("Managers:");
-	for(Manager m : managerList){
-		System.out.println(m.getStaffName());
+public void DisplayStaff() {
+	System.out.println("1. Display by branch");
+	System.out.println("2. Display all");
+	int opt = sc.nextInt();
+	if(opt == 1) {
+		System.out.println("Enter the branch to display the stafflist");
+		for(int i=0;i<App.branchList.size();i++){
+			System.out.println((i+1)+ ". " + App.branchList.get(i).getBranchName());
+		}
+		int index;
+		index=sc.nextInt();
+		Branch branch = App.branchList.get(index-1);	
+		List<Staff> staffList = filterStaff(branch);
+		List<Manager> managerList = filterManager(branch);
+		System.out.println("Managers:");
+		for(Manager m : managerList){
+			System.out.println(m.getStaffName() + "  Gender: " + m.getGender() + "  Age: " + m.getAge()+ "  Branch: " + m.getBranch().getBranchName());
+		}
+		System.out.println();
+		System.out.println("Staffs:");
+		for(Staff st : staffList)
+			System.out.println(st.getStaffName() + "  Gender:" + st.getGender() + "  Age: " + st.getAge() + "  Branch: " + st.getBranch().getBranchName());
+		System.out.println();
 	}
-	System.out.println();
-	System.out.println("Staffs:");
-	for(Staff st : staffList)
-		System.out.println(st.getStaffName());
-	System.out.println();
+	else if(opt == 2) {
+		System.out.println("======== Staff Details ========");
+		System.out.println("Managers:");
+		for(Staff s : App.allEmployeesList) {
+			if(s.getRole() == 'M') {
+				System.out.println(s.getStaffName() + "  Gender: " + s.getGender() + "  Age: " + s.getAge() + "  Branch: " + s.getBranch().getBranchName());
+			}
+		}
+		System.out.println();
+		System.out.println("Staffs:");
+		for(Staff s : App.allEmployeesList) {
+			if(s.getRole() == 'S') {
+				System.out.println(s.getStaffName() + "  Gender: " + s.getGender() + "  Age: " + s.getAge() + "  Branch: " + s.getBranch().getBranchName());
+			}
+		}
+		System.out.println("===============================");
+		System.out.println();
 	}
+}
 	
 
 private Manager addManager(Branch branch){
@@ -302,10 +337,10 @@ public void loadHomePage() {
 				int index;
 				index=sc.nextInt();
 				Branch branch=App.branchList.get(index-1);
-				this.AddStaff(branch);
+				AddStaff(branch);
 			}
 			//Edit
-			if(option==2){
+			else if(option==2){
 				System.out.println("Enter the branch the staff is in:");
 				for(int i=0;i<App.branchList.size();i++){
 					System.out.println((i+1) + ". " + App.branchList.get(i).getBranchName());
@@ -315,7 +350,7 @@ public void loadHomePage() {
 				Branch branch=App.branchList.get(index-1);
 				this.EditStaff(branch);	
 			}
-			if (option==3){
+			else if (option==3){
 				System.out.println("Enter the branch the staff is in:");
 				for(int i=0;i<App.branchList.size();i++){
 					System.out.println((i+1) + ". " + App.branchList.get(i).getBranchName());
@@ -328,23 +363,16 @@ public void loadHomePage() {
 			break;
 			
 		case 2: 
-			System.out.println("Enter the branch to display the stafflist");
-			for(int i=0;i<App.branchList.size();i++){
-				System.out.println((i+1)+ ". " + App.branchList.get(i).getBranchName());
-			}
-			int index;
-			index=sc.nextInt();
-			Branch branch = App.branchList.get(index-1);
-			this.DisplayStaff(branch);
+			DisplayStaff();
 			break;
 		case 3: 
 			System.out.println("Enter the branch");
 			for(int i=0;i<App.branchList.size();i++){
 				System.out.println((i+1) + 	". " + App.branchList.get(i).getBranchName());
 			}
-			index=sc.nextInt();
+			int index=sc.nextInt();
 			int x = 0;
-			branch = App.branchList.get(index-1);
+			Branch branch = App.branchList.get(index-1);
 			System.out.println("Enter the staff to promote to Manager");
 				for(Staff staff : branch.getStaffList()){
 					System.out.println(x+1 + ". " + staff.getStaffName());
@@ -352,7 +380,7 @@ public void loadHomePage() {
 					}
 				int opt = sc.nextInt();
 				Manager m=new Manager(branch.getStaffList().get(opt-1).getStaffName(),branch.getStaffList().get(opt-1).getLoginID(),branch.getStaffList().get(opt-1).getGender(),branch.getStaffList().get(opt-1).getAge(),branch.getStaffList().get(opt-1).getBranch());
-				
+				m.setPassword(branch.getStaffList().get(opt-1).getPassword());
 				//updating App.allEmployeesList
 				List<Staff> employeesToRemove = new ArrayList<>();
 				for (Staff s : App.allEmployeesList) {
@@ -374,6 +402,7 @@ public void loadHomePage() {
 				branch.getmanagerlist().add(m);
 				App.allEmployeesList.add(m);
 				App.ManagerList.add(m);
+				System.out.println("Promoted " + m.getStaffName() + " successfully!");
 
 			break;
 		case 4: 

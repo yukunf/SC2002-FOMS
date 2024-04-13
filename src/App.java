@@ -170,7 +170,7 @@ public class App {
 				System.out.println("Login successful, " + loggedInStaff.getStaffName());
 
 				// reset password if first successful login
-				if (loggedInStaff.getLoginTry()==1) {
+				if (loggedInStaff.getLoginTry()==1 && loggedInStaff.getPassword().equals("password")) {
 					System.out.println("Input new password: ");
 					String newPassword = sc.next();
 					loggedInStaff.setPassword(newPassword);
