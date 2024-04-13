@@ -12,7 +12,7 @@ public class Branch {
   private int quota;
   private List<Staff> staffList;
   private List<Food> branchMenu;
-  private List<Manager> managerList;
+  private List<Staff> managerList;
 
   
   public Branch(String branchName){
@@ -59,16 +59,16 @@ public class Branch {
     return branchMenu;
   }
 
-  public List<Manager> getmanagerlist(){
+  public List<Staff> getmanagerlist(){
     return this.managerList;
 
   }
 
-  public void setmanagerlist(List<Manager> managerList){
+  public void setmanagerlist(List<Staff> managerList){
 
     this.managerList=managerList;    
   }
-
+  
   public Boolean getState(){
     return this.state;
   }

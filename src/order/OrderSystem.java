@@ -67,6 +67,20 @@ public class OrderSystem {
             if(o != null){
                 System.out.println("Status of Order "+id+" : "+o.getStatus());
                 found = true;
+                if(o.getStatus().equals(OrderStatus.READY)) {
+                	System.out.println("1. Collect Order");
+                	int opt = s.nextInt();
+                	switch(opt) {
+                	case 1:
+                		System.out.println("Order collected!");
+                		o.setStatus(OrderStatus.COLLECTED);
+                		break;
+                	default:
+                		System.out.println("Invalid option!");
+                		break;
+                	}
+                		
+                }
             }
         }
         //need to remove order from orderlist upon collection

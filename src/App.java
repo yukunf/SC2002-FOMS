@@ -16,6 +16,7 @@ import src.menu.Food;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 
 /**
  * @author fengyukun
@@ -54,7 +55,24 @@ public class App {
 		orderList = new ArrayList<Order>();
 
 		orderList = deserializeOrderList();
-
+		
+		List<Staff> branchStaff;
+		List<Staff> branchManager;
+		for (Branch branch : branchList) {
+		    branchStaff = new ArrayList<>();
+		    branchManager = new ArrayList<>();
+		    for (Staff employee : allEmployeesList) {
+		        if (branch.getBranchName().equals(employee.getBranch().getBranchName())) {
+		            if (employee.getRole() == 'S') {
+		                branchStaff.add(employee);
+		            } else if (employee.getRole() == 'M') {
+		                branchManager.add(employee);
+		            }
+		        }
+		    }
+		    branch.setStaffList(branchStaff);
+		    branch.setmanagerlist(branchManager);
+		}
 
 		//Order.setOrderIDCounter(orderList.get(orderList.size() - 1).getOrderID() + 1);
 		// Set the counter 1 more than the biggest existing orderID
@@ -124,248 +142,11 @@ public class App {
 		}
 	}
 
-	public static void Staffpage(Staff loggedInStaff){
-		int choice;
-		do {
-		System.out.println();
-		System.out.println("Select action:");
-		System.out.println("1. View order details");
-		System.out.println("2. Process order");
-		System.out.println("3. Exit");
-                        choice = sc.nextInt();
-                        switch (choice) {
-                            case 1: loggedInStaff.viewDetails();
-                                break;
-                            case 2: loggedInStaff.processOrder();
-						}
-		}while(choice < 3);       
-	}
-
-	public static void Managerpage(Manager loggedInManager){
-		int answer;
-		do {
-		System.out.println("Select action:");
-		System.out.println("1. View order details");
-		System.out.println("2. Process order");
-		System.out.println("3. Display staff list");
-		System.out.println("4. Edit Menu");
-		System.out.println("5. Exit");
-		answer = sc.nextInt();
-		switch (answer) {
-			case 1: loggedInManager.viewDetails();
-				break;
-			case 2: loggedInManager.processOrder();
-				break;
-			case 3: loggedInManager.displayStaff();;
-				break;
-			case 4: loggedInManager.editMenu();
-				break;
-		}
-		}while(answer < 5);
-		
-	}
-	public static void AdminPage(Admin loggedInAdmin){
-		int answer;
-		do {
-		System.out.println("Select action:");
-		System.out.println("1. Add/Edit/Remove Staff");
-		System.out.println("2. Display staff");
-		System.out.println("3. Assign managers to a branch");
-		System.out.println("4. Promote a staff to a Branch manager");
-		System.out.println("5. Transfer a staff/manager");
-		System.out.println("6. Add/Remove payment method");
-		System.out.println("7. Open/Close Branch");
-		System.out.println("8. Quit");
-		answer = sc.nextInt();
-		switch (answer) {
-			case 1: 
-				System.out.println("Enter option");
-				System.out.println("1. Add");
-				System.out.println("2. Edit");
-				System.out.println("3. Remove");
-				int option=sc.nextInt();
-				//Add
-				if(option==1){
-					System.out.println("Enter the branch the staff is adding to:");
-					for(int i=0;i<branchList.size();i++){
-						System.out.println((i+1)+". "+branchList.get(i).getBranchName());
-					}
-					int index;
-					index=sc.nextInt();
-					Branch branch=branchList.get(index-1);
-					loggedInAdmin.AddStaff(branch);
-				}
-				//Edit
-				if(option==2){
-					System.out.println("Enter the branch the staff is in:");
-					for(int i=0;i<branchList.size();i++){
-						System.out.println((i+1) + ". " + branchList.get(i).getBranchName());
-					}
-					int index;
-					index=sc.nextInt();
-					Branch branch=branchList.get(index-1);
-
-					System.out.println("Enter the name of the satff to edit:");
-					String name;
-					name=sc.next();
-					Staff s;
-					for(Staff staff:branch.getStaffList()){
-						if(name==staff.getStaffName()) {
-							s=staff;
-							loggedInAdmin.EditStaff(s, branch);
-							break;
-						}
-					}
-					
-				}
-				if (option==3){
-					System.out.println("Enter the branch the staff is in:");
-					for(int i=0;i<branchList.size();i++){
-						System.out.println((i+1) + ". " + branchList.get(i).getBranchName());
-					}
-					int index;
-					index=sc.nextInt();
-					Branch branch=branchList.get(index-1);
-					loggedInAdmin.RemoveStaff(branch);
-				}
-				break;
-				
-			case 2: 
-				System.out.println("Enter the branch to display the stafflist");
-				for(int i=0;i<branchList.size();i++){
-					System.out.println((i+1)+ ". " + branchList.get(i).getBranchName());
-				}
-				int index;
-				index=sc.nextInt();
-				Branch branch=branchList.get(index-1);
-				loggedInAdmin.DisplayStaff(branch);
-				break;
-			case 3: 
-				System.out.println("Enter the branch");
-
-				for(int i=0;i<branchList.size();i++){
-					System.out.println((i+1) + ". "+branchList.get(i).getBranchName());
-				}
-				index=sc.nextInt();
-				branch=branchList.get(index-1);
-				loggedInAdmin.AssignManager(branch);
-				break;
-			case 4: 
-				System.out.println("Enter the branch");
-				for(int i=0;i<branchList.size();i++){
-					System.out.println((i+1) + 	". " + branchList.get(i).getBranchName());
-				}
-				index=sc.nextInt();
-				branch=branchList.get(index-1);
-				System.out.println("Enter the name of the staff to promote to Manager");
-				String name;
-					name=sc.next();
-					Staff s;
-					for(Staff staff:branch.getStaffList()){
-						if(name==staff.getStaffName()) {
-							s=staff;
-							Manager m=new Manager(s.getStaffName(),s.getLoginID(),s.getGender(),s.getAge(),s.getBranch());
-							loggedInAdmin.RemoveStaff(branch);
-							loggedInAdmin.AssignManager(branch, m);
-							break;
-						}
-					}
-				break;
-			case 5: 
-			System.out.println("Transfer () to a new branch 1.Manager	2.Staff");
-			index=sc.nextInt();
-			System.out.println("Enter the original branch the staff was in:");
-			for(int i=0;i<branchList.size();i++){
-				System.out.println((i+1)+ ". "+ branchList.get(i).getBranchName());
-			}
-			index=sc.nextInt();
-			Branch oribranch=branchList.get(index-1);
-			System.out.println("Enter the new branch");
-			for(int i=0;i<branchList.size();i++){
-				System.out.println((i+1) + ". " + branchList.get(i).getBranchName());
-			}
-			index=sc.nextInt();
-			Branch newbranch=branchList.get(index-1);
-			if (index==1){
-				System.out.println("Enter the name of the Manger:");
-				name=sc.next();
-				for(Manager m:oribranch.getmanagerlist()){
-					if(name==m.getStaffName()) {
-						loggedInAdmin.TransferManager(newbranch, oribranch, m);;
-						break;
-					}
-				}
-			}
-			if (index==2){
-				System.out.println("Enter the name of the Staff:");
-				name=sc.next();
-				
-				for(Staff staff:oribranch.getStaffList()){
-					if(name==staff.getStaffName()) {
-						loggedInAdmin.TransferStaff(newbranch, oribranch, staff);;
-						break;
-					}
-				}
-			}
-			break;
-
-			case 6:
-			System.out.println("Do you want to");
-			System.out.println("1. Add Payment");
-			System.out.println("2. Remove Payment");
-			index=sc.nextInt();
-			if(index==1){
-				System.out.println("Enter the new payment method:");
-				String newmethod=sc.next();
-				loggedInAdmin.addpaymentmethod(newmethod);
-			}
-			if(index==2){
-				System.out.println("Enter the new payment to remove:");
-				String removingmethod=sc.next();
-				loggedInAdmin.removepaymentmethod(removingmethod);
-			}
-			break;
-
-			case 7:			
-			System.out.println("Do you want to");
-			System.out.println("1. Open Branch");
-			System.out.println("2. Close Branch");
-			index=sc.nextInt();
-			if(index==1){
-				System.out.println("Enter the branch to open");
-				for(int i=0;i<branchList.size();i++){
-					System.out.println((i+1) + ". " + branchList.get(i).getBranchName());
-				}
-				index=sc.nextInt();
-				branch=branchList.get(index-1);
-				loggedInAdmin.open(branch);
-			}
-			if(index==2){
-				System.out.println("Enter the branch to close");
-				for(int i=0;i<branchList.size();i++){
-					System.out.println((i+1)+ ". " + branchList.get(i).getBranchName());
-				}
-				index=sc.nextInt();
-				branch=branchList.get(index-1);
-				loggedInAdmin.close(branch);
-			}
-
-		}
-	}while(answer < 8);
-		
-	}
-
-
-
-	
 	public static void staffDriver() {  //May want to use a HashMap for constant look up time
 		String input;
 
 		int option;
 		Staff loggedInStaff = null;
-		Manager loggedInManager=null;
-		Admin loggedInAdmin=null;
-
 
 		do {
 		loggedInStaff = null;
@@ -402,13 +183,13 @@ public class App {
 				char role=loggedInStaff.getRole(); 
 				switch (role) {
 					case 'S': 
-						Staffpage(loggedInStaff);
+						loggedInStaff.loadHomePage();
 						break;
 					case 'M': 
-						Managerpage((Manager)loggedInStaff);
+						loggedInStaff.loadHomePage();
 						break;
 					case 'A':
-						AdminPage((Admin)loggedInStaff);
+						loggedInStaff.loadHomePage();
 						break;
 				}
 			}
@@ -430,16 +211,21 @@ public class App {
 	
     public static void main(String[] args) {
 
-
+    	
 		initialize();
-
-    	int opt;
+    	int opt = 0;
         do {
         	System.out.println("Select a domain:");
             System.out.println("1. Customer");
             System.out.println("2. Staff");
             System.out.println("3. Terminate");
+            try {
         	opt = sc.nextInt();
+            }catch(InputMismatchException e) {
+            	System.out.println("Invalid input");
+            	sc.nextLine(); //clear input buffer
+            	continue;
+            }
         	switch(opt) {
         	case 1: // Customer
 				customerDriver();

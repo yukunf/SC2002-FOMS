@@ -69,6 +69,7 @@ public class Staff {
 			else {
 				customization= "None";
 			}
+			System.out.println();
 			System.out.println((i+1)+". " +orderObject.getFoodList().get(i).getFood().getName()+ ", Quantity: "
 					+orderObject.getFoodList().get(i).getQuantity()+ ", Customization: "+customization);
 		}
@@ -116,11 +117,11 @@ public class Staff {
 		public String getStaffName () {
 			return name;
 		}
-		public void changeStaffName (Staff a, String newname){
-			a.name = newname;
+		public void changeStaffName (String newname){
+			name = newname;
 		}
-		public void changeStaffID (Staff a, String newID){
-			a.loginID = newID;
+		public void changeStaffID (String newID){
+			loginID = newID;
 
 		}
 		public void changeStaffgender (char newgender){
@@ -132,11 +133,11 @@ public class Staff {
 		public int getAge() {
 			return age;
 		}
-		public void changeStaffage (Staff a, int newage){
-			a.age = newage;
+		public void changeStaffage (int newage){
+			age = newage;
 		}
-		public void changeStaffbranch (Staff a, Branch newbranch){
-			a.branch = newbranch;
+		public void changeStaffbranch (Branch newbranch){
+			branch = newbranch;
 		}
 		public String getLoginID () {
 			return loginID;
@@ -167,6 +168,23 @@ public class Staff {
 		}
 		public Branch getBranch() {
 			return branch;
+		}
+		
+		public void loadHomePage() {
+			int choice;
+			do {
+			System.out.println();
+			System.out.println("Select action:");
+			System.out.println("1. View order details");
+			System.out.println("2. Process order");
+			System.out.println("3. Exit");
+	                        choice = sc.nextInt();
+	                        switch (choice) {
+	                            case 1: this.viewDetails();
+	                                break;
+	                            case 2: this.processOrder();
+							}
+			}while(choice < 3);  
 		}
 
 	}
