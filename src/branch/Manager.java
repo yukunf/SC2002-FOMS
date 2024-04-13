@@ -142,5 +142,27 @@ public class Manager extends Staff {
 		  break;
 	  }
   }
+  public void loadHomePage() {
+	  int answer;
+		do {
+		System.out.println("Select action:");
+		System.out.println("1. View order details");
+		System.out.println("2. Process order");
+		System.out.println("3. Display staff list");
+		System.out.println("4. Edit Menu");
+		System.out.println("5. Exit");
+		answer = sc.nextInt();
+		switch (answer) {
+			case 1: this.viewDetails();
+				break;
+			case 2: this.processOrder();
+				break;
+			case 3: this.displayStaff();;
+				break;
+			case 4: this.editMenu();
+				break;
+		}
+		}while(answer < 5);
+	}
 } 
 
