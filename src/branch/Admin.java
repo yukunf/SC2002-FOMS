@@ -1,5 +1,6 @@
 package src.branch;
 import java.util.List;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Scanner;
 import src.App;
@@ -40,12 +41,36 @@ public static List<Manager> filterManager(Branch branch){
 	}
 	return managerList;
 }
+
+private int lowerquota(Branch b){
+	int numofmanagers=b.getmanagerlist().size();
+	if (numofmanagers==1) return 1;
+	else if (numofmanagers==2) return 5;
+	else if (numofmanagers==3) return 9;
+	else return 0;
+	//error handling?	
+}
+
+private int higherquota(Branch b){
+	int numofmanagers=b.getmanagerlist().size();
+	if (numofmanagers==1) return 4;
+	else if (numofmanagers==2) return 8;
+	else if (numofmanagers==2) return 15;
+	else return 0;
+	//error handling?	
+}
+
 	
 public void AddStaff(Branch branch) {
 
-	int quota=branch.getStaffQuota();
+	int quota=higherquota(branch);
 	List<Staff> staffList = filterStaff(branch);
-	if (staffList.size()<quota){
+	if (staffList.size()>=quota) {
+		System.out.println("Exceeding the quota.");
+		return;
+	}
+
+	else{
 		System.out.println("Enter the name of the new staff:");
 		sc.nextLine(); //Clear input buffer
 		String name=sc.nextLine();
@@ -134,31 +159,38 @@ public void EditStaff(Branch branch) {
 }
 
 public void RemoveStaff(Branch branch) {
+	int quota=lowerquota(branch);
 	int i = 1;
 	List<Staff> staffList = filterStaff(branch);
-	System.out.println("Enter the staff to remove:");
-	for(Staff staff: staffList) {
-		System.out.println(i + ". " + staff.getStaffName());
-		i++;
-	}
-	int opt = sc.nextInt();
-	for(Staff s : App.allEmployeesList) {
-		if(staffList.get(opt-1).getStaffName().equals(s.getStaffName())) {
-			App.allEmployeesList.remove(s);
-			break;
+	if (staffList.size()<=quota){
+		System.out.println("Removing will cause the number of staffs to be below the quota.");
+		return;
+	} 
+	else{
+		System.out.println("Enter the staff to remove:");
+		for(Staff staff: staffList) {
+			System.out.println(i + ". " + staff.getStaffName());
+			i++;
 		}
-	}
-	for(Staff s : App.staffList) {
-		if(staffList.get(opt-1).getStaffName().equals(s.getStaffName())) {
-			App.staffList.remove(s);
-			break;
+		int opt = sc.nextInt();
+		for(Staff s : App.allEmployeesList) {
+			if(staffList.get(opt-1).getStaffName().equals(s.getStaffName())) {
+				App.allEmployeesList.remove(s);
+				break;
+			}
 		}
+		for(Staff s : App.staffList) {
+			if(staffList.get(opt-1).getStaffName().equals(s.getStaffName())) {
+				App.staffList.remove(s);
+				break;
+			}
+		}
+		staffList.remove(opt-1);
+		branch.setStaffList(staffList);
+		System.out.println("Removed successfully!");
+		System.out.println();
+		return;
 	}
-	staffList.remove(opt-1);
-	branch.setStaffList(staffList);
-	System.out.println("Removed successfully!");
-	System.out.println();
-	return;
 	
 }
 
@@ -207,7 +239,8 @@ public void DisplayStaff() {
 }
 	
 
-private Manager addManager(Branch branch){
+private void addManager(Branch branch){
+	
 	System.out.println("Enter the name of the new staff");
 	String name=sc.nextLine();
 	System.out.println("Enter the loginID of the new staff");
@@ -217,7 +250,14 @@ private Manager addManager(Branch branch){
 	System.out.println("Enter the age of the new staff");
 	int age=sc.nextInt();
 	Manager m=new Manager(name,ID,gender,age,branch);
-	return m;
+	
+	branch.getmanagerlist().add(m);
+	App.allEmployeesList.add(m);
+	App.ManagerList.add(m);
+	while(branch.getStaffList().size()<lowerquota(branch)){
+		System.out.println("To meet the quota, add more staffs");
+		AddStaff(branch);
+	}
 
 }
 
@@ -251,8 +291,17 @@ public void TransferManager(Branch b) {
 			 break;
 		 }
 	 }
-	 App.branchList.get(opt-1).getmanagerlist().add(m);
-	 b.getmanagerlist().remove(m);
+	App.branchList.get(opt-1).getmanagerlist().add(m);
+	
+	while(App.branchList.get(opt-1).getStaffList().size()<lowerquota(App.branchList.get(opt-1))){
+		System.out.println("To meet the quota, add more staffs");
+		AddStaff(App.branchList.get(opt-1));
+	}
+	b.getmanagerlist().remove(m);
+	while(b.getStaffList().size()>higherquota(b)){
+		System.out.println("To meet the quota, remove more staffs");
+		RemoveStaff(b);
+	}
 }
 
 public void TransferStaff(Branch b) {
