@@ -341,7 +341,9 @@ public class OrderSystem {
 					   System.out.println();
 					   Receipt.printReceipt(currentOrder);
 					   // currentOrder.setStatus(OrderStatus.PREPARING); Done by payment
+					   currentOrder.setTime(System.currentTimeMillis()); // Register Time
 					   App.orderList.add(currentOrder);
+
 				   }
 				   else{
 					   System.out.println("Payment Failed. Order will be dropped");

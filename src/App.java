@@ -18,7 +18,12 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 
+import static java.lang.Thread.sleep;
+
 /**
+ * This Main Class holds global variables used across different domains of our program.
+ * It also has a main method to run user interactions.
+ * Two methods to initialize those variables with IO functions are also included.
  * @author fengyukun
  * Created at 21/3/24 17:11
  * Email : @author fengyukufyk@sina.com
@@ -36,7 +41,7 @@ public class App {
 	public static List<Admin> adminList;
 	public static List<Staff> allEmployeesList;
 
-
+	public static final int ORDER_EXPIRE_SECOND = 60 * 5 ; // 5 minutes. Can change this when testing.
 
 
 	/*
@@ -51,8 +56,7 @@ public class App {
 		adminList = FileIO.readAdminList();
 		ManagerList=FileIO.readManagerList();
 		allEmployeesList = FileIO.readAllEmployees();
-		// TODO orderList
-		orderList = new ArrayList<Order>();
+
 
 		orderList = deserializeOrderList();
 		
@@ -73,6 +77,24 @@ public class App {
 		    branch.setStaffList(branchStaff);
 		    branch.setmanagerlist(branchManager);
 		}
+
+		// This thread automatically check every order's expiry time.
+		Thread orderTimeTracker = new Thread(() -> {
+			while(true){
+                try {
+                    sleep( 5 * 1000); // Check every 5 seconds
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                for(Order o : orderList){
+					if(System.currentTimeMillis() - o.getTime() > ORDER_EXPIRE_SECOND * 1000
+					&& o.getStatus() == OrderStatus.READY){
+						o.setStatus(OrderStatus.CANCELLED);
+					}
+				}
+			}
+		});
+		orderTimeTracker.start();
 
 		//Order.setOrderIDCounter(orderList.get(orderList.size() - 1).getOrderID() + 1);
 		// Set the counter 1 more than the biggest existing orderID

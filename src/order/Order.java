@@ -1,29 +1,28 @@
 package src.order;
 
-import src.menu.Food;
-
-import java.beans.JavaBean;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * This order class describe every order customers made during ordering process.
+ * Which includes items and other essential status.
  * @author fengyukun
  * Created at 21/3/24 17:50
  * Email : @author fengyukufyk@sina.com
  * Package : src.order
  * @version 1.00.00
+ * @
  **/
 public class Order implements Serializable {
     private static int orderCount = 0;
     private int orderID;
     private String branch;
     private boolean diningStatus; //True == dining in and false == take away
-    private int time; // Time when order is placed ( #TODO or when order is ready???)
+    private long time; // Time when order is placed
                     // in unix timestamp
     private OrderStatus status;
     private List<OrderEntry> foodList;
-    //TODO Maybe need a subclass to store customize options and quantity;
 
     public Order() {
     	orderCount++; //everytime a new order is instantiated can increment no need to manually set it.
@@ -71,11 +70,11 @@ public class Order implements Serializable {
     	this.diningStatus = diningStatus;
     }
 
-    public int getTime() {
+    public long getTime() {
         return time;
     }
 
-    public void setTime(int time) {
+    public void setTime(long time) {
         this.time = time;
     }
 
