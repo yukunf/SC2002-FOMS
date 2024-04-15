@@ -163,26 +163,27 @@ public class Manager extends Staff {
   public void loadHomePage() {
 	    int answer=0;
 		do {
-		System.out.println("Select action:");
-		System.out.println("1. View order details");
-		System.out.println("2. Process order");
-		System.out.println("3. Display staff list");
-		System.out.println("4. Edit Menu");
-		System.out.println("5. Exit");
-		answer = sc.nextInt();
-		switch (answer) {
-			case 1: this.viewDetails();
-				break;
-			case 2: this.processOrder();
-				break;
-			case 3: this.displayStaff();;
-				break;
-			case 4: this.editMenu();
-				break;
-			default: System.out.println("Invalid! Re-enter choice: ");
-				break;
-		}
-		}while(answer ==0);
+			System.out.println("Select action:");
+			System.out.println("1. View order details");
+			System.out.println("2. Process order");
+			System.out.println("3. Display staff list");
+			System.out.println("4. Edit Menu");
+			System.out.println("5. Exit");
+			answer = sc.nextInt();
+			switch (answer) {
+				case 1: this.viewDetails();
+					break;
+				case 2: this.processOrder();
+					break;
+				case 3: this.displayStaff();;
+					break;
+				case 4: this.editMenu();
+					break;
+				case 5: break;
+				default: System.out.println("Invalid! Re-enter choice.");
+					break;
+			}
+		} while(answer != 1 && answer!=2  && answer!=3 && answer!=4  && answer!=5);
 	}
 } 
 
