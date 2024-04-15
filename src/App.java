@@ -119,6 +119,7 @@ public class App {
         } catch (IOException ex) {
             System.err.println(ex);
         }
+        Order.setOrderIDCounter(orderList.size() + 1);
     }
 
     /*
@@ -246,6 +247,9 @@ public class App {
 
 
         initialize();
+        for (Order o: orderList){
+            System.out.println(o.getOrderID());
+        }
         int opt = 0;
         do {
             System.out.println("Select a domain:");

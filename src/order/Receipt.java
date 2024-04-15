@@ -29,6 +29,8 @@ public class Receipt {
 			System.out.printf("%-20s Qty: %-4d $%-10s%n",
 			        food.getFood().getName(), food.getQuantity(),
 			        String.format("%.2f", food.getFood().getPrice() * food.getQuantity()));
+			if(food.isHasCustomization())
+				System.out.println("\t*Customize: "+food.getCustomization());
 		}
 		System.out.println();
 		System.out.println("Total: " + "$" + String.format("%.2f", currentOrder.getTotalCost()));
