@@ -1,5 +1,7 @@
 package src.menu;
 
+import java.io.Serializable;
+
 /**
  * @author fengyukun
  * Created at 21/3/24 17:28
@@ -7,7 +9,7 @@ package src.menu;
  * Package : src
  * @version 1.00.00
  **/
-public class Food {
+public class Food implements Serializable {
 
     private int ID; //Need ID?
     private String name;

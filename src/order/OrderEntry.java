@@ -3,9 +3,10 @@ package src.order;
 import src.menu.Food;
 
 import java.beans.JavaBean;
+import java.io.Serializable;
 
 @JavaBean
-public class OrderEntry{ // Class used to represent a line of order
+public class OrderEntry implements Serializable { // Class used to represent a line of order
     private Food food;
     private int quantity;
 
