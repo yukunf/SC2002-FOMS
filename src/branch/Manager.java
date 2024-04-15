@@ -37,23 +37,28 @@ public class Manager extends Staff {
 	  int choice = sc.nextInt();
 	  switch (choice) {
 	  case 1:
+	    FoodCategory category = null;
 		System.out.println("Select item category to add:");
 		System.out.println("1. Side");
 		System.out.println("2. Set Meal");
 		System.out.println("3. Burger");
 		System.out.println("4. Drink");
-		int answer = sc.nextInt();
-		FoodCategory category = null;
-		switch (answer) {
-			case 1: category = SIDE;
-				break;
-			case 2: category = SET_MEAL;
-				break;
-			case 3: category = BURGER;
-				break;
-			case 4: category = DRINK;
-				break;
-		}
+		do {
+			int answer = sc.nextInt();
+			switch (answer) {
+				case 1: category = SIDE;
+					break;
+				case 2: category = SET_MEAL;
+					break;
+				case 3: category = BURGER;
+					break;
+				case 4: category = DRINK;
+					break;
+				default: System.out.println("Invalid! Re-enter choice: ");
+					break;
+			}
+		} while (category==null);
+		
 		System.out.println("Enter new item name: ");
 		String name = sc.nextLine(); // Consume the newline character
 		name = sc.nextLine();
@@ -101,12 +106,22 @@ public class Manager extends Staff {
 	    		  System.out.println("Price changed!");
 	    		  break;
 	    	  case 2:
+				  int opt=0;
 	    		  System.out.println("Enter food availability:");
 	    		  System.out.println("1. Availablable");
 	    		  System.out.println("2. Unavailable");
-	    		  int opt = sc.nextInt();
-	    		  if(opt == 1) App.foodList.get(x).setAvailability(true);
-	    		  else App.foodList.get(x).setAvailability(false);
+				  do {
+					opt = sc.nextInt();
+	    		  	if(opt == 1) {
+						App.foodList.get(x).setAvailability(true);
+						break;
+					}
+	    		  	if(opt == 2) {
+						App.foodList.get(x).setAvailability(false);
+						break;
+					}
+					System.out.println("Invalid! Re-enter choice: ");
+				  } while (opt!=1 && opt!=2);
 	    		  System.out.println("Update Success!");
 	    		  break;
 	    	  }
@@ -123,7 +138,7 @@ public class Manager extends Staff {
 	    		  System.out.println(z+1 + ". " + food.getName() + " $" + String.format("%.2f", food.getPrice()));
 	    		  z++;
 	    	  }
-	    }
+	   	  }
 		  x = sc.nextInt();
 	      for(int j = 0; j<App.foodList.size();j++) {
 	    	  Food food = App.foodList.get(j);
@@ -140,10 +155,13 @@ public class Manager extends Staff {
 	    	  System.out.println("Removed successfully!");
 	      }
 		  break;
+	
+	  default: System.out.println("Invalid choice!");
+		  break;
 	  }
   }
   public void loadHomePage() {
-	  int answer;
+	    int answer=0;
 		do {
 		System.out.println("Select action:");
 		System.out.println("1. View order details");
@@ -161,8 +179,10 @@ public class Manager extends Staff {
 				break;
 			case 4: this.editMenu();
 				break;
+			default: System.out.println("Invalid! Re-enter choice: ");
+				break;
 		}
-		}while(answer < 5);
+		}while(answer ==0);
 	}
 } 
 
