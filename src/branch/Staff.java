@@ -100,18 +100,23 @@ public class Staff {
 		System.out.println("1: PREPARING");
 		System.out.println("2: READY");
 		System.out.println("3: CANCELLED");
-		int choice = sc.nextInt();
-		switch (choice) { 
-			case 1:
-				orderList.get(currentID).setStatus(OrderStatus.PREPARING);
-				break;
-			case 2:
-				orderList.get(currentID).setStatus(OrderStatus.READY);
-				break;
-			case 3:
-				orderList.get(currentID).setStatus(OrderStatus.CANCELLED);
-				break;
-		}
+		int choice=0;
+		do {
+			choice = sc.nextInt();
+			switch (choice) { 
+				case 1:
+					orderList.get(currentID).setStatus(OrderStatus.PREPARING);
+					break;
+				case 2:
+					orderList.get(currentID).setStatus(OrderStatus.READY);
+					break;
+				case 3:
+					orderList.get(currentID).setStatus(OrderStatus.CANCELLED);
+					break;
+				default: System.out.println("Invalid! Re-enter choice: ");
+					break;
+			}
+		} while (choice==0);
 	}
 
 		public String getStaffName () {
@@ -171,20 +176,23 @@ public class Staff {
 		}
 		
 		public void loadHomePage() {
-			int choice;
+			int choice=0;
 			do {
 			System.out.println();
 			System.out.println("Select action:");
 			System.out.println("1. View order details");
 			System.out.println("2. Process order");
 			System.out.println("3. Exit");
-	                        choice = sc.nextInt();
-	                        switch (choice) {
-	                            case 1: this.viewDetails();
-	                                break;
-	                            case 2: this.processOrder();
-							}
-			}while(choice < 3);  
+			choice = sc.nextInt();
+			switch (choice) {
+				case 1: this.viewDetails();
+					break;
+				case 2: this.processOrder();
+					break;
+				default: System.out.println("Invalid! Re-enter choice: ");
+					break;
+			}
+			}while(choice ==0);  
 		}
 
 	}
