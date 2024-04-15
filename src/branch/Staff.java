@@ -116,7 +116,7 @@ public class Staff {
 				default: System.out.println("Invalid! Re-enter choice: ");
 					break;
 			}
-		} while (choice==0);
+		} while (choice!=1 && choice!=2  && choice!=3);
 	}
 
 		public String getStaffName () {
@@ -178,21 +178,22 @@ public class Staff {
 		public void loadHomePage() {
 			int choice=0;
 			do {
-			System.out.println();
-			System.out.println("Select action:");
-			System.out.println("1. View order details");
-			System.out.println("2. Process order");
-			System.out.println("3. Exit");
-			choice = sc.nextInt();
-			switch (choice) {
-				case 1: this.viewDetails();
-					break;
-				case 2: this.processOrder();
-					break;
-				default: System.out.println("Invalid! Re-enter choice: ");
-					break;
-			}
-			}while(choice ==0);  
+				System.out.println();
+				System.out.println("Select action:");
+				System.out.println("1. View order details");
+				System.out.println("2. Process order");
+				System.out.println("3. Exit");
+				choice = sc.nextInt();
+				switch (choice) {
+					case 1: this.viewDetails();
+						break;
+					case 2: this.processOrder();
+						break;
+					case 3: break;
+					default: System.out.println("Invalid! Re-enter choice: ");
+						break;
+				}
+			}while(choice != 1 && choice!=2  && choice!=3);  
 		}
 
 	}
