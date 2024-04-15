@@ -23,7 +23,7 @@ public class OrderSystem {
 
 
     /*-------------------- Tool Methods -----------------------------*/
-    private Order currentOrder = new Order(); // Holds the order currently making
+    private Order currentOrder; // Holds the order currently making
 
 
     public static Order getOrderByID(int orderID){
@@ -50,7 +50,6 @@ public class OrderSystem {
     /*-------------------- User Methods -----------------------------*/
 
     public static void checkOrderStatus(){
-        // TODO: Do everything here if users need to check the order status
         // including I/O with command line
         Scanner s = new Scanner(System.in);
         System.out.println("Please input the Order ID:");
@@ -97,7 +96,9 @@ public class OrderSystem {
 	    	   System.out.println();
 	    	   for(OrderEntry oe : currentOrder.getFoodList()) {
 	    		   System.out.printf("%d. %-18s Qty: %-9d $%-10s $%-12s%n", i, oe.getFood().getName(), oe.getQuantity(), String.format("%.2f", oe.getFood().getPrice()), String.format("%.2f", oe.getQuantity()*oe.getFood().getPrice()));
-		    	   i++;
+				   if(oe.isHasCustomization())
+					   System.out.println("\t*Customize: "+oe.getCustomization());
+				   i++;
 		       }
 	    	   System.out.println();
 	    	   System.out.println("Total: " + "$" + String.format("%.2f", currentOrder.getTotalCost()));
@@ -123,6 +124,7 @@ public class OrderSystem {
 					   System.out.println("Select items to remove:");
 						  for(OrderEntry oe : currentOrder.getFoodList()) {
 							  System.out.printf("%d. %-20s $%-10s Qty: %-4d%n", i, oe.getFood().getName(), String.format("%.2f", oe.getFood().getPrice()),oe.getQuantity());
+
 							  i++;
 					   }
 						   opt2 = sc.nextInt();
@@ -167,7 +169,6 @@ public class OrderSystem {
     }
 
     public void createNewOrder(){
-        // TODO: Do everything here if users need to create an order
         // including I/O with command line
     	//left input handling
 
@@ -284,11 +285,11 @@ public class OrderSystem {
     		   for(Food cateFood : catMenu) {
     			   System.out.println(i + ". " + cateFood.getName() + " $" + String.format("%.2f", cateFood.getPrice()));
     			   i++;
-    			 
+
     		   }
     		   System.out.println();
     		   break;
-    	
+
     	   case 5: // Review Cart
     		   rc = reviewCart();
     		   break;
@@ -332,6 +333,21 @@ public class OrderSystem {
 
     		   OrderEntry oe = new OrderEntry(catMenu.get(opt2 - 1));
     		   oe.setQuantity(quant);
+			   // clear input buffer
+			   sc.nextLine();
+/*-----------------------------      Customization Implemented      ---------------------------------*/
+			   System.out.println("-------------------\n" +
+					   "Enter customization for this item. \nIf no special needs, perform void input" +
+					   " by input enter directly. ");
+			   String cus = sc.nextLine();
+			   if(cus.length() == 0){ // Void Input
+				   System.out.println("----------No customization indicated---------");
+				   oe.setHasCustomization(false);
+			   }else{
+				   oe.setHasCustomization(true);
+				   oe.setCustomization(cus);
+				   System.out.println("Customization of \""+ cus + "\" received");
+			   }
     		   currentOrder.addOrderItem(oe);
     	   	}
     	   else if(opt == 5) {
