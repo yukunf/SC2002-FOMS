@@ -47,6 +47,7 @@ public class App {
 	/*
 	* Use this function to initialize everything when program starts
 	* That is, all I/O functions, including reading Branch, Menu, Staff from .xls or .csv files.
+	* It also runs a separate thread to monitor order time, setting them as cancelled once expired.
 	* */
 	public static void initialize(){
 		// reading orderList;
@@ -100,6 +101,11 @@ public class App {
 		// Set the counter 1 more than the biggest existing orderID
 	}
 
+	/*
+	* This function serialize OrderList to .ser files
+	*
+	* @serialData the OrderList
+	* */
 	private static void serializeOrderList(){
 
 		try {
@@ -111,7 +117,11 @@ public class App {
 			System.err.println(ex);
 		}
 	}
-
+	/*
+	 * This function deserialize .ser files to  OrderList
+	 *
+	 * @serialData the OrderList
+	 * */
 	private static List<Order> deserializeOrderList(){
 		List<Order> ol = new ArrayList<>();
 		try {
