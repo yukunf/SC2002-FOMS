@@ -147,8 +147,11 @@ public class Staff {
 		public String getLoginID () {
 			return loginID;
 		}
-		public String getPassword () {
-			return password;
+		public boolean checkPassword (String answer) {
+			if (answer == password) {
+				return true;
+			}
+			return false; 
 		}
 		public void setPassword (String password){  //For staff to change password
 			this.password = password;
@@ -195,5 +198,4 @@ public class Staff {
 				}
 			}while(choice!=3);
 		}
-
 	}

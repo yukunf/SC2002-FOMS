@@ -10,15 +10,11 @@ import java.util.Scanner;
 
 import src.branch.Staff;
 import src.order.Order;
-import src.order.OrderStatus;
 import src.order.OrderSystem;
 import src.menu.Food;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
-
-import static java.lang.Thread.sleep;
 
 /**
  * This Main Class holds global variables used across different domains of our program.
@@ -41,8 +37,7 @@ public class App {
     public static List<Manager> ManagerList;
     public static List<Admin> adminList;
     public static List<Staff> allEmployeesList;
-	private static Thread orderTimeTracker;
-
+	  private static Thread orderTimeTracker;
     private static boolean programIsTerminating = false;
     public static final int ORDER_EXPIRE_SECOND = 60 * 5; // 5 minutes. Can change this when testing.
 
@@ -148,6 +143,7 @@ public class App {
         return ol;
     }
 
+
     /*
      * Use this function to do something before program ends
      * That is, all I/O functions, including saving Branch, Menu, Staff to .xls or .csv files.
@@ -181,7 +177,6 @@ public class App {
 
     public static void staffDriver() {  //May want to use a HashMap for constant look up time
         String input;
-
         int option;
         Staff loggedInStaff = null;
 
@@ -202,12 +197,12 @@ public class App {
             if (loggedInStaff != null) {
                 System.out.println("Password:");
                 input = sc.next();
-                if (input.equals(loggedInStaff.getPassword())) {
+                if (loggedInStaff.checkPassword(input)) {
                     System.out.println();
                     System.out.println("Login successful, " + loggedInStaff.getStaffName());
 
                     // reset password if first successful login
-                    if (loggedInStaff.getLoginTry() == 1 && loggedInStaff.getPassword().equals("password")) {
+                    if (loggedInStaff.getLoginTry() == 1 && loggedInStaff.checkPassword("password")) {
                         System.out.println("Input new password: ");
                         String newPassword = sc.next();
                         loggedInStaff.setPassword(newPassword);
