@@ -124,7 +124,7 @@ public class Manager extends Staff {
 						break;
 					}
 					System.out.println("Invalid! Re-enter choice: ");
-				  } while (opt<3);
+				  } while (!(opt == 1 || opt == 2));
 	    		  System.out.println("Update Success!");
 	    		  break;
 	    	  }
@@ -187,7 +187,7 @@ public class Manager extends Staff {
 				default: System.out.println("Invalid! Re-enter choice.");
 					break;
 			}
-		} while(answer<5);
+		} while(answer != 5);
 	}
 } 
 
