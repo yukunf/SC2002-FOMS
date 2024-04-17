@@ -4,6 +4,7 @@ import src.menu.Food;
 import src.menu.FoodCategory;
 import src.menu.Menu;
 import src.App;
+import src.FileIO;
 import static src.menu.FoodCategory.*;
 
 import java.util.List;
@@ -66,6 +67,7 @@ public class Manager extends Staff {
 	  	double price = sc.nextDouble();
 		Food newItem = new Food(name, price, this.getBranch().getBranchName(), category, true);
 		App.foodList.add(newItem);
+		FileIO.writeToMenu("menu_list.csv", App.foodList);
 		System.out.println("Item added!");
 	  	break;
 	  case 2: 
@@ -103,6 +105,7 @@ public class Manager extends Staff {
 	    		  System.out.println("Enter new price:"); 
 	    		  double newPrice = sc.nextDouble();
 	    		  App.foodList.get(selectedIndex).setPrice(newPrice);
+	    		  FileIO.writeToMenu("menu_list.csv", App.foodList);
 	    		  System.out.println("Price changed!");
 	    		  break;
 	    	  case 2:
@@ -121,7 +124,7 @@ public class Manager extends Staff {
 						break;
 					}
 					System.out.println("Invalid! Re-enter choice: ");
-				  } while (opt!=1 && opt!=2);
+				  } while (opt<3);
 	    		  System.out.println("Update Success!");
 	    		  break;
 	    	  }
@@ -153,6 +156,7 @@ public class Manager extends Staff {
 	      if(selectedIndex != -1) {
 	    	  App.foodList.remove(selectedIndex);
 	    	  System.out.println("Removed successfully!");
+	    	  FileIO.writeToMenu("menu_list.csv", App.foodList);
 	      }
 		  break;
 	
@@ -183,7 +187,7 @@ public class Manager extends Staff {
 				default: System.out.println("Invalid! Re-enter choice.");
 					break;
 			}
-		} while(answer != 1 && answer!=2  && answer!=3 && answer!=4  && answer!=5);
+		} while(answer<5);
 	}
 } 
 
