@@ -155,6 +155,7 @@ public class App {
     public static void deinitialize() {
         serializeOrderList();
         programIsTerminating = true;// This will stop another thread.
+        FileIO.writeToMenu("menu_list.csv", App.foodList);
     }
 
 
