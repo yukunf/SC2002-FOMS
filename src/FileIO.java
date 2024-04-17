@@ -36,7 +36,7 @@ public class FileIO {
 				String data[] = line.split(",");
 				if(data.length == 0) break;
 				//availability default true
-				Food food = new Food(data[0], Double.parseDouble(data[1]), data[2], FoodCategory.valueOf(data[3].toUpperCase()), true);
+				Food food = new Food(data[0], Double.parseDouble(data[1]), data[2], FoodCategory.valueOf(data[3].toUpperCase()), Boolean.parseBoolean(data[4]));
 				FoodList.add(food);
 			}
 		}
@@ -216,9 +216,11 @@ public class FileIO {
 		PrintWriter out = null;
 		try {
 			out = new PrintWriter(new FileWriter(filename));
-			out.println("Name,Price,Branch,Category");
+			out.println("Name,Price,Branch,Category,Availability");
 			for(int i = 0; i<dataFood.size(); i++) {
-				out.println(dataFood.get(i).getName() + "," + String.format("%.2f", dataFood.get(i).getPrice()) + "," + dataFood.get(i).getBranch() + "," + dataFood.get(i).getCategory().toString().toLowerCase());
+				out.println(dataFood.get(i).getName() + "," + String.format("%.2f", dataFood.get(i).getPrice()) + ","
+						+ dataFood.get(i).getBranch() + "," +
+						dataFood.get(i).getCategory().toString().toLowerCase()+","+dataFood.get(i).isAvailability());
 			}
 		}
 		catch(IOException e) {

@@ -116,11 +116,11 @@ public class Manager extends Staff {
 				  do {
 					opt = sc.nextInt();
 	    		  	if(opt == 1) {
-						App.foodList.get(x).setAvailability(true);
+						App.foodList.get(selectedIndex).setAvailability(true);
 						break;
 					}
 	    		  	if(opt == 2) {
-						App.foodList.get(x).setAvailability(false);
+						App.foodList.get(selectedIndex).setAvailability(false);
 						break;
 					}
 					System.out.println("Invalid! Re-enter choice: ");
