@@ -536,7 +536,7 @@ public void loadHomePage() {
 		}
 
 	}
-}while(answer < 7);
+}while(answer != 7);
 }
 
 

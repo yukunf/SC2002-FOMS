@@ -193,7 +193,7 @@ public class Staff {
 					default: System.out.println("Invalid! Re-enter choice: ");
 						break;
 				}
-			}while(choice<3);  
+			}while(choice!=3);
 		}
 
 	}
