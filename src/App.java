@@ -17,6 +17,10 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
+ * This Main Class holds global variables used across different domains of our program.
+ * It also has a main method to run user interactions.
+ * Two methods to initialize those variables with IO functions are also included.
+ *
  * @author fengyukun
  * Created at 21/3/24 17:11
  * Email : @author fengyukufyk@sina.com
@@ -24,457 +28,249 @@ import java.util.ArrayList;
  * @version 1.00.00
  **/
 public class App {
-	private static final Scanner sc = new Scanner(System.in);
+    private static final Scanner sc = new Scanner(System.in);
     public static List<Branch> branchList;  // Stores every branch
     public static List<Order> orderList;  // Stores every order; Keeps orderID ascending
-	private static String orderFilePath = "orders.ser";
-	public static List<Food> foodList;
-	public static List<Staff> staffList;
-	public static List<Manager> ManagerList;
-	public static List<Admin> adminList;
-	public static List<Staff> allEmployeesList;
+    private static String orderFilePath = "orders.ser";
+    public static List<Food> foodList;
+    public static List<Staff> staffList;
+    public static List<Manager> ManagerList;
+    public static List<Admin> adminList;
+    public static List<Staff> allEmployeesList;
+	  private static Thread orderTimeTracker;
+    private static boolean programIsTerminating = false;
+    public static final int ORDER_EXPIRE_SECOND = 60 * 5; // 5 minutes. Can change this when testing.
 
 
+    /*
+     * Use this function to initialize everything when program starts
+     * That is, all I/O functions, including reading Branch, Menu, Staff from .xls or .csv files.
+     * It also runs a separate thread to monitor order time, setting them as cancelled once expired.
+     * */
+    public static void initialize() {
+        // reading orderList;
+        branchList = FileIO.readBranchList();
+        foodList = FileIO.readFoodList();
+        staffList = FileIO.readStaffList();
+        adminList = FileIO.readAdminList();
+        ManagerList = FileIO.readManagerList();
+        allEmployeesList = FileIO.readAllEmployees();
 
 
-	/*
-	* Use this function to initialize everything when program starts
-	* That is, all I/O functions, including reading Branch, Menu, Staff from .xls or .csv files.
-	* */
-	public static void initialize(){
-		// reading orderList;
-		branchList = FileIO.readBranchList();
-		foodList = FileIO.readFoodList();
-		staffList = FileIO.readStaffList();
-		adminList = FileIO.readAdminList();
-		ManagerList=FileIO.readManagerList();
-		allEmployeesList = FileIO.readAllEmployees();
-		// TODO orderList
-		orderList = new ArrayList<Order>();
+        orderList = deserializeOrderList();
 
-		orderList = deserializeOrderList();
+        List<Staff> branchStaff;
+        List<Staff> branchManager;
+        for (Branch branch : branchList) {
+            branchStaff = new ArrayList<>();
+            branchManager = new ArrayList<>();
+            for (Staff employee : allEmployeesList) {
+                if (branch.getBranchName().equals(employee.getBranch().getBranchName())) {
+                    if (employee.getRole() == 'S') {
+                        branchStaff.add(employee);
+                    } else if (employee.getRole() == 'M') {
+                        branchManager.add(employee);
+                    }
+                }
+            }
+            branch.setStaffList(branchStaff);
+            branch.setmanagerlist(branchManager);
+        }
 
+        // This thread automatically check every order's expiry time.
+        orderTimeTracker = new Thread(() -> {
+            while (!programIsTerminating) {
+                try {
+                    sleep(5 * 1000); // Check every 5 seconds
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                for (Order o : orderList) {
+                    if (System.currentTimeMillis() - o.getTime() > ORDER_EXPIRE_SECOND * 1000
+                            && o.getStatus() == OrderStatus.READY) {
+                        o.setStatus(OrderStatus.CANCELLED);
+                    }
+                }
+            }
+        });
+        orderTimeTracker.start();
 
-		//Order.setOrderIDCounter(orderList.get(orderList.size() - 1).getOrderID() + 1);
-		// Set the counter 1 more than the biggest existing orderID
-	}
+        //Order.setOrderIDCounter(orderList.get(orderList.size() - 1).getOrderID() + 1);
+        // Set the counter 1 more than the biggest existing orderID
+    }
 
-	private static void serializeOrderList(){
+    /*
+     * This function serialize OrderList to .ser files
+     *
+     * @serialData the OrderList
+     * */
+    private static void serializeOrderList() {
 
-		try {
-			FileOutputStream fos = new FileOutputStream(orderFilePath);
-			ObjectOutputStream outputStream = new ObjectOutputStream(fos);
-			outputStream.writeObject(orderList);
-			outputStream.close();
-		} catch (IOException ex) {
-			System.err.println(ex);
-		}
-	}
+        try {
+            FileOutputStream fos = new FileOutputStream(orderFilePath);
+            ObjectOutputStream outputStream = new ObjectOutputStream(fos);
+            outputStream.writeObject(orderList);
+            outputStream.close();
+        } catch (IOException ex) {
+            System.err.println(ex);
+        }
+        Order.setOrderIDCounter(orderList.size() + 1);
+    }
 
-	private static List<Order> deserializeOrderList(){
-		List<Order> ol = new ArrayList<>();
-		try {
-			FileInputStream fis = new FileInputStream(orderFilePath);
-			ObjectInputStream inputStream = new ObjectInputStream(fis);
-			Object o = inputStream.readObject();
-			if(o == null){
-				inputStream.close();
-				return ol;
-			}else{
-				ol = (ArrayList<Order>)o;
-			}
-			inputStream.close();
-		} catch (FileNotFoundException ex) {
-			return ol;
-		}
-		catch (IOException | ClassNotFoundException e){
-			System.out.println(e);
-		}
-		return ol;
-	}
-
-	//TODO Actually I don know where to put this in...
-	public static Order searchOrderByID(int id){
-		for(Order o:
-		orderList){
-			if(o.getOrderID() == id)return o;
-		}
-		return null;
-	}
-
-
-
-	/*
-	 * Use this function to do something before program ends
-	 * That is, all I/O functions, including saving Branch, Menu, Staff to .xls or .csv files.
-	 * */
-	public static void deinitialize(){ // TODO
-		serializeOrderList();
-	}
-
-
-
-	public static void customerDriver(){
-		System.out.println("Select an option:");
-		System.out.println("1. Create a new order");
-		System.out.println("2. Check the status of an existing order");
-		System.out.println("3. Cancel");
-		int secondOpt = sc.nextInt();
-		while(secondOpt != 3){
-			if(secondOpt == 1) {
-				//OrderSystem cannot be static because everytime you create a new order, it will just add on the previous order.
-				OrderSystem os = new OrderSystem();
-				os.createNewOrder();
-				break;
-			} else if(secondOpt == 2) {
-				OrderSystem.checkOrderStatus();
-				break;
-			} else System.out.println("Invalid Option");
-			secondOpt = sc.nextInt();
-		}
-	}
-
-	public static void Staffpage(Staff loggedInStaff){
-		int choice;
-		do {
-		System.out.println("Select action:");
-		System.out.println("1. Display new orders");
-		System.out.println("2. View order details");
-		System.out.println("3. Process order");
-		System.out.println("4. Exit");
-                        choice = sc.nextInt();
-                        switch (choice) {
-                            case 1: loggedInStaff.displayOrders();
-                                break;
-                            case 2: loggedInStaff.viewDetails();
-                                break;
-                            case 3: loggedInStaff.processOrder();
-						}
-		}while(choice < 4);       
-	}
-
-	public static void Managerpage(Manager loggedInManager){
-		int answer;
-		do {
-		System.out.println("Select action:");
-		System.out.println("1. Display new orders");
-		System.out.println("2. View order details");
-		System.out.println("3. Process order");
-		System.out.println("4. Display staff list");
-		System.out.println("5. Edit Menu");
-		System.out.println("6. Exit");
-		answer = sc.nextInt();
-		switch (answer) {
-			case 1: loggedInManager.displayOrders();
-				break;
-			case 2: loggedInManager.viewDetails();
-				break;
-			case 3: loggedInManager.processOrder();
-				break;
-			case 4: loggedInManager.displayStaff();;
-				break;
-			case 5: loggedInManager.editMenu();
-				break;
-		}
-		}while(answer < 6);
-		
-	}
-	public static void AdminPage(Admin loggedInAdmin){
-		int answer;
-		do {
-		System.out.println("Select action:");
-		System.out.println("1. Add/Edit/Remove Staff");
-		System.out.println("2. Display staff");
-		System.out.println("3. Assign managers to a branch");
-		System.out.println("4. Promote a staff to a Branch manager");
-		System.out.println("5. Transfer a staff/manager");
-		System.out.println("6. Add/Remove paymeny method");
-		System.out.println("7. Open.Close Branch");
-		System.out.println("8. Quit");
-		answer = sc.nextInt();
-		switch (answer) {
-			case 1: 
-				System.out.println("1.Add 2.Edit 3. Remove");
-				int option=sc.nextInt();
-				//Add
-				if(option==1){
-					System.out.println("Enter the branch the staff is adding to:");
-					for(int i=0;i<branchList.size();i++){
-						System.out.println((i+1)+branchList.get(i).getBranchName());
-					}
-					int index;
-					index=sc.nextInt();
-					Branch branch=branchList.get(index-1);
-					loggedInAdmin.AddStaff(branch);
-				}
-				//Edit
-				if(option==2){
-					System.out.println("Enter the branch the staff is in:");
-					for(int i=0;i<branchList.size();i++){
-						System.out.println((i+1)+branchList.get(i).getBranchName());
-					}
-					int index;
-					index=sc.nextInt();
-					Branch branch=branchList.get(index-1);
-
-					System.out.println("Enter the name of the staff to edit:");
-					String name;
-					name=sc.next();
-					Staff s;
-					for(Staff staff:branch.getStaffList()){
-						if(name==staff.getStaffName()) {
-							s=staff;
-							loggedInAdmin.EditStaff(s, branch);
-							break;
-						}
-					}
-					
-				}
-				if (option==3){
-					System.out.println("Enter the branch the staff is in:");
-					for(int i=0;i<branchList.size();i++){
-						System.out.println((i+1)+branchList.get(i).getBranchName());
-					}
-					int index;
-					index=sc.nextInt();
-					Branch branch=branchList.get(index-1);
-
-					System.out.println("Enter the name of the satff to remove:");
-					String name;
-					name=sc.next();
-					Staff s;
-					for(Staff staff:branch.getStaffList()){
-						if(name==staff.getStaffName()) {
-							s=staff;
-							loggedInAdmin.RemoveStaff(s, branch);
-							break;
-						}
-					}
-				}
-				break;
-			case 2: 
-				System.out.println("Enter the branch to display the stafflist");
-				for(int i=0;i<branchList.size();i++){
-					System.out.println((i+1)+branchList.get(i).getBranchName());
-				}
-				int index;
-				index=sc.nextInt();
-				Branch branch=branchList.get(index-1);
-				loggedInAdmin.DisplayStaff(branch);
-				break;
-			case 3: 
-				System.out.println("Enter the branch");
-
-				for(int i=0;i<branchList.size();i++){
-					System.out.println((i+1)+branchList.get(i).getBranchName());
-				}
-				index=sc.nextInt();
-				branch=branchList.get(index-1);
-				loggedInAdmin.AssignManager(branch);
-				break;
-			case 4: 
-				System.out.println("Enter the branch");
-				for(int i=0;i<branchList.size();i++){
-					System.out.println((i+1)+branchList.get(i).getBranchName());
-				}
-				index=sc.nextInt();
-				branch=branchList.get(index-1);
-				System.out.println("Enter the name of the staff to promote to Manager");
-				String name;
-					name=sc.next();
-					Staff s;
-					for(Staff staff:branch.getStaffList()){
-						if(name==staff.getStaffName()) {
-							s=staff;
-							Manager m=new Manager(s.getStaffName(),s.getLoginID(),s.getGender(),s.getAge(),s.getBranch());
-							loggedInAdmin.RemoveStaff(s, branch);
-							loggedInAdmin.AssignManager(branch, m);
-							break;
-						}
-					}
-				break;
-			case 5: 
-			System.out.println("Transfer () to a new branch 1.Manager	2.Staff");
-			index=sc.nextInt();
-			System.out.println("Enter the original branch the staff was in:");
-			for(int i=0;i<branchList.size();i++){
-				System.out.println((i+1)+branchList.get(i).getBranchName());
-			}
-			index=sc.nextInt();
-			Branch oribranch=branchList.get(index-1);
-			System.out.println("Enter the new branch");
-			for(int i=0;i<branchList.size();i++){
-				System.out.println((i+1)+branchList.get(i).getBranchName());
-			}
-			index=sc.nextInt();
-			Branch newbranch=branchList.get(index-1);
-			if (index==1){
-				System.out.println("Enter the name of the Manger:");
-				name=sc.next();
-				for(Manager m:oribranch.getmanagerlist()){
-					if(name==m.getStaffName()) {
-						loggedInAdmin.TransferManager(newbranch, oribranch, m);;
-						break;
-					}
-				}
-			}
-			if (index==2){
-				System.out.println("Enter the name of the Staff:");
-				name=sc.next();
-				
-				for(Staff staff:oribranch.getStaffList()){
-					if(name==staff.getStaffName()) {
-						loggedInAdmin.TransferStaff(newbranch, oribranch, staff);;
-						break;
-					}
-				}
-			}
-			break;
-
-			case 6:
-			System.out.println("Do you want to");
-			System.out.println("1. Add Payment");
-			System.out.println("2. Remove Payment");
-			index=sc.nextInt();
-			if(index==1){
-				System.out.println("Enter the new payment method:");
-				String newmethod=sc.next();
-				loggedInAdmin.addpaymentmethod(newmethod);
-			}
-			if(index==2){
-				System.out.println("Enter the new payment to remove:");
-				String removingmethod=sc.next();
-				loggedInAdmin.removepaymentmethod(removingmethod);
-			}
-			break;
-
-			case 7:			
-			System.out.println("Do you want to 1.open 2.close branch");
-			index=sc.nextInt();
-			if(index==1){
-				System.out.println("Enter the branch to open");
-				for(int i=0;i<branchList.size();i++){
-					System.out.println((i+1)+branchList.get(i).getBranchName());
-				}
-				index=sc.nextInt();
-				branch=branchList.get(index-1);
-				loggedInAdmin.open(branch);
-			}
-			if(index==2){
-				System.out.println("Enter the branch to close");
-				for(int i=0;i<branchList.size();i++){
-					System.out.println((i+1)+branchList.get(i).getBranchName());
-				}
-				index=sc.nextInt();
-				branch=branchList.get(index-1);
-				loggedInAdmin.close(branch);
-			}
-
-		}
-	}while(answer < 8);
-		
-	}
+    /*
+     * This function deserialize .ser files to  OrderList
+     *
+     * @serialData the OrderList
+     * */
+    private static List<Order> deserializeOrderList() {
+        List<Order> ol = new ArrayList<>();
+        try {
+            FileInputStream fis = new FileInputStream(orderFilePath);
+            ObjectInputStream inputStream = new ObjectInputStream(fis);
+            Object o = inputStream.readObject();
+            if (o == null) {
+                inputStream.close();
+                return ol;
+            } else {
+                ol = (ArrayList<Order>) o;
+            }
+            inputStream.close();
+        } catch (FileNotFoundException ex) {
+            return ol;
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println(e);
+        }
+        return ol;
+    }
 
 
-
-	
-	public static void staffDriver() {  //May want to use a HashMap for constant look up time
-		String input;
-
-		int option;
-		Staff loggedInStaff = null;
-		Manager loggedInManager=null;
-		Admin loggedInAdmin=null;
-
-
-		do {
-		loggedInStaff = null;
-		System.out.println("LoginID:");
-		System.out.println("Enter 'q' to exit");
-		input = sc.next();
-		if(input.equals("q")) {
-			break;
-		}
-		for(Staff staff : allEmployeesList) {
-			if(input.equals(staff.getLoginID())){
-				loggedInStaff = staff;
-				break;
-			}
-		}
-		if(loggedInStaff != null) {
-			System.out.println("Password:");
-			input = sc.next();
-			if(loggedInStaff.checkPassword(input)) {
-				System.out.println();
-				System.out.println("Login successful, " + loggedInStaff.getStaffName());
-
-				// reset password if first successful login
-				if (loggedInStaff.getLoginTry()==1) {
-					System.out.println("Input new password: ");
-					String newPassword = sc.next();
-					loggedInStaff.setPassword(newPassword);
-					System.out.println("Password updated succesfully.");
-					System.out.println();
-					loggedInStaff.SetLoginTry();
-				}
-
-				//Proceed to staff page
-				char role=loggedInStaff.getRole(); 
-				switch (role) {
-					case 'S': 
-						Staffpage(loggedInStaff);
-						break;
-					case 'M': 
-						Managerpage((Manager)loggedInStaff);
-						break;
-					case 'A':
-						AdminPage((Admin)loggedInStaff);
-						break;
-				}
-			}
-			else {
-				System.out.println("Wrong password!");
-			}
-		}
-		else {
-			if(!input.equals("q")) {
-			System.out.println("Invalid LoginID!");
-			System.out.println();
-			}
-		}
-	}while(!input.equals("q"));
-		
-	}
-				
-	
-    public static void main(String[] args) {
+    /*
+     * Use this function to do something before program ends
+     * That is, all I/O functions, including saving Branch, Menu, Staff to .xls or .csv files.
+     * */
+    public static void deinitialize() {
+        serializeOrderList();
+        programIsTerminating = true;// This will stop another thread.
+        FileIO.writeToMenu("menu_list.csv", App.foodList);
+    }
 
 
-		initialize();
+    public static void customerDriver() {
+        System.out.println("Select an option:");
+        System.out.println("1. Create a new order");
+        System.out.println("2. Check the status of an existing order");
+        System.out.println("3. Cancel");
+        int secondOpt = sc.nextInt();
+        while (secondOpt != 3) {
+            if (secondOpt == 1) {
+                //OrderSystem cannot be static because everytime you create a new order, it will just add on the previous order.
+                OrderSystem os = new OrderSystem();
+                os.createNewOrder();
+                break;
+            } else if (secondOpt == 2) {
+                OrderSystem.checkOrderStatus();
+                break;
+            } else System.out.println("Invalid Option");
+            secondOpt = sc.nextInt();
+        }
+    }
 
-    	int opt;
+    public static void staffDriver() {  //May want to use a HashMap for constant look up time
+        String input;
+        int option;
+        Staff loggedInStaff = null;
+
         do {
-        	System.out.println("Select a domain:");
+            loggedInStaff = null;
+            System.out.println("LoginID:");
+            System.out.println("Enter 'q' to exit");
+            input = sc.next();
+            if (input.equals("q")) {
+                break;
+            }
+            for (Staff staff : allEmployeesList) {
+                if (input.equals(staff.getLoginID())) {
+                    loggedInStaff = staff;
+                    break;
+                }
+            }
+            if (loggedInStaff != null) {
+                System.out.println("Password:");
+                input = sc.next();
+                if (loggedInStaff.checkPassword(input)) {
+                    System.out.println();
+                    System.out.println("Login successful, " + loggedInStaff.getStaffName());
+
+                    // reset password if first successful login
+                    if (loggedInStaff.getLoginTry() == 1 && loggedInStaff.checkPassword("password")) {
+                        System.out.println("Input new password: ");
+                        String newPassword = sc.next();
+                        loggedInStaff.setPassword(newPassword);
+                        System.out.println("Password updated succesfully.");
+                        FileIO.writeToStaff("staff_list.csv", App.allEmployeesList);
+                        System.out.println();
+                        loggedInStaff.SetLoginTry();
+                    }
+
+                    //Proceed to staff page
+                    char role = loggedInStaff.getRole();
+                    switch (role) {
+                        case 'S':
+                            loggedInStaff.loadHomePage();
+                            break;
+                        case 'M':
+                            loggedInStaff.loadHomePage();
+                            break;
+                        case 'A':
+                            loggedInStaff.loadHomePage();
+                            break;
+                    }
+                } else {
+                    System.out.println("Wrong password!");
+                    System.out.println();
+                }
+            } else {
+                if (!input.equals("q")) {
+                    System.out.println("Invalid LoginID!");
+                    System.out.println();
+                }
+            }
+        } while (!input.equals("q"));
+
+    }
+
+
+    public static void main(String[] args) {
+        initialize();
+        int opt = 0;
+        do {
+            System.out.println("Select a domain:");
             System.out.println("1. Customer");
             System.out.println("2. Staff");
             System.out.println("3. Terminate");
-        	opt = sc.nextInt();
-        	switch(opt) {
-        	case 1: // Customer
-				customerDriver();
-        		break;
-        	case 2: //Staff
-        		staffDriver();
-        		break;
-        	case 3:
-        		break;
-        	default:
-        		System.out.println("Invalid option");
-        		break;
-        	}
-        	System.out.println();
-        }while(opt != 3);
+            try {
+                opt = sc.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input");
+                sc.nextLine(); //clear input buffer
+                continue;
+            }
+            switch (opt) {
+                case 1: // Customer
+                    customerDriver();
+                    break;
+                case 2: //Staff
+                    staffDriver();
+                    break;
+                case 3:
+                    break;
+                default:
+                    System.out.println("Invalid option");
+                    break;
+            }
+            System.out.println();
+        } while (opt != 3);
 
-		deinitialize();
+        deinitialize();
     }
 }
