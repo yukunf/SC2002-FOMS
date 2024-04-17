@@ -246,9 +246,6 @@ public class App {
 
     public static void main(String[] args) {
         initialize();
-        for (Order o: orderList){
-            System.out.println(o.getOrderID());
-        }
         int opt = 0;
         do {
             System.out.println("Select a domain:");
