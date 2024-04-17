@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Scanner;
 import src.App;
+import src.FileIO;
 import src.order.Payment;
 
 
@@ -88,6 +89,7 @@ public void AddStaff(Branch branch) {
 		//Update App.staffList
 		App.staffList.add(newsStaff);
 		branch.setStaffList(staffList);
+		FileIO.writeToStaff("staff_list.csv", App.allEmployeesList);
 	}
 
 		
@@ -156,6 +158,7 @@ public void EditStaff(Branch branch) {
         }
     }
 	branch.setStaffList(staffList);
+	FileIO.writeToStaff("staff_list.csv", App.allEmployeesList);
 }
 
 public void RemoveStaff(Branch branch) {
@@ -188,6 +191,7 @@ public void RemoveStaff(Branch branch) {
 		staffList.remove(opt-1);
 		branch.setStaffList(staffList);
 		System.out.println("Removed successfully!");
+		FileIO.writeToStaff("staff_list.csv", App.allEmployeesList);
 		System.out.println();
 		return;
 	}
@@ -291,6 +295,7 @@ public void TransferManager(Branch b) {
 			 break;
 		 }
 	 }
+	FileIO.writeToStaff("staff_list.csv", App.allEmployeesList);
 	App.branchList.get(opt-1).getmanagerlist().add(m);
 	
 	while(App.branchList.get(opt-1).getStaffList().size()<lowerquota(App.branchList.get(opt-1))){
@@ -336,6 +341,7 @@ public void TransferStaff(Branch b) {
 	 }
 	 App.branchList.get(opt-1).getStaffList().add(s);
 	 b.getStaffList().remove(s);
+	 FileIO.writeToStaff("staff_list.csv", App.allEmployeesList);
 	
 }
 
@@ -452,7 +458,7 @@ public void loadHomePage() {
 				App.allEmployeesList.add(m);
 				App.ManagerList.add(m);
 				System.out.println("Promoted " + m.getStaffName() + " successfully!");
-
+				FileIO.writeToStaff("staff_list.csv", App.allEmployeesList);
 			break;
 		case 4: 
 			System.out.println("Transfer:");

@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.io.File;
 import java.util.Scanner;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.FileWriter;
 
 import src.branch.Admin;
 import src.branch.Branch;
@@ -16,6 +19,7 @@ import src.branch.Manager;
 import src.menu.Food;
 import src.menu.FoodCategory;
 import src.order.Order;
+ 
 
 public class FileIO {
 
@@ -107,16 +111,19 @@ public class FileIO {
 				if(data[2].equals("M")) {
 					Branch b=new Branch(data[5]);
 					Staff manager = new Manager(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), b);
+					manager.setPassword(data[6]);
 					employeeList.add(manager);
 				}
 				else if(data[2].equals("S")){
 					Branch b=new Branch(data[5]);
 					Staff staff = new Staff(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), b);
+					staff.setPassword(data[6]);
 					employeeList.add(staff); 
 				}
 				else {
 					Branch b=new Branch("na");
 					Staff admin = new Admin(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), b);
+					admin.setPassword(data[6]);
 					employeeList.add(admin);
 				}
 
@@ -184,9 +191,43 @@ public class FileIO {
 		return null;
 	}
 
-	public static void writeBackToFile(){
-		//TODO Write Everything back to csv.
-
+	public static void writeToStaff(String filename, List<Staff> dataStaff){
+		PrintWriter out = null;
+		try {
+			out = new PrintWriter(new FileWriter(filename));
+			out.println("Name,Staff Login,Role,Gender,Age,Branch,Password");
+			for(int i = 0; i<dataStaff.size(); i++) {
+				String branch = dataStaff.get(i).getBranch().getBranchName();
+				if(dataStaff.get(i).getRole() == 'A') branch = ""; 
+				out.println(dataStaff.get(i).getStaffName() + "," + dataStaff.get(i).getLoginID() + "," + dataStaff.get(i).getRole() + "," + dataStaff.get(i).getGender() + "," + dataStaff.get(i).getAge() + "," + branch +"," + dataStaff.get(i).getPassword() + ",");
+			}
+		}
+		catch(IOException e) {
+			System.out.println("Error writing back to file");
+		}
+		finally {
+			if(out != null)
+			out.close();
+		}
+		
+	}
+	
+	public static void writeToMenu(String filename, List<Food> dataFood) {
+		PrintWriter out = null;
+		try {
+			out = new PrintWriter(new FileWriter(filename));
+			out.println("Name,Price,Branch,Category");
+			for(int i = 0; i<dataFood.size(); i++) {
+				out.println(dataFood.get(i).getName() + "," + String.format("%.2f", dataFood.get(i).getPrice()) + "," + dataFood.get(i).getBranch() + "," + dataFood.get(i).getCategory().toString().toLowerCase());
+			}
+		}
+		catch(IOException e) {
+			System.out.println("Error writing back to file");
+			e.printStackTrace();
+		}
+		finally {
+			if(out != null) out.close();
+		}
 	}
 
 

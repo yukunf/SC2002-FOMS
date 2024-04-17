@@ -211,6 +211,7 @@ public class App {
                         String newPassword = sc.next();
                         loggedInStaff.setPassword(newPassword);
                         System.out.println("Password updated succesfully.");
+                        FileIO.writeToStaff("staff_list.csv", App.allEmployeesList);
                         System.out.println();
                         loggedInStaff.SetLoginTry();
                     }
@@ -244,8 +245,6 @@ public class App {
 
 
     public static void main(String[] args) {
-
-
         initialize();
         for (Order o: orderList){
             System.out.println(o.getOrderID());

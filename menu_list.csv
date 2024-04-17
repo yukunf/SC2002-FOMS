@@ -1,9 +1,11 @@
-﻿Name,Price,Branch,Category
-FRIES,3.2,NTU,side
-3PC set meal,9.9,NTU,set_meal
-CAJUN FISH,5.6,JP,burger
-COLE SLAW,2.7,JE,side
-3PC set meal,10.4,JE,set_meal
-chicken nugget,6.9,JP,side
-chicken nugget,6.6,NTU,side
-pepsi,2.1,JE,drink
+Name,Price,Branch,Category
+FRIES,3.30,NTU,side
+3PC set meal,9.90,NTU,set_meal
+CAJUN FISH,5.60,JP,burger
+COLE SLAW,2.70,JE,side
+3PC set meal,10.40,JE,set_meal
+chicken nugget,6.90,JP,side
+chicken nugget,6.60,NTU,side
+pepsi,2.10,JE,drink
+McChicken,3.50,NTU,burger
+Coca Cola,2.30,NTU,drink
