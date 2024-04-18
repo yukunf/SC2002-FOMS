@@ -60,7 +60,7 @@ public class Staff {
 		if(orderObject.getDiningStatus()) diningStatus = "Dining in";
 		else diningStatus = "Take-away";
 		System.out.println("OrderID: " + orderObject.getOrderID());
-		System.out.println("Branch: "+ orderObject.getBranch() + " \nTime: "+ orderObject.getTime()+" \nDining Status: "+ diningStatus + " \nCurrent status: "+orderObject.getStatus());
+		System.out.println("Branch: "+ orderObject.getBranch() + " \nDining Status: "+ diningStatus + " \nCurrent status: "+orderObject.getStatus());
 		for (int i=0; i < orderObject.getFoodList().size(); i++) {
 			String customization;
 			if (orderObject.getFoodList().get(i).isHasCustomization()) {
@@ -148,10 +148,13 @@ public class Staff {
 			return loginID;
 		}
 		public boolean checkPassword (String answer) {
-			if (answer == password) {
+			if (answer.equals(password)) {
 				return true;
 			}
 			return false; 
+		}
+		public String getPassword() {
+			return password;
 		}
 		public void setPassword (String password){  //For staff to change password
 			this.password = password;
