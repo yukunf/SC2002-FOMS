@@ -36,8 +36,7 @@ public class FileIO {
 				String data[] = line.split(",");
 				if(data.length == 0) break;
 				//availability default true
-				//The csv file do not have data[4], so I manually set true
-				Food food = new Food(data[0], Double.parseDouble(data[1]), data[2], FoodCategory.valueOf(data[3].toUpperCase()), true);
+				Food food = new Food(data[0], Double.parseDouble(data[1]), data[2], FoodCategory.valueOf(data[3].toUpperCase()), Boolean.parseBoolean(data[4]));
 				FoodList.add(food);
 			}
 		}
