@@ -116,7 +116,7 @@ public class App {
         } catch (IOException ex) {
             System.err.println(ex);
         }
-        Order.setOrderIDCounter(orderList.size() + 1);
+
     }
 
     /*
@@ -142,6 +142,7 @@ public class App {
         } catch (IOException | ClassNotFoundException e) {
             System.out.println(e);
         }
+        Order.setOrderIDCounter(orderList.size() + 1);
         return ol;
     }
 
