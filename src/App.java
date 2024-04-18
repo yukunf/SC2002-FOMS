@@ -60,7 +60,7 @@ public class App {
 
 
         orderList = deserializeOrderList();
-
+        Order.setOrderIDCounter(orderList.size() + 1);
         List<Staff> branchStaff;
         List<Staff> branchManager;
         for (Branch branch : branchList) {
@@ -142,7 +142,6 @@ public class App {
         } catch (IOException | ClassNotFoundException e) {
             System.out.println(e);
         }
-        Order.setOrderIDCounter(orderList.size() + 1);
         return ol;
     }
 
