@@ -7,11 +7,13 @@ import src.branch.Manager;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.util.Scanner;
+import java.util.InputMismatchException;
 
 import src.branch.Staff;
 import src.order.Order;
 import src.order.OrderSystem;
 import src.menu.Food;
+import src.order.OrderStatus;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -81,7 +83,7 @@ public class App {
         orderTimeTracker = new Thread(() -> {
             while (!programIsTerminating) {
                 try {
-                    sleep(5 * 1000); // Check every 5 seconds
+                    Thread.sleep(5 * 1000); // Check every 5 seconds
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
@@ -225,7 +227,8 @@ public class App {
                             loggedInStaff.loadHomePage();
                             break;
                     }
-                } else {
+                }
+                 else {
                     System.out.println("Wrong password!");
                     System.out.println();
                 }

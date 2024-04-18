@@ -247,6 +247,7 @@ public class OrderSystem {
     			   System.out.println(i + ". " + cateFood.getName() + " $" + String.format("%.2f", cateFood.getPrice()));
     			   i++;
     		   }
+    		   System.out.println(i + ". Back");
     		   System.out.println();
     		   break;
     	   case 2:
@@ -260,6 +261,7 @@ public class OrderSystem {
     			   System.out.println(i + ". " + cateFood.getName() + " $" + String.format("%.2f", cateFood.getPrice()));
     			   i++;
     		   }
+    		   System.out.println(i + ". Back");
     		   System.out.println();
     		   break;
     	   case 3:
@@ -273,6 +275,7 @@ public class OrderSystem {
     			   System.out.println(i + ". " + cateFood.getName() + " $" + String.format("%.2f", cateFood.getPrice()));
     			   i++;
     		   }
+    		   System.out.println(i + ". Back");
     		   System.out.println();
     		   break;
     	   case 4:
@@ -287,11 +290,17 @@ public class OrderSystem {
     			   i++;
 
     		   }
+    		   System.out.println(i + ". Back");
     		   System.out.println();
     		   break;
 
     	   case 5: // Review Cart
+    		   if(currentOrder.getTotalCost() == 0) {
+    			   System.out.println("Error: No item in cart!");
+    		   }
+    		   else {
     		   rc = reviewCart();
+    		   }
     		   break;
     	   default:
     		   System.out.println("Invalid option");
@@ -305,7 +314,7 @@ public class OrderSystem {
     		       try {
     		           System.out.println("Enter the option: ");
     		           opt2 = sc.nextInt();
-    		           if (opt2 < 1 || opt2 > catMenu.size()) {
+    		           if (opt2 < 1 || opt2 > catMenu.size()+1) {
     		               throw new Exception();
     		           }
     		           validOption = true;
@@ -317,6 +326,9 @@ public class OrderSystem {
 
     		   int quant = 0;
     		   boolean validQuantity = false;
+    		   if(opt2 == catMenu.size() + 1) {
+    			   continue;
+    		   }
     		   while (!validQuantity) {
     		       try {
     		           System.out.println("Enter quantity: ");

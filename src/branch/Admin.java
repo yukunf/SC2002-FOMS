@@ -63,11 +63,11 @@ private int higherquota(Branch b){
 
 	
 public void AddStaff(Branch branch) {
-
+	char gender;
 	int quota=higherquota(branch);
 	List<Staff> staffList = filterStaff(branch);
 	if (staffList.size()>=quota) {
-		System.out.println("Exceeding the quota.");
+		System.out.println("Exceeded the staff quota.");
 		return;
 	}
 
@@ -77,11 +77,33 @@ public void AddStaff(Branch branch) {
 		String name=sc.nextLine();
 		System.out.println("Enter the loginID of the new staff");
 		String ID=sc.next();
-		System.out.println("Enter the gender of the new staff");
-		char gender=sc.next().charAt(0);
-		System.out.println("Enter the age of the new staff");
-		int age=sc.nextInt();
+		while (true) {
+            System.out.println("Enter the gender of the new staff");
+            System.out.println("1. Male");
+            System.out.println("2. Female");
+            try {
+                int opt = sc.nextInt();
 
+                if (opt == 1) {
+                    gender = 'M';
+                    break; 
+                } else if (opt == 2) {
+                    gender = 'F';
+                    break; 
+                } else {
+                    System.out.println("Invalid option. Please enter 1 for Male or 2 for Female.");
+                    // If the option is invalid, continue to prompt the user
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid option. Please enter 1 for Male or 2 for Female.");
+                // If an exception occurs, continue to prompt the user
+            }
+
+            // Clear the input buffer
+            sc.nextLine();
+        }
+		System.out.println("Enter staff age:");
+		int age = sc.nextInt();
 		Staff newsStaff=new Staff(name,ID,gender,age,branch);
 		staffList.add(newsStaff);
 		//Update allEmployeesList
@@ -219,7 +241,7 @@ public void DisplayStaff() {
 		System.out.println();
 		System.out.println("Staffs:");
 		for(Staff st : staffList)
-			System.out.println(st.getStaffName() + "  Gender:" + st.getGender() + "  Age: " + st.getAge() + "  Branch: " + st.getBranch().getBranchName());
+			System.out.println(st.getStaffName() + "  Gender: " + st.getGender() + "  Age: " + st.getAge() + "  Branch: " + st.getBranch().getBranchName());
 		System.out.println();
 	}
 	else if(opt == 2) {
@@ -310,6 +332,7 @@ public void TransferManager(Branch b) {
 }
 
 public void TransferStaff(Branch b) {
+	int quota = higherquota(b);
 	int i = 0;
 	System.out.println("Select Staff:");
 	for(Staff s: b.getStaffList()) {
@@ -325,6 +348,11 @@ public void TransferStaff(Branch b) {
 		i++;
 	}
 	opt = sc.nextInt();
+	//check quota before transferring
+	if(App.branchList.get(opt-1).getStaffList().size()>=quota) {
+		System.out.println("Staff quota reached for " + App.branchList.get(opt-1).getBranchName());
+		return;
+	}
 	//update App.StaffList
 	 for (Staff staff : App.staffList) {
 		 if(s.getStaffName().equals(staff.getStaffName())){
@@ -341,9 +369,11 @@ public void TransferStaff(Branch b) {
 	 }
 	 App.branchList.get(opt-1).getStaffList().add(s);
 	 b.getStaffList().remove(s);
+	 System.out.println("Transfer success!");
 	 FileIO.writeToStaff("staff_list.csv", App.allEmployeesList);
 	
 }
+
 
 
 
