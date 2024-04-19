@@ -138,6 +138,7 @@ public class Staff {
 					break;
 				case 2:
 					orderList.get(currentID).setStatus(OrderStatus.READY);
+					orderList.get(currentID).setTime(System.currentTimeMillis()); // Register Time
 					break;
 				case 3:
 					orderList.get(currentID).setStatus(OrderStatus.CANCELLED);

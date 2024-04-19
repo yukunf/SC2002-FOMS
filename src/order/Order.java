@@ -27,7 +27,7 @@ public class Order implements Serializable {
     public Order() {
     	orderCount++; //everytime a new order is instantiated can increment no need to manually set it.
         orderID = orderCount;
-        time = 0;
+        time = -1;
         status = OrderStatus.UNPAID;
         diningStatus = false;
         foodList = new ArrayList<>();

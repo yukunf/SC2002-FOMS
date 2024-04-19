@@ -110,9 +110,12 @@ public class App {
                     throw new RuntimeException(e);
                 }
                 for (Order o : orderList) {
-                    if (System.currentTimeMillis() - o.getTime() > ORDER_EXPIRE_SECOND * 1000
-                            && o.getStatus() == OrderStatus.READY) {
-                        o.setStatus(OrderStatus.CANCELLED);
+                    if(o.getTime() > 0) // minus indicates not ready
+                    {
+                        if (System.currentTimeMillis() - o.getTime() > ORDER_EXPIRE_SECOND * 1000
+                                && o.getStatus() == OrderStatus.READY) {
+                            o.setStatus(OrderStatus.CANCELLED);
+                        }
                     }
                 }
             }
