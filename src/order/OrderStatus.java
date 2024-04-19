@@ -6,6 +6,8 @@ package src.order;
  * Email : @author fengyukufyk@sina.com
  * Package : src.order
  * @version 1.00.00
+ *
+ * Status of Orders
  **/
 public enum OrderStatus {
     UNPAID,PREPARING,READY,CANCELLED,COLLECTED

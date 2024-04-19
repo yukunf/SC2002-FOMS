@@ -23,28 +23,50 @@ import java.util.ArrayList;
  * It also has a main method to run user interactions.
  * Two methods to initialize those variables with IO functions are also included.
  *
- * @author fengyukun
- * Created at 21/3/24 17:11
- * Email : @author fengyukufyk@sina.com
- * Package : PACKAGE_NAME
+ * @author fengyukun  Created at 21/3/24 17:11 Email : @author fengyukufyk@sina.com Package : PACKAGE_NAME
  * @version 1.00.00
- **/
+ */
 public class App {
     private static final Scanner sc = new Scanner(System.in);
+    /**
+     * The constant branchList.
+     */
     public static List<Branch> branchList;  // Stores every branch
+    /**
+     * The constant orderList.
+     */
     public static List<Order> orderList;  // Stores every order; Keeps orderID ascending
     private static String orderFilePath = "orders.ser";
+    /**
+     * The Food list.
+     */
     public static List<Food> foodList;
+    /**
+     * The Staff list.
+     */
     public static List<Staff> staffList;
+    /**
+     * The Manager list.
+     */
     public static List<Manager> ManagerList;
+    /**
+     * The Admin list.
+     */
     public static List<Admin> adminList;
+    /**
+     * The All employees list.
+     */
     public static List<Staff> allEmployeesList;
 	  private static Thread orderTimeTracker;
     private static boolean programIsTerminating = false;
+    /**
+     * The constant ORDER_EXPIRE_SECOND.
+     */
     public static final int ORDER_EXPIRE_SECOND = 60 * 5; // 5 minutes. Can change this when testing.
 
 
-    /*
+
+    /**
      * Use this function to initialize everything when program starts
      * That is, all I/O functions, including reading Branch, Menu, Staff from .xls or .csv files.
      * It also runs a separate thread to monitor order time, setting them as cancelled once expired.
@@ -101,7 +123,7 @@ public class App {
         // Set the counter 1 more than the biggest existing orderID
     }
 
-    /*
+    /**
      * This function serialize OrderList to .ser files
      *
      * @serialData the OrderList
@@ -119,7 +141,7 @@ public class App {
 
     }
 
-    /*
+    /**
      * This function deserialize .ser files to  OrderList
      *
      * @serialData the OrderList
@@ -146,6 +168,9 @@ public class App {
     }
 
 
+    /**
+     * Deinitialize. Terminating the threads and write everything back.
+     */
     /*
      * Use this function to do something before program ends
      * That is, all I/O functions, including saving Branch, Menu, Staff to .xls or .csv files.
@@ -154,9 +179,13 @@ public class App {
         serializeOrderList();
         programIsTerminating = true;// This will stop another thread.
         FileIO.writeToMenu("menu_list.csv", App.foodList);
+        FileIO.writeToStaff("staff_list.csv", App.allEmployeesList);
     }
 
 
+    /**
+     * Customer User Interface Handler
+     */
     public static void customerDriver() {
         System.out.println("Select an option:");
         System.out.println("1. Create a new order");
@@ -177,6 +206,9 @@ public class App {
         }
     }
 
+    /**
+     * Staff User Interface Handler.
+     */
     public static void staffDriver() {  //May want to use a HashMap for constant look up time
         String input;
         int option;
@@ -243,6 +275,11 @@ public class App {
     }
 
 
+    /**
+     * The entry point of application.
+     *
+     * @param args the input arguments
+     */
     public static void main(String[] args) {
         initialize();
         int opt = 0;

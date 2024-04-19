@@ -3,17 +3,36 @@ package src.order;
 import src.order.Order;
 import src.menu.Food;
 import java.util.List;
+
+/**
+ * The Receipt printed after payment
+ */
 public class Receipt {
 	private String branch;
 	private int orderID;
 	private Order currentOrder;
 	private double totalCost;
+
+	/**
+	 * Instantiates a new Receipt.
+	 *
+	 * @param branch       the branch
+	 * @param orderID      the order id
+	 * @param currentOrder the current order
+	 * @param totalCost    the total cost
+	 */
 	public Receipt(String branch, int orderID, Order currentOrder, double totalCost ) {
 		this.branch = branch;
 		this.orderID = orderID;
 		this.currentOrder = currentOrder;
 		this.totalCost = totalCost;
 	}
+
+	/**
+	 * Print receipt.
+	 *
+	 * @param currentOrder the current order
+	 */
 	public static void printReceipt(Order currentOrder) {
 		System.out.println("============== Receipt ==============");
 		System.out.println("Branch: " + currentOrder.getBranch());

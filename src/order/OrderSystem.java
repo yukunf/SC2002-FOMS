@@ -10,13 +10,10 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.List;
 
+
 /**
- * @author fengyukun
- * Created at 22/3/24 01:19
- * Email : @author fengyukufyk@sina.com
- * Package : src.order
- * @version 1.00.00
- **/
+ * Tool class OrderSystem. Controls the UI of order generation, thus all methods are static.
+ */
 public class OrderSystem {
     // This static class holds every method needed for creating an order, no instance is needed so please make
     // everything static.
@@ -26,7 +23,13 @@ public class OrderSystem {
     private Order currentOrder; // Holds the order currently making
 
 
-    public static Order getOrderByID(int orderID){
+	/**
+	 * Get order by id order.
+	 *
+	 * @param orderID the order id
+	 * @return the order
+	 */
+	public static Order getOrderByID(int orderID){
         for(Order o: App.orderList){
             if(o.getOrderID() == orderID){
                 return o;
@@ -40,7 +43,12 @@ public class OrderSystem {
         return getOrderByID(orderID).getStatus();
     }
 
-    public void addToCart(Food food){
+	/**
+	 * Add a certain food to cart of the order. Use before finalize order.
+	 *
+	 * @param food the food
+	 */
+	public void addToCart(Food food){
 
         currentOrder.addOrderItem(new OrderEntry(food));
     }
@@ -49,7 +57,10 @@ public class OrderSystem {
 
     /*-------------------- User Methods -----------------------------*/
 
-    public static void checkOrderStatus(){
+	/**
+	 * Check order status. Method of User Interface
+	 */
+	public static void checkOrderStatus(){
         // including I/O with command line
         Scanner s = new Scanner(System.in);
         System.out.println("Please input the Order ID:");
@@ -85,7 +96,9 @@ public class OrderSystem {
         //need to remove order from orderlist upon collection
 
     }
-    
+    /**
+     *	Review the cart. UI method.
+     */
     private int reviewCart() {
     	Scanner sc = new Scanner(System.in);
     	int opt = 0;
@@ -168,7 +181,11 @@ public class OrderSystem {
 	      
     }
 
-    public void createNewOrder(){
+	/**
+	 * Create new order.
+	 * The UI method handles the whole process of creating an order from user.
+	 */
+	public void createNewOrder(){
         // including I/O with command line
     	//left input handling
 

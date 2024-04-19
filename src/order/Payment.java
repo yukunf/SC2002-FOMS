@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
+ * The Payment Class. Still, works the UI to payment, so methods are static.
+ *
  * @author xinyue
  * Created at 26/3/24 13:24
  * Email: dmsxinyue@gmail.com
@@ -32,6 +34,12 @@ public class Payment {
         paymentMethodsList.add("PAYNOW");
     }
 
+    /**
+     * Handles the process of payment. Return the payment status
+     *
+     * @param currentOrder the current order
+     * @return true if payment is successful.
+     */
     public static boolean processPayment(Order currentOrder) {
         Scanner sc = new Scanner(System.in);
         if (currentOrder == null) {
@@ -62,18 +70,38 @@ public class Payment {
         return true;
     }
 
+    /**
+     * Gets All Payment methods.
+     *
+     * @return the payment methods
+     */
     public static List<String> getPaymentMethods() {
         return new ArrayList<>(paymentMethodsList);
     }
 
+    /**
+     * Set new payment methods by a kust
+     *
+     * @param paymentMethods the payment methods
+     */
     public static void setPaymentMethods(List<String> paymentMethods) {
         paymentMethodsList = new ArrayList<>(paymentMethods);
     }
 
+    /**
+     * Add new payment method.
+     *
+     * @param paymentMethod the payment method
+     */
     public static void addPaymentMethod(String paymentMethod) {
         paymentMethodsList.add(paymentMethod);
     }
 
+    /**
+     * Remove a certain payment method.
+     *
+     * @param paymentMethod the payment method
+     */
     public static void removePaymentMethod(String paymentMethod) {
         paymentMethodsList.remove(paymentMethod);
     }
