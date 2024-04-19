@@ -9,15 +9,31 @@ import static src.menu.FoodCategory.*;
 
 import java.util.List;
 
+/**
+ * The type Manager. Extends from staff with more access of functions.
+ * Manager can change the menu and sets food availability
+ */
 public class Manager extends Staff {
 
 	private char role = 'M';
-  
-  public Manager(String name, String loginID, char gender, int age, Branch branch) {
+
+	/**
+	 * Instantiates a new Manager.
+	 *
+	 * @param name    the name
+	 * @param loginID the login id
+	 * @param gender  the gender
+	 * @param age     the age
+	 * @param branch  the branch
+	 */
+	public Manager(String name, String loginID, char gender, int age, Branch branch) {
 	  super(name, loginID, gender, age, branch);
   }
-  
-  public void displayStaff() {
+
+	/**
+	 * Display staff list of the branch
+	 */
+	public void displayStaff() {
 	 int i = 1;
 	 System.out.println("======== Staff List ========");
 	 System.out.printf("%-21s %-4s %s\n", "       Staff Name", "  Gender", "      Age");
@@ -29,8 +45,11 @@ public class Manager extends Staff {
 	 }
 	System.out.println();
   }
-	
-  public void editMenu() {
+
+	/**
+	 * Edit menu. User Interface Handler.
+	 */
+	public void editMenu() {
 	  System.out.println("Select action: ");
 	  System.out.println("1. Add food items");
 	  System.out.println("2. Edit food items");
@@ -164,6 +183,10 @@ public class Manager extends Staff {
 		  break;
 	  }
   }
+	/**
+	 * Load home page. The staff User Interface handler.
+	 * Overwritten for more functions.
+	 */
   public void loadHomePage() {
 	    int answer=0;
 		do {

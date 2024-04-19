@@ -10,8 +10,12 @@ import java.util.Scanner;
 import static src.App.orderList;
 
 
+/**
+ * The Staff Type
+ */
 public class Staff {
 	private char role = 'S';
+
 	Scanner sc = new Scanner(System.in);
 	
 	private String name;
@@ -20,8 +24,17 @@ public class Staff {
 	private int age;
 	private Branch branch;
 	private String password;
-	private int loginTry=1; 
-	
+	private int loginTry=1;
+
+	/**
+	 * Instantiates a new Staff.
+	 *
+	 * @param name    the name
+	 * @param loginID the login id
+	 * @param gender  the gender
+	 * @param age     the age
+	 * @param branch  the branch
+	 */
 	public Staff(String name, String loginID, char gender, int age, Branch branch) {
 		this.name=name;
 		this.loginID=loginID;
@@ -30,14 +43,23 @@ public class Staff {
 		this.branch=branch;
 		this.password = "password"; //default password
 	}
-	//TODO Actually I don know where to put this in...
+
+	/**
+	 * Search order by id order.
+	 *
+	 * @param id the id
+	 * @return the order
+	 */
 	public Order searchOrderByID(int id){
 		for(Order o : orderList){
 			if(o.getOrderID() == id && o.getStatus().equals(OrderStatus.PREPARING) && o.getBranch().equals(branch.getBranchName()))return o;
 		}
 		return null;
 	}
-	
+
+	/**
+	 * Display orders.
+	 */
 	public void displayOrders() {
 		System.out.println("The list of orders:");
 		for (Order order : orderList) {	
@@ -46,6 +68,10 @@ public class Staff {
 		  }
 	    }
 	}
+
+	/**
+	 * View order details, showing all information including the customization
+	 */
 	public void viewDetails() {
 		displayOrders();
 		System.out.println("Enter OrderID to view order: ");
@@ -78,6 +104,9 @@ public class Staff {
 	}
 
 
+	/**
+	 * Process order. Handles the staff user interface to process a order.
+	 */
 	public void processOrder() {
 		displayOrders();
 		System.out.println("Enter orderID to process: ");
@@ -119,50 +148,134 @@ public class Staff {
 		} while (choice!=1 && choice!=2  && choice!=3);
 	}
 
-		public String getStaffName () {
+	/**
+	 * Gets staff name.
+	 *
+	 * @return the staff name
+	 */
+	public String getStaffName () {
 			return name;
 		}
-		public void changeStaffName (String newname){
+
+	/**
+	 * Change staff name.
+	 *
+	 * @param newname the newname
+	 */
+	public void changeStaffName (String newname){
 			name = newname;
 		}
-		public void changeStaffID (String newID){
+
+	/**
+	 * Change staff id.
+	 *
+	 * @param newID the new id
+	 */
+	public void changeStaffID (String newID){
 			loginID = newID;
 
 		}
-		public void changeStaffgender (char newgender){
+
+	/**
+	 * Change staffgender.
+	 *
+	 * @param newgender the newgender
+	 */
+	public void changeStaffgender (char newgender){
 			this.gender = newgender;
 		}
-		public char getGender() {
+
+	/**
+	 * Gets gender.
+	 *
+	 * @return the gender
+	 */
+	public char getGender() {
 			return gender;
 		}
-		public int getAge() {
+
+	/**
+	 * Gets age.
+	 *
+	 * @return the age
+	 */
+	public int getAge() {
 			return age;
 		}
-		public void changeStaffage (int newage){
+
+	/**
+	 * Change staffage.
+	 *
+	 * @param newage the newage
+	 */
+	public void changeStaffage (int newage){
 			age = newage;
 		}
-		public void changeStaffbranch (Branch newbranch){
+
+	/**
+	 * Change staffbranch.
+	 *
+	 * @param newbranch the newbranch
+	 */
+	public void changeStaffbranch (Branch newbranch){
 			branch = newbranch;
 		}
-		public String getLoginID () {
+
+	/**
+	 * Gets login id.
+	 *
+	 * @return the login id
+	 */
+	public String getLoginID () {
 			return loginID;
 		}
-		public boolean checkPassword (String answer) {
+
+	/**
+	 * Check password boolean.
+	 *
+	 * @param answer the answer
+	 * @return the boolean
+	 */
+	public boolean checkPassword (String answer) {
 			if (answer.equals(password)) {
 				return true;
 			}
 			return false; 
 		}
-		public String getPassword() {
+
+	/**
+	 * Gets password.
+	 *
+	 * @return the password
+	 */
+	public String getPassword() {
 			return password;
 		}
-		public void setPassword (String password){  //For staff to change password
+
+	/**
+	 * Set password.
+	 *
+	 * @param password the password
+	 */
+	public void setPassword (String password){  //For staff to change password
 			this.password = password;
 		}
-		public void setRole(char role) {
+
+	/**
+	 * Sets role.
+	 *
+	 * @param role the role
+	 */
+	public void setRole(char role) {
 			this.role=role;
 		}
-		public char getRole() {
+
+	/**
+	 * Gets role.
+	 *
+	 * @return the role
+	 */
+	public char getRole() {
 			 if (this instanceof Manager) {
 			        return 'M'; // Representing the role of a Manager
 			    } else if (this instanceof Admin) {
@@ -171,17 +284,36 @@ public class Staff {
 			        return 'S'; // Default role for Staff
 			    }
 		}
-		public void SetLoginTry () {
+
+	/**
+	 * Set login try counter.
+	 */
+	public void SetLoginTry () {
 			this.loginTry++;
 		}
-		public int getLoginTry () {
+
+	/**
+	 * Gets login try counter.
+	 *
+	 * @return the login try
+	 */
+	public int getLoginTry () {
 			return loginTry;
 		}
-		public Branch getBranch() {
+
+	/**
+	 * Gets branch the staff belongs to
+	 *
+	 * @return the branch
+	 */
+	public Branch getBranch() {
 			return branch;
 		}
-		
-		public void loadHomePage() {
+
+	/**
+	 * Load home page. The staff User Interface handler.
+	 */
+	public void loadHomePage() {
 			int choice=0;
 			do {
 				System.out.println();

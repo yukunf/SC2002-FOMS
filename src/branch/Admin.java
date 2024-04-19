@@ -8,23 +8,42 @@ import src.FileIO;
 import src.order.Payment;
 
 
+/**
+ * The Admin extends from staff.
+ */
 public class Admin extends Staff {
 
 	private char role = 'A';
 	
 	private List<Branch> branchlist;
-	private List<String> paymentMethodsList;	 
+	private List<String> paymentMethodsList;
+
 
 	Scanner sc = new Scanner(System.in);
 
 
+	/**
+	 * Instantiates a new Admin.
+	 *
+	 * @param name    the name
+	 * @param loginID the login id
+	 * @param gender  the gender
+	 * @param age     the age
+	 * @param branch  the branch
+	 */
 // default constructor
 	public Admin(String name, String loginID, char gender, int age, Branch branch) {
 		super(name, loginID, gender, age, branch);
 		}
 //Constructor
 
-public static List<Staff> filterStaff(Branch branch){
+	/**
+	 * return staffs belongs to a certain branch
+	 *
+	 * @param branch the branch
+	 * @return the staff list
+	 */
+	public static List<Staff> filterStaff(Branch branch){
 	List<Staff> staffList = new ArrayList<>();
 	for(Staff staff: App.staffList) {
 		if(staff.getBranch().getBranchName().equals(branch.getBranchName())) {
@@ -33,7 +52,14 @@ public static List<Staff> filterStaff(Branch branch){
 	}
 	return staffList;
 }
-public static List<Manager> filterManager(Branch branch){
+
+	/**
+	 * return managers belongs to a certain branch
+	 *
+	 * @param branch the branch
+	 * @return the list
+	 */
+	public static List<Manager> filterManager(Branch branch){
 	List<Manager> managerList = new ArrayList<>();
 	for(Manager manager: App.ManagerList) {
 		if(manager.getBranch().getBranchName().equals(branch.getBranchName())) {
@@ -61,8 +87,13 @@ private int higherquota(Branch b){
 	//error handling?	
 }
 
-	
-public void AddStaff(Branch branch) {
+
+	/**
+	 * Add staff to a branch
+	 *
+	 * @param branch the branch
+	 */
+	public void AddStaff(Branch branch) {
 	char gender;
 	int quota=higherquota(branch);
 	List<Staff> staffList = filterStaff(branch);
@@ -117,7 +148,12 @@ public void AddStaff(Branch branch) {
 		
 }
 
-public void EditStaff(Branch branch) {
+	/**
+	 * Edit staff of a branch
+	 *
+	 * @param branch the branch
+	 */
+	public void EditStaff(Branch branch) {
 	int i = 1;
 	List<Staff> staffList = filterStaff(branch);
 	System.out.println("Enter the staff to edit:");
@@ -183,7 +219,12 @@ public void EditStaff(Branch branch) {
 	FileIO.writeToStaff("staff_list.csv", App.allEmployeesList);
 }
 
-public void RemoveStaff(Branch branch) {
+	/**
+	 * Remove staff from a branch
+	 *
+	 * @param branch the branch
+	 */
+	public void RemoveStaff(Branch branch) {
 	int quota=lowerquota(branch);
 	int i = 1;
 	List<Staff> staffList = filterStaff(branch);
@@ -220,7 +261,10 @@ public void RemoveStaff(Branch branch) {
 	
 }
 
-public void DisplayStaff() {
+	/**
+	 * Display staff. User Interface Handlers
+	 */
+	public void DisplayStaff() {
 	System.out.println("1. Display by branch");
 	System.out.println("2. Display all");
 	int opt = sc.nextInt();
@@ -287,7 +331,12 @@ private void addManager(Branch branch){
 
 }
 
-public void TransferManager(Branch b) {
+	/**
+	 * Transfer manager from the branch b  to another( Indicated by user in UI)
+	 *
+	 * @param b the b
+	 */
+	public void TransferManager(Branch b) {
 	int i = 0;
 	System.out.println("Select Manager:");
 	for(Staff s: b.getmanagerlist()) {   
@@ -331,7 +380,12 @@ public void TransferManager(Branch b) {
 	}
 }
 
-public void TransferStaff(Branch b) {
+	/**
+	 * Transfer staff from the branch b  to another( Indicated by user in UI)
+	 *
+	 * @param b the b
+	 */
+	public void TransferStaff(Branch b) {
 	int quota = higherquota(b);
 	int i = 0;
 	System.out.println("Select Staff:");
@@ -376,24 +430,26 @@ public void TransferStaff(Branch b) {
 
 
 
+//	public List<String> removepaymentmethod(String removingpaymentmethod) {
+//	paymentMethodsList.remove(removingpaymentmethod);
+//	return paymentMethodsList;
+//
+//}
 
-public List<String> addpaymentmethod(String newpaymentmethod) {
-	paymentMethodsList.add(newpaymentmethod);
-	return paymentMethodsList;
-}
-public List<String> removepaymentmethod(String removingpaymentmethod) {
-	paymentMethodsList.remove(removingpaymentmethod);
-	return paymentMethodsList;
-	
-}
 
-public void open(Branch branch) {
-	App.branchList.add(branch);	
-}
-public void close(Branch branch) {
-	App.branchList.remove(branch);
-}
+//	public void open(Branch branch) {
+//	App.branchList.add(branch);
+//}
 
+
+	public void close(Branch branch) {
+	branch.setstate(false);
+}
+	/**
+	 * Load home page.The staff User Interface handler.
+	 * Overwritten for more functionalities.
+	 *
+	 */
 public void loadHomePage() {
 	int answer;
 	do {
