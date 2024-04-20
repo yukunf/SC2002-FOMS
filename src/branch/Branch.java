@@ -12,6 +12,16 @@ public class Branch {
   private int BranchID;
   private boolean state;
   private String branchName;
+
+  public String getLocation() {
+    return location;
+  }
+
+  public void setLocation(String location) {
+    this.location = location;
+  }
+
+  private String location;
   private int quota;
   private List<Staff> staffList;
   private List<Food> branchMenu;
@@ -23,8 +33,9 @@ public class Branch {
    *
    * @param branchName the branch name
    */
-  public Branch(String branchName){
+  public Branch(String branchName, String location){
 	  this.branchName = branchName;
+      this.location = location;
   }
 
   /**

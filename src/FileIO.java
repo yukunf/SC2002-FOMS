@@ -148,7 +148,7 @@ public class FileIO {
 			String line = sc.nextLine();
 			String data[] =line.split(",");
 			if(data.length == 0) break;
-			Branch branch = new Branch(data[0]);
+			Branch branch = new Branch(data[0],data[1]);
 			branch.setStaffQuota(Integer.parseInt(data[2]));
 			branchList.add(branch);	
 			}
@@ -171,7 +171,7 @@ public class FileIO {
 				String data[] = line.split(",");
 				if(data.length == 0) break;
 			if(data[2].equals("A")) {
-				Branch b=new Branch("na");
+				Branch b=new Branch("na","na");
 				Admin admin = new Admin(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), b);
 				adminList.add(admin);
 
@@ -221,6 +221,23 @@ public class FileIO {
 				out.println(dataFood.get(i).getName() + "," + String.format("%.2f", dataFood.get(i).getPrice()) + ","
 						+ dataFood.get(i).getBranch() + "," +
 						dataFood.get(i).getCategory().toString().toLowerCase()+","+dataFood.get(i).isAvailability());
+			}
+		}
+		catch(IOException e) {
+			System.out.println("Error writing back to file");
+			e.printStackTrace();
+		}
+		finally {
+			if(out != null) out.close();
+		}
+	}
+	public static void writeToBranch(String filename, List<Branch> branchList ){
+		PrintWriter out = null;
+		try {
+			out = new PrintWriter(new FileWriter(filename));
+			out.println("Name,Location,Staff Quota");
+			for(Branch b : branchList){
+				out.println(b.getBranchName()+","+b.getLocation()+","+b.getStaffQuota());
 			}
 		}
 		catch(IOException e) {

@@ -74,9 +74,13 @@ public class App {
     public static void initialize() {
         // reading orderList;
         branchList = FileIO.readBranchList();
+
         foodList = FileIO.readFoodList();
+
         staffList = FileIO.readStaffList();
+
         adminList = FileIO.readAdminList();
+
         ManagerList = FileIO.readManagerList();
         allEmployeesList = FileIO.readAllEmployees();
 
