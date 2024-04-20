@@ -120,6 +120,7 @@ public void RemoveStaff(Staff a,Branch branch) {
 	return;
 	
 }
+<<<<<<< Updated upstream
 public void DisplayStaff(Branch branch) {
 	System.out.println("Manahers:");
 	for(Manager m:branch.getmanagerlist()){
@@ -130,6 +131,173 @@ public void DisplayStaff(Branch branch) {
 		System.out.println(st.getStaffName());
 	}
 	
+=======
+
+	/**
+	 * Display staff. User Interface Handlers
+	 */
+	public void DisplayStaff() {
+	System.out.println("1. Display all");
+	System.out.println("2. Display by branch");
+	System.out.println("3. Display by role");
+	System.out.println("4. Display by gender");
+	System.out.println("5. Display by age");
+	int opt = sc.nextInt();
+	if(opt == 2) {
+		System.out.println("Enter the branch to display the stafflist");
+		for(int i=0;i<App.branchList.size();i++){
+			System.out.println((i+1)+ ". " + App.branchList.get(i).getBranchName());
+		}
+		int index;
+		index=sc.nextInt();
+		Branch branch = App.branchList.get(index-1);	
+		List<Staff> staffList = filterStaff(branch);
+		List<Manager> managerList = filterManager(branch);
+		System.out.println("Managers:");
+		for(Manager m : managerList){
+			System.out.println(m.getStaffName() + "  Gender: " + m.getGender() + "  Age: " + m.getAge()+ "  Branch: " + m.getBranch().getBranchName());
+		}
+		System.out.println();
+		System.out.println("Staffs:");
+		for(Staff st : staffList)
+			System.out.println(st.getStaffName() + "  Gender: " + st.getGender() + "  Age: " + st.getAge() + "  Branch: " + st.getBranch().getBranchName());
+		System.out.println();
+	}
+	else if(opt == 1) {
+		System.out.println("======== Staff Details ========");
+		System.out.println("Managers:");
+		for(Staff s : App.allEmployeesList) {
+			if(s.getRole() == 'M') {
+				System.out.println(s.getStaffName() + "  Gender: " + s.getGender() + "  Age: " + s.getAge() + "  Branch: " + s.getBranch().getBranchName());
+			}
+		}
+		System.out.println();
+		System.out.println("Staffs:");
+		for(Staff s : App.allEmployeesList) {
+			if(s.getRole() == 'S') {
+				System.out.println(s.getStaffName() + "  Gender: " + s.getGender() + "  Age: " + s.getAge() + "  Branch: " + s.getBranch().getBranchName());
+			}
+		}
+		System.out.println("===============================");
+		System.out.println();
+	}
+
+	else if(opt == 3) {
+		List <Staff> thelist;
+		System.out.println("Admin:");
+		for(Admin m: App.adminList){
+			System.out.println(m.getStaffName()+ "  Gender: " + m.getGender() + "  Age: " + m.getAge()+ "  Branch: " + m.getBranch().getBranchName());
+		}
+
+		System.out.println("Managers:");
+		for(Branch b: App.branchList){
+			thelist=b.getmanagerlist();
+			for(Staff m : thelist){
+				System.out.println(m.getStaffName() + "  Gender: " + m.getGender() + "  Age: " + m.getAge()+ "  Branch: " + m.getBranch().getBranchName());
+			}
+		}
+		
+		System.out.println();
+		System.out.println("Staffs:");
+		for(Branch b: App.branchList){
+			thelist=b.getStaffList();
+			for(Staff m : thelist){
+				System.out.println(m.getStaffName() + "  Gender: " + m.getGender() + "  Age: " + m.getAge()+ "  Branch: " + m.getBranch().getBranchName());
+			}
+		}
+		System.out.println("===============================");
+		System.out.println();
+	}
+	else if (opt==4){
+		
+		List <Staff> thelist;
+		System.out.println("Female:");
+		thelist=filterStaff('F');
+		for(Staff m : thelist){
+			System.out.println(m.getStaffName() + "  Gender: " + m.getGender() + "  Age: " + m.getAge()+ "  Branch: " + m.getBranch().getBranchName());
+		}
+
+		System.out.println();
+		System.out.println("Male:");
+		thelist=filterStaff('M');
+		for(Staff m : thelist){
+			System.out.println(m.getStaffName() + "  Gender: " + m.getGender() + "  Age: " + m.getAge()+ "  Branch: " + m.getBranch().getBranchName());
+		}
+		System.out.println("===============================");
+		System.out.println();
+
+	}
+	else if (opt==5){
+		int age=10,i=0;		
+		List <Staff> thelist;
+		Staff m;
+		thelist=filterStaff();
+		for (i=0;i<thelist.size();i++){
+			m=thelist.get(0);
+			thelist.remove(0);
+			if (m.getAge()!=age){
+				System.out.println("Age"+age+":");
+			}
+			System.out.println(m.getStaffName() + "  Gender: " + m.getGender() + "  Age: " + m.getAge()+ "  Branch: " + m.getBranch().getBranchName());
+		}
+		System.out.println("===============================");
+		System.out.println();
+
+	}
+
+}
+
+public static List<Staff> filterStaff(char c){
+	List<Staff> newList = new ArrayList<>();
+	List <Staff> thelist;
+	for(Admin m: App.adminList){
+		if(m.getGender()==c)
+		newList.add(m);
+	}
+	for(Branch b: App.branchList){
+		thelist=b.getmanagerlist();
+		for(Staff m : thelist){
+			if(m.getGender()==c)
+			newList.add(m);
+		}
+	}
+	for(Branch b: App.branchList){
+		thelist=b.getStaffList();
+		for(Staff m : thelist){
+			if(m.getGender()==c)
+			newList.add(m);
+		}
+	}
+	return newList;
+}
+
+public static List<Staff> filterStaff(){
+	List<Staff> newList = new ArrayList<>();
+	List <Staff> thelist;
+	int age=10;
+	for(age=10; age<99;age++){
+		for(Admin m: App.adminList){
+			if(m.getAge()==age)
+			newList.add(m);
+		}
+		for(Branch b: App.branchList){
+			thelist=b.getmanagerlist();
+			for(Staff m : thelist){
+				if(m.getAge()==age)
+				newList.add(m);
+			}
+		}
+		for(Branch b: App.branchList){
+			thelist=b.getStaffList();
+			for(Staff m : thelist){
+				if(m.getAge()==age)
+				newList.add(m);
+			}
+		}
+	}
+	return newList;
+}
+>>>>>>> Stashed changes
 
 private Manager addManager(Branch branch){
 	System.out.println("Enter the name of the new staff");
