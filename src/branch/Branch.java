@@ -36,6 +36,8 @@ public class Branch {
   public Branch(String branchName, String location){
 	  this.branchName = branchName;
       this.location = location;
+      state = true;
+
   }
 
   /**

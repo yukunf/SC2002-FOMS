@@ -18,6 +18,8 @@ import src.order.OrderStatus;
 import java.util.List;
 import java.util.ArrayList;
 
+import static src.FileIO.writeToBranch;
+
 /**
  * This Main Class holds global variables used across different domains of our program.
  * It also has a main method to run user interactions.
@@ -187,6 +189,7 @@ public class App {
         programIsTerminating = true;// This will stop another thread.
         FileIO.writeToMenu("menu_list.csv", App.foodList);
         FileIO.writeToStaff("staff_list.csv", App.allEmployeesList);
+        writeToBranch("branch_list.csv", App.branchList );
     }
 
 

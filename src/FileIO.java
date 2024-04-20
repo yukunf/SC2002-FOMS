@@ -59,7 +59,7 @@ public class FileIO {
 				String data[] = line.split(",");
 				if(data.length == 0) break;
 				if(data[2].equals("S")) {
-				Branch b=new Branch(data[5]);
+				Branch b= findBranchByName(data[5]);
 				Staff staff = new Staff(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), b);
 				staffList.add(staff);
 				}
@@ -84,7 +84,7 @@ public class FileIO {
 				String data[] = line.split(",");
 				if(data.length == 0) break;
 				if(data[2].equals("M")) {
-					Branch b=new Branch(data[5]);
+					Branch b= findBranchByName(data[5]);
 					Manager manager = new Manager(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), b);
 					ManagerList.add(manager);
 				}
@@ -109,19 +109,19 @@ public class FileIO {
 				String data[] = line.split(",");
 				if(data.length == 0) break;
 				if(data[2].equals("M")) {
-					Branch b=new Branch(data[5]);
+					Branch b= findBranchByName(data[5]);
 					Staff manager = new Manager(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), b);
 					manager.setPassword(data[6]);
 					employeeList.add(manager);
 				}
 				else if(data[2].equals("S")){
-					Branch b=new Branch(data[5]);
+					Branch b= findBranchByName(data[5]);
 					Staff staff = new Staff(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), b);
 					staff.setPassword(data[6]);
 					employeeList.add(staff); 
 				}
 				else {
-					Branch b=new Branch("na");
+					Branch b= new Branch("NA","NA");
 					Staff admin = new Admin(data[0], data[1], data[3].charAt(0), Integer.parseInt(data[4]), b);
 					admin.setPassword(data[6]);
 					employeeList.add(admin);
@@ -136,6 +136,12 @@ public class FileIO {
 	}
 
 
+	public static Branch findBranchByName(String name){
+		for(Branch b: App.branchList){
+			if(b.getBranchName().equals(name))return b;
+		}
+		return null;
+	}
 	
 	//This reads the file and return the list of branches
 	public static List<Branch> readBranchList(){
@@ -150,6 +156,7 @@ public class FileIO {
 			if(data.length == 0) break;
 			Branch branch = new Branch(data[0],data[1]);
 			branch.setStaffQuota(Integer.parseInt(data[2]));
+			branch.setstate(Boolean.parseBoolean(data[3]));
 			branchList.add(branch);	
 			}
  		}
@@ -186,10 +193,6 @@ public class FileIO {
 	}
 
 
-	public static List<Order> readOrderList(){
-		//TODO we will have our own csv file ( or serialized object orderList )
-		return null;
-	}
 
 	public static void writeToStaff(String filename, List<Staff> dataStaff){
 		PrintWriter out = null;
@@ -237,7 +240,7 @@ public class FileIO {
 			out = new PrintWriter(new FileWriter(filename));
 			out.println("Name,Location,Staff Quota");
 			for(Branch b : branchList){
-				out.println(b.getBranchName()+","+b.getLocation()+","+b.getStaffQuota());
+				out.println(b.getBranchName()+","+b.getLocation()+","+b.getStaffQuota()+","+b.getState().toString());
 			}
 		}
 		catch(IOException e) {

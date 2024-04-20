@@ -605,20 +605,41 @@ public void loadHomePage() {
 		System.out.println("2. Close Branch");
 		index=sc.nextInt();
 		if(index==1){
-			System.out.println("Enter the name of a branch: ");
-			sc.nextLine();
-			String name = sc.next();
-			Branch newBranch = new Branch(name);
-			App.branchList.add(newBranch);
+			System.out.println("Please choose:\n1.Reopen a existing branch\n2.Create a new branch");
+			int op2 = sc.nextInt();
+			if(op2 == 2) {
+				System.out.println("Enter the name of a branch: ");
+				sc.nextLine();
+				String name = sc.next();
+				System.out.println("Enter the location of a branch: ");
+				sc.nextLine();
+				String loc = sc.next();
+				Branch newBranch = new Branch(name, loc);
+				App.branchList.add(newBranch);
+			}
+			else if(op2 == 1){
+				System.out.println("Enter the branch to open\n* indicates branch are already closed:");
+				for(int i=0;i<App.branchList.size();i++){
+					if( !App.branchList.get(i).getState()) System.out.print("*");
+					System.out.println((i+1)+ ". " + App.branchList.get(i).getBranchName());
+				}
+				index=sc.nextInt();
+				App.branchList.get(index-1).setstate(true);
+
+			}
+			else{
+				System.out.println("Wrong Option!");
+			}
 		}
 		if(index==2){
-			System.out.println("Enter the branch to close");
+			System.out.println("Enter the branch to close\n* indicates branch are already closed:");
 			for(int i=0;i<App.branchList.size();i++){
+				if( !App.branchList.get(i).getState()) System.out.print("*");
 				System.out.println((i+1)+ ". " + App.branchList.get(i).getBranchName());
 			}
 			index=sc.nextInt();
-			branch=App.branchList.get(index-1);
-			this.close(branch);
+			App.branchList.get(index-1).setstate(false);
+
 		}
 
 	}
