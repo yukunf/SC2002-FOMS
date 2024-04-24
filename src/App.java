@@ -201,6 +201,7 @@ public class App {
         System.out.println("1. Create a new order");
         System.out.println("2. Check the status of an existing order");
         System.out.println("3. Cancel");
+        try {
         int secondOpt = sc.nextInt();
         while (secondOpt != 3) {
             if (secondOpt == 1) {
@@ -213,6 +214,11 @@ public class App {
                 break;
             } else System.out.println("Invalid Option");
             secondOpt = sc.nextInt();
+        }
+        }catch(InputMismatchException e) {
+        	System.out.println("Invalid option!");
+        	sc.nextLine(); //clear input buffer
+        	return;
         }
     }
 
