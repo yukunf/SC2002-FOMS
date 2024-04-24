@@ -8,6 +8,7 @@ import src.FileIO;
 import static src.menu.FoodCategory.*;
 
 import java.util.List;
+import java.util.InputMismatchException;
 
 /**
  * The type Manager. Extends from staff with more access of functions.
@@ -161,6 +162,7 @@ public class Manager extends Staff {
 	    		  z++;
 	    	  }
 	   	  }
+		  try {
 		  x = sc.nextInt();
 	      for(int j = 0; j<App.foodList.size();j++) {
 	    	  Food food = App.foodList.get(j);
@@ -172,6 +174,10 @@ public class Manager extends Staff {
 	    		  }
 	    	  }
 	      }
+		  }catch(InputMismatchException e) {
+			  System.out.println("Invalid input!\n");
+			  return;
+		  }
 	      if(selectedIndex != -1) {
 	    	  App.foodList.remove(selectedIndex);
 	    	  System.out.println("Removed successfully!");
@@ -196,6 +202,7 @@ public class Manager extends Staff {
 			System.out.println("3. Display staff list");
 			System.out.println("4. Edit Menu");
 			System.out.println("5. Exit");
+			try {
 			answer = sc.nextInt();
 			switch (answer) {
 				case 1: this.viewDetails();
@@ -209,6 +216,11 @@ public class Manager extends Staff {
 				case 5: break;
 				default: System.out.println("Invalid! Re-enter choice.");
 					break;
+			}
+			}catch(InputMismatchException e) {
+				System.out.println("Invalid choice!\n");
+				sc.nextLine(); //clear input buffer
+				continue;
 			}
 		} while(answer != 5);
 	}

@@ -7,6 +7,7 @@ import src.order.OrderStatus;
 
 import java.util.Scanner;
 
+
 import static src.App.orderList;
 
 
@@ -135,13 +136,16 @@ public class Staff {
 			switch (choice) { 
 				case 1:
 					orderList.get(currentID).setStatus(OrderStatus.PREPARING);
+					System.out.println("Order set to PREPARING successful!");
 					break;
 				case 2:
 					orderList.get(currentID).setStatus(OrderStatus.READY);
 					orderList.get(currentID).setTime(System.currentTimeMillis()); // Register Time
+					System.out.println("Order set to READY successful!");
 					break;
 				case 3:
 					orderList.get(currentID).setStatus(OrderStatus.CANCELLED);
+					System.out.println("Order set to CANCELLED successful!");
 					break;
 				default: System.out.println("Invalid! Re-enter choice: ");
 					break;

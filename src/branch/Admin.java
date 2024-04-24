@@ -4,6 +4,7 @@ import java.util.List;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.InputMismatchException;
 
 import src.App;
 import src.FileIO;
@@ -226,6 +227,7 @@ public class Admin extends Staff {
      */
     public void RemoveStaff(Branch branch) {
         int quota = lowerquota(branch);
+        int opt = -1;
         int i = 1;
         List<Staff> staffList = filterStaff(branch);
         if (staffList.size() <= quota) {
@@ -233,11 +235,12 @@ public class Admin extends Staff {
             return;
         } else {
             System.out.println("Enter the staff to remove:");
+            try {
             for (Staff staff : staffList) {
                 System.out.println(i + ". " + staff.getStaffName());
                 i++;
             }
-            int opt = sc.nextInt();
+            opt = sc.nextInt();
             for (Staff s : App.allEmployeesList) {
                 if (staffList.get(opt - 1).getStaffName().equals(s.getStaffName())) {
                     App.allEmployeesList.remove(s);
@@ -256,6 +259,11 @@ public class Admin extends Staff {
             FileIO.writeToStaff("staff_list.csv", App.allEmployeesList);
             System.out.println();
             return;
+            }catch(Exception e) {
+            	System.out.println("Invalid input!\n");
+            	sc.nextLine(); //clear input buffer
+            	return;
+            }
         }
 
     }
@@ -264,18 +272,26 @@ public class Admin extends Staff {
      * Display staff. User Interface Handlers
      */
     public void DisplayStaff() {
+    	int opt = 0;
         System.out.println("1. Display all");
         System.out.println("2. Display by branch");
         System.out.println("3. Display by role");
         System.out.println("4. Display by gender");
         System.out.println("5. Display by age");
-        int opt = sc.nextInt();
+        try {
+        opt = sc.nextInt();
+        }catch(Exception e) {
+        	System.out.println("Invalid input!\n");
+        	sc.nextLine(); //clears input buffer
+        	return;
+        }
         if (opt == 2) {
             System.out.println("Enter the branch to display the stafflist");
             for (int i = 0; i < App.branchList.size(); i++) {
                 System.out.println((i + 1) + ". " + App.branchList.get(i).getBranchName());
             }
             int index;
+            try {
             index = sc.nextInt();
             Branch branch = App.branchList.get(index - 1);
             List<Staff> staffList = filterStaff(branch);
@@ -289,6 +305,11 @@ public class Admin extends Staff {
             for (Staff st : staffList)
                 System.out.println(st.getStaffName() + "  Gender: " + st.getGender() + "  Age: " + st.getAge() + "  Branch: " + st.getBranch().getBranchName());
             System.out.println();
+            }catch(Exception e) {
+            	System.out.println("Invalid input!\n");
+            	sc.nextLine(); //clear input buffer
+            	return;
+            }
         } else if (opt == 1) {
             System.out.println("======== Staff Details ========");
             System.out.println("Managers:");
@@ -308,8 +329,9 @@ public class Admin extends Staff {
             System.out.println();
         } else if (opt == 3) {
 			System.out.println("1.Display Admin\n2.Display Manager\n3.Display Staff");
+			char r = '\n';
+			try {
 			int i = sc.nextInt();
-			char r;
 			switch (i) {
 				case 1:
 					r = 'A';
@@ -321,8 +343,13 @@ public class Admin extends Staff {
 					r = 'S';
 					break;
 				default:
-					System.out.println("Invalid Option!");
+					System.out.println("Invalid Option!\n");
 					return;
+			}
+			}catch(Exception e) {
+				System.out.println("Invalid option!\n");
+				sc.nextLine(); //clear input buffer
+				return;
 			}
 			for (Staff m : App.allEmployeesList) {
 				if(m.getRole() == r){
@@ -334,6 +361,7 @@ public class Admin extends Staff {
         } else if (opt == 4) {
 
 			System.out.println("1.Display Male\n2.Display Female");
+			try {
             int i = sc.nextInt();
 			if(i != 1 && i != 2){
 				System.out.println("Wrong Option!");
@@ -344,6 +372,11 @@ public class Admin extends Staff {
                     System.out.println(m.getStaffName() + "  Gender: " + m.getGender() + "  Age: " + m.getAge() + "  Branch: " + m.getBranch().getBranchName());
                 }
             }
+			}catch(InputMismatchException e) {
+				System.out.println("Invalid output\n");
+				sc.nextLine(); //clear input buffer
+				return;
+			}
             System.out.println("===============================");
             System.out.println();
 
@@ -398,19 +431,29 @@ public class Admin extends Staff {
      */
     public void TransferManager(Branch b) {
         int i = 0;
+        Staff m;
         System.out.println("Select Manager:");
         for (Staff s : b.getmanagerlist()) {
             System.out.println(i + 1 + ". " + s.getStaffName());
             i++;
         }
-        int opt = sc.nextInt();
-        Staff m = b.getmanagerlist().get(opt - 1);
+        int opt = -1;
+        try {
+        opt = sc.nextInt();
+        
+        m = b.getmanagerlist().get(opt - 1);
+        }catch(Exception e) {
+        	System.out.println("Invalid Input!\n");
+        	sc.nextLine(); //clear input buffer
+        	return;
+        }
         System.out.println("Select branch to transfer the Manager to:");
         i = 0;
         for (Branch branch : App.branchList) {
             System.out.println(i + 1 + ". " + branch.getBranchName());
             i++;
         }
+        try {
         opt = sc.nextInt();
         //update App.StaffList
         for (Staff manager : App.ManagerList) {
@@ -438,6 +481,11 @@ public class Admin extends Staff {
             System.out.println("To meet the quota, remove more staffs");
             RemoveStaff(b);
         }
+        }catch(Exception e) {
+        	System.out.println("Invalid Option!\n");
+        	sc.nextLine(); //clear input buffer;
+        	return;
+        }
     }
 
     /**
@@ -446,15 +494,23 @@ public class Admin extends Staff {
      * @param b the b
      */
     public void TransferStaff(Branch b) {
+    	Staff s;
         int quota = higherquota(b);
         int i = 0;
         System.out.println("Select Staff:");
-        for (Staff s : b.getStaffList()) {
-            System.out.println(i + 1 + ". " + s.getStaffName());
+        for (Staff st : b.getStaffList()) {
+            System.out.println(i + 1 + ". " + st.getStaffName());
             i++;
         }
-        int opt = sc.nextInt();
-        Staff s = b.getStaffList().get(opt - 1);
+        int opt = -1;
+        try {
+        opt = sc.nextInt();
+        s = b.getStaffList().get(opt - 1);
+        }catch(Exception e) {
+        	System.out.println("Invalid Option!\n");
+        	sc.nextLine(); //clear input buffer;
+        	return;
+        }
         System.out.println("Select branch to transfer the staff to:");
         i = 0;
         for (Branch branch : App.branchList) {
@@ -531,33 +587,67 @@ public class Admin extends Staff {
                     //Add
                     if (option == 1) {
                         System.out.println("Enter the branch the staff is adding to:");
+                        try {
                         for (int i = 0; i < App.branchList.size(); i++) {
                             System.out.println((i + 1) + ". " + App.branchList.get(i).getBranchName());
                         }
                         int index;
                         index = sc.nextInt();
+                        if(index < 1 || index > App.branchList.size()) {
+                        	System.out.println("Invalid option!\n");
+                        	continue;
+                        }
                         Branch branch = App.branchList.get(index - 1);
                         AddStaff(branch);
+                    }catch(InputMismatchException e) {
+                    	System.out.println("Invalid option!\n");
+                    	sc.nextLine(); //clear input buffer
+                    	continue;
+                    }
+                    	
                     }
                     //Edit
                     else if (option == 2) {
                         System.out.println("Enter the branch the staff is in:");
+                        try {
                         for (int i = 0; i < App.branchList.size(); i++) {
                             System.out.println((i + 1) + ". " + App.branchList.get(i).getBranchName());
                         }
                         int index;
                         index = sc.nextInt();
+                        if(index < 1 || index > App.branchList.size()) {
+                        	System.out.println("Invalid option!\n");
+                        	continue;
+                        }
                         Branch branch = App.branchList.get(index - 1);
                         this.EditStaff(branch);
+                        }catch(InputMismatchException e) {
+                        	System.out.println("Invalid option!\n");
+                        	sc.nextLine(); //clear input buffer
+                        	continue;
+                        }
                     } else if (option == 3) {
                         System.out.println("Enter the branch the staff is in:");
+                        try {
                         for (int i = 0; i < App.branchList.size(); i++) {
                             System.out.println((i + 1) + ". " + App.branchList.get(i).getBranchName());
                         }
                         int index;
                         index = sc.nextInt();
+                        if(index < 1 || index > App.branchList.size()) {
+                        	System.out.println("Invalid option!\n");
+                        	continue;
+                        }
                         Branch branch = App.branchList.get(index - 1);
                         this.RemoveStaff(branch);
+                        }catch(InputMismatchException e) {
+                        	System.out.println("Invalid option!\n");
+                        	sc.nextLine(); //clear input buffer
+                        	continue;
+                        }
+                    }
+                    else {
+                    	System.out.println("Invalid input!\n");
                     }
                     break;
 
@@ -570,6 +660,10 @@ public class Admin extends Staff {
                         System.out.println((i + 1) + ". " + App.branchList.get(i).getBranchName());
                     }
                     int index = sc.nextInt();
+                    if(index < 1 || index > App.branchList.size()) {
+                    	System.out.println("Invalid option!\n");
+                    	break;
+                    }
                     int x = 0;
                     Branch branch = App.branchList.get(index - 1);
                     System.out.println("Enter the staff to promote to Manager");
@@ -578,6 +672,10 @@ public class Admin extends Staff {
                         x++;
                     }
                     int opt = sc.nextInt();
+                    if(opt < 1 || opt > branch.getStaffList().size()) {
+                    	System.out.println("Invalid option!\n");
+                    	break;
+                    }
                     Manager m = new Manager(branch.getStaffList().get(opt - 1).getStaffName(), branch.getStaffList().get(opt - 1).getLoginID(), branch.getStaffList().get(opt - 1).getGender(), branch.getStaffList().get(opt - 1).getAge(), branch.getStaffList().get(opt - 1).getBranch());
                     m.setPassword(branch.getStaffList().get(opt - 1).getPassword());
                     //updating App.allEmployeesList
@@ -601,14 +699,22 @@ public class Admin extends Staff {
                     branch.getmanagerlist().add(m);
                     App.allEmployeesList.add(m);
                     App.ManagerList.add(m);
-                    System.out.println("Promoted " + m.getStaffName() + " successfully!");
+                    System.out.println("Promoted " + m.getStaffName() + " successfully!\n");
                     FileIO.writeToStaff("staff_list.csv", App.allEmployeesList);
                     break;
+                    
                 case 4:
+                	opt = 0;                	
                     System.out.println("Transfer:");
                     System.out.println("1. Staff");
                     System.out.println("2. Manager");
+                    try {
                     opt = sc.nextInt();
+                    }catch(Exception e) {
+                    	System.out.println("Invalid Option!\n");
+                    	sc.nextLine(); //clear input buffer
+                    	break;
+                    }
                     int k = 0;
                     if (opt == 1) {
                         k = 0;
@@ -617,9 +723,16 @@ public class Admin extends Staff {
                             System.out.println(k + 1 + ". " + b.getBranchName());
                             k++;
                         }
-                        int choice = sc.nextInt();
+                        int choice = -1;
+                        try {
+                        choice = sc.nextInt();
                         Branch b = App.branchList.get(choice - 1);
                         this.TransferStaff(b);
+                        }catch(Exception e) {
+                        	System.out.println("Invalid option!\n");
+                        	sc.nextLine(); //clear input buffer;
+                        	break;
+                        }
                     } else if (opt == 2) {
                         k = 0;
                         System.out.println("Select branch you want to transfer manager from:");
@@ -627,9 +740,19 @@ public class Admin extends Staff {
                             System.out.println(k + 1 + ". " + b.getBranchName());
                             k++;
                         }
-                        int choice = sc.nextInt();
+                        int choice = -1;
+                        try {
+                        choice = sc.nextInt();
                         Branch b = App.branchList.get(choice - 1);
                         this.TransferManager(b);
+                        }catch(Exception e) {
+                        	System.out.println("Invalid option!\n");
+                        	sc.nextLine(); //clear input buffer
+                        	break;
+                        }
+                    }
+                    else {
+                    	System.out.println("Invalid Option!\n");
                     }
                     break;
 
@@ -637,14 +760,16 @@ public class Admin extends Staff {
                     System.out.println("Do you want to");
                     System.out.println("1. Add Payment");
                     System.out.println("2. Remove Payment");
+                    try {
                     index = sc.nextInt();
                     if (index == 1) {
                         System.out.println("Enter the new payment method:");
 
                         String paymentMethod = sc.next();
                         Payment.addPaymentMethod(paymentMethod);
+                        System.out.println("Payment added!\n");
                     }
-                    if (index == 2) {
+                    else if (index == 2) {
                         int i = 0;
                         System.out.println("Enter payment method to remove:");
                         for (String p : Payment.getPaymentMethods()) {
@@ -653,13 +778,23 @@ public class Admin extends Staff {
                         }
                         int method = sc.nextInt();
                         Payment.removePaymentMethod(Payment.getPaymentMethods().get(method - 1));
+                        System.out.println("Payment removed!\n");
+                    }
+                    else {
+                    	System.out.println("Invalid option!\n");
                     }
                     break;
+                    }catch(InputMismatchException e) {
+                    	System.out.println("Invalid option!\n");
+                    	sc.nextLine(); //clear input buffer
+                    	break;
+                    }
 
                 case 6:
                     System.out.println("Do you want to");
                     System.out.println("1. Open Branch");
                     System.out.println("2. Close Branch");
+                    try {
                     index = sc.nextInt();
                     if (index == 1) {
                         System.out.println("Please choose:\n1.Reopen a existing branch\n2.Create a new branch");
@@ -673,6 +808,7 @@ public class Admin extends Staff {
                             String loc = sc.next();
                             Branch newBranch = new Branch(name, loc);
                             App.branchList.add(newBranch);
+                            System.out.println("Branch added successfully!\n");
                         } else if (op2 == 1) {
                             System.out.println("Enter the branch to open\n* indicates branch are already closed:");
                             for (int i = 0; i < App.branchList.size(); i++) {
@@ -694,7 +830,12 @@ public class Admin extends Staff {
                         }
                         index = sc.nextInt();
                         App.branchList.get(index - 1).setstate(false);
+                        System.out.println("Branch removed!\n");
 
+                    }
+                    }catch(InputMismatchException e) {
+                    	System.out.println("Invalid option\n");
+                    	sc.nextLine(); //clear input buffer
                     }
 
             }

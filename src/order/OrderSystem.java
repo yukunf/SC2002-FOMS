@@ -75,7 +75,10 @@ public class OrderSystem {
                 break;
             }
             if(o != null){
+            	System.out.println("======== Order Status ========");
+            	System.out.println("Branch: " + o.getBranch());
                 System.out.println("Status of Order "+id+" : "+o.getStatus());
+                System.out.println("==============================");
                 found = true;
                 if(o.getStatus().equals(OrderStatus.READY)) {
                 	System.out.println("1. Collect Order");
@@ -171,6 +174,10 @@ public class OrderSystem {
 
 	      
 		      else if(opt == 3) {
+		    	  if(currentOrder.getTotalCost() == 0) {
+		    		  System.out.println("Error: No items in cart!");
+		    		  return 0;
+		    	  }
 		    	  System.out.println("Proceeding to payment");
 		    	  return 1;
 		      }
@@ -200,12 +207,14 @@ public class OrderSystem {
     		System.out.println("Select Branch:");
     		l = 0;
         	for (Branch branch : App.branchList) {
+        		if(branch.getState()) {
         	    System.out.println((l+1) + " : " + branch.getBranchName());
         	    l++;
+        		}
         	}
     	    try {
     	        opt = sc.nextInt();
-    	        if (opt < 1 || opt > App.branchList.size()) {
+    	        if (opt < 1 || opt > l) {
     	            throw new Exception();
     	        }
     	        validInput = true;
@@ -317,6 +326,9 @@ public class OrderSystem {
     		   }
     		   else {
     		   rc = reviewCart();
+    		   if(rc == 0) {
+    			   continue;
+    		   }
     		   }
     		   break;
     	   default:
