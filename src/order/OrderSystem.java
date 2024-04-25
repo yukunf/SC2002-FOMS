@@ -212,9 +212,13 @@ public class OrderSystem {
         	    l++;
         		}
         	}
+        	System.out.println(l+1 + ". Back");
     	    try {
     	        opt = sc.nextInt();
-    	        if (opt < 1 || opt > l) {
+    	        if(opt == l+1) {
+    	        	return;
+    	        }
+    	        if (opt < 1 || opt > l+1) {
     	            throw new Exception();
     	        }
     	        validInput = true;
@@ -223,8 +227,22 @@ public class OrderSystem {
     	        sc.nextLine(); // Clear the input buffer
     	    } 
     	}
+    	int branchIndex = 0;
+    	if (validInput) {
+    	    // Map user input to index in App.branchList
+    	    branchIndex = 0;
+    	    for (int i = 0; i < App.branchList.size(); i++) {
+    	        if (App.branchList.get(i).getState()) {
+    	            branchIndex++;
+    	            if (branchIndex == opt) {
+    	                branchIndex = i; // Found the correct index
+    	                break;
+    	            }
+    	        }
+    	    }
+    	}
     	Menu menu = new Menu(App.foodList);
-    	Branch branch = App.branchList.get(opt-1);
+    	Branch branch = App.branchList.get(branchIndex);
     	currentOrder.setBranch(branch.getBranchName());
     	// Setting the menu according to the branch selected
     	branch.setBranchMenu(menu.getFoodListByBranch(branch.getBranchName()));

@@ -764,8 +764,8 @@ public class Admin extends Staff {
                     index = sc.nextInt();
                     if (index == 1) {
                         System.out.println("Enter the new payment method:");
-
-                        String paymentMethod = sc.next();
+                        sc.nextLine(); //clear input buffer
+                        String paymentMethod = sc.nextLine();
                         Payment.addPaymentMethod(paymentMethod);
                         System.out.println("Payment added!\n");
                     }
@@ -801,11 +801,10 @@ public class Admin extends Staff {
                         int op2 = sc.nextInt();
                         if (op2 == 2) {
                             System.out.println("Enter the name of a branch: ");
-                            sc.nextLine();
-                            String name = sc.next();
-                            System.out.println("Enter the location of a branch: ");
-                            sc.nextLine();
-                            String loc = sc.next();
+                            sc.nextLine(); //clears input buffer
+                            String name = sc.nextLine();
+                            System.out.println("Enter the location of a branch: ");            
+                            String loc = sc.nextLine();
                             Branch newBranch = new Branch(name, loc);
                             App.branchList.add(newBranch);
                             System.out.println("Branch added successfully!\n");
@@ -817,6 +816,7 @@ public class Admin extends Staff {
                             }
                             index = sc.nextInt();
                             App.branchList.get(index - 1).setstate(true);
+                            System.out.println("Branch Re-open!\n");
 
                         } else {
                             System.out.println("Wrong Option!");
